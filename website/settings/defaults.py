@@ -1981,6 +1981,7 @@ REG_METRICS_OSF_TOKEN = None
 REG_METRICS_BASE_FOLDER = None
 
 ### NII extensions
+ENABLE_TIMESTAMP = True
 
 # service name for page header
 OSF_PAGE_NAME = 'OSF'
@@ -2065,4 +2066,3 @@ BABEL_LANGUAGES = {
     'ja': '日本語'
 }
 BABEL_DEFAULT_LOCALE = 'ja'
-
