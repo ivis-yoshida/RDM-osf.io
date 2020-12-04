@@ -923,6 +923,8 @@ def userkey_generation_check(guid):
     return RdmUserKey.objects.filter(guid=Guid.objects.get(_id=guid, content_type_id=ContentType.objects.get_for_model(OSFUser).id).object_id).exists()
 
 def userkey_generation(guid):
+    if not settings.ENABLE_TIMESTAMP:
+        return
 
     try:
         generation_date = datetime.datetime.now()
