@@ -1,3 +1,4 @@
+## -*- coding: utf-8 -*-
 <%
     is_project = node['node_type'] == 'project'
 %>
@@ -43,7 +44,9 @@
                         <!-- Add-on tabs  -->
                         % for addon in addons_enabled:
 
-                            % if addons[addon]['has_page']:
+                            <!-- ember: ここから -->
+                            % if addon != 'myscreen' and addons[addon]['has_page']:
+                            <!-- ember: ここまで -->
                                 <li>
                                     <a href="${node['url']}${addons[addon]['short_name']}">
 
@@ -55,6 +58,20 @@
                                 </li>
                             % endif
                         % endfor
+
+                        <!-- ember: ここから -->
+                        % if 'myscreen' in addons_enabled and addons['myscreen']['has_page']:
+                            <li>
+                                <a href="${node['url']}${addons['myscreen']['short_name']}">
+
+                                    % if addons['myscreen']['icon'] and addons['myscreen']['has_page_icon']:
+                                        <img src="${addons['myscreen']['icon']}" class="addon-logo"/>
+                                    % endif
+                                    ${addons['myscreen']['full_name']}
+                                </a>
+                            </li>
+                        % endif
+                        <!-- ember: ここまで -->
 
                         % if project_analytics:
                         % if node['is_public'] or user['is_contributor_or_group_member']:
