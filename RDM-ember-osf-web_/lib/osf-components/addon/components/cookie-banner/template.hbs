@@ -1,0 +1,12 @@
+{{#if this.showBanner}}
+    <div local-class='CookieBanner'>
+        <div local-class='Warning'>
+            {{t 'cookieBanner.cookieWarning' htmlSafe=true}}
+        </div>
+        <div local-class='Accept'>
+            <OsfButton @onClick={{action this.accept}}>
+                {{t 'cookieBanner.accept'}}
+            </OsfButton>
+        </div>
+    </div>
+{{/if}}

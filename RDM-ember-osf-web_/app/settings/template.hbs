@@ -1,0 +1,121 @@
+<div data-analytics-scope='Settings' class='container'>
+    <div class='row'>
+        <div class='col-xs-12'>
+            <h2 class='page-header'>
+                {{t 'general.settings'}}
+                <OsfButton
+                   local-class='NavToggle'
+                   aria-label={{t 'settings.toggleNav'}}
+                   @type='link'
+                   @class='hidden-md hidden-lg'
+                   @onClick={{action (mut this.navCollapsed) (not this.navCollapsed)}}
+                >
+                    {{fa-icon 'bars'}}
+                </OsfButton>
+            </h2>
+        </div>
+    </div>
+    <div class='row'>
+        <div class='col-md-3'>
+            <BsCollapse @collapsed={{this.navCollapsed}} local-class='SideNav'>
+                <div class='panel panel-default'>
+                    <BsNav @type='pills' @stacked={{true}} as |nav|>
+                        <nav.item>
+                            <nav.link-to 
+                                data-analytics-name='Settings'
+                                @params={{array 'settings.profile'}}
+                            >
+                                {{t 'settings.profile.title'}}
+                            </nav.link-to>
+                            <BsNav
+                                data-analytics-scope='Profile Nav'
+                                local-class='ProfileNav'
+                                @stacked={{true}}
+                                @type='pills'
+                                as |profileNav|
+                            >
+                                <profileNav.item>
+                                    <profileNav.link-to
+                                        data-analytics-name='Name'
+                                        @params={{array 'settings.profile.name'}}
+                                    >
+                                        {{t 'settings.profile.name.title'}}
+                                    </profileNav.link-to>
+                                </profileNav.item>
+                                <profileNav.item>
+                                    <profileNav.link-to
+                                        data-analytics-name='Social'
+                                        @params={{array 'settings.profile.social'}}
+                                    >
+                                        {{t 'settings.profile.social.title'}}
+                                    </profileNav.link-to>
+                                </profileNav.item>
+                                <profileNav.item>
+                                    <profileNav.link-to
+                                        data-analytics-name='Education'
+                                        @params={{array 'settings.profile.education'}}
+                                    >
+                                        {{t 'settings.profile.education.title'}}
+                                    </profileNav.link-to>
+                                </profileNav.item>
+                                <profileNav.item>
+                                    <profileNav.link-to
+                                        data-analytics-name='Employment'
+                                        @params={{array 'settings.profile.employment'}}
+                                    >
+                                        {{t 'settings.profile.employment.title'}}
+                                    </profileNav.link-to>
+                                </profileNav.item>
+                            </BsNav>
+                        </nav.item>
+                        <nav.item>
+                            <nav.link-to
+                                data-analytics-name='Account'
+                                @params={{array 'settings.account'}}
+                            >
+                                {{t 'settings.account.title'}}
+                            </nav.link-to>
+                        </nav.item>
+                        <nav.item>
+                            <OsfLink
+                                data-analytics-name='Configure add-on accounts'
+                                @href='/settings/addons'
+                            >
+                                {{t 'settings.addons.title'}}
+                            </OsfLink>
+                        </nav.item>
+                        <nav.item>
+                            <OsfLink
+                                data-analytics-name='Notifications'
+                                @href='/settings/notifications'
+                            >
+                                {{t 'settings.notifications.title'}}
+                            </OsfLink>
+                        </nav.item>
+                        <nav.item>
+                            <nav.link-to
+                                data-analytics-name='Developer apps'
+                                @params={{array 'settings.developer-apps'}}
+                            >
+                                {{t 'settings.developer-apps.title'}}
+                            </nav.link-to>
+                        </nav.item>
+                        <nav.item>
+                            <nav.link-to
+                                data-analytics-name='Personal access tokens'
+                                @params={{array 'settings.tokens'}}
+                            >
+                                {{t 'settings.tokens.title'}}
+                            </nav.link-to>
+                        </nav.item>
+                    </BsNav>
+                </div>
+            </BsCollapse>
+        </div>
+        <div class='col-md-9'>
+            {{#if this.currentUser.user}}
+                {{outlet}}
+            {{/if}}
+        </div>
+    </div>
+</div>

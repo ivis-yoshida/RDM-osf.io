@@ -1,0 +1,16 @@
+<div>
+    <ul local-class='nobullet'>
+        {{#each this.items as |item|}}
+            <li data-test-checklist-facet-item={{item.key}}>
+                <label local-class='label'>
+                    <Input
+                        @type='checkbox'
+                        @checked={{item.checked}}
+                        @change={{action this.updateFilters item.key}}
+                    />
+                    {{item.key}}
+                </label>
+            </li>
+        {{/each}}
+    </ul>
+</div>

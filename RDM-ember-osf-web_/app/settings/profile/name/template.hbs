@@ -1,0 +1,11 @@
+{{title (t 'settings.profile.name.title')}}
+<div data-analytics-scope='Name' class='panel panel-default'>
+    <div class='panel-heading clearfix'>
+        <h3 class='panel-title'>{{t 'settings.profile.name.title'}}</h3>
+    </div>
+    {{settings/profile/name/-components/name 
+        user=this.user
+        onSave=(action this.onSave)
+    }}
+
+</div>

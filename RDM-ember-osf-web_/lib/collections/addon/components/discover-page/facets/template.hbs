@@ -1,0 +1,31 @@
+{{!Copied from Ember-SHARE}}
+<div class='p-t-md'>
+    {{#each @facetContexts as |context|}}
+        <div
+            data-test-facet-panel={{context.title}}
+            class='panel panel-default'
+            local-class='facet-panel'
+            hidden={{get context 'options.hidden'}}
+        >
+            <div
+                data-test-facet-title
+                class='panel-heading'
+                local-class='facet-heading'
+            >
+                {{context.title}}
+            </div>
+            <div
+                data-test-facet-body
+                class='panel-body'
+                local-class='facet-body'
+            >
+                {{component
+                    (concat 'discover-page/facets/' context.component)
+                    context=context
+                    filterChanged=@filterChanged
+                    filterReplace=@filterReplace
+                }}
+            </div>
+        </div>
+    {{/each}}
+</div>

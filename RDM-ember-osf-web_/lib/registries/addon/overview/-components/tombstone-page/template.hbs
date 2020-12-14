@@ -1,0 +1,25 @@
+<div
+    local-class='Tombstone'
+    data-analytics-scope='Tombstone page'
+    ...attributes
+>
+    <div local-class='TitleBlock'>
+        <div local-class='Title'>
+            <FaIcon
+                local-class='Icon'
+                @icon={{@icon}}
+                @size='5'
+            />
+            <h2 data-test-tombstone-title>
+                {{@titleText}}
+            </h2>
+        </div>
+        <div local-class='SubtitleBlock'>
+            {{yield}}
+        </div>
+    </div>
+    <RegistriesMetadata
+        local-class='MetadataBlock'
+        @registration={{this.registration}}
+    />
+</div>

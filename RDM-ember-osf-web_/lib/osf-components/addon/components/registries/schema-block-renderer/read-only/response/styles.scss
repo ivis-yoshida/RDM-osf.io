@@ -1,0 +1,12 @@
+.ResponseValue {
+    composes: Element from '../../styles.scss';
+    white-space: pre-wrap;
+}
+
+.NoResponse {
+    font-style: italic;
+}
+
+.ValidationErrors {
+    composes: Element from '../../styles.scss';
+}

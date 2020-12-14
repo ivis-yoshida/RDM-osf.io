@@ -1,0 +1,39 @@
+<div data-analytics-scope='ToS consent banner' class='container'>
+    <BsAlert
+        @type='default'
+        @dismissible={{true}}
+        @visible={{this.currentUser.showTosConsentBanner}}
+        @onDismiss={{action this.dismiss}}
+    >
+        <div class='jumbotron'>
+            <p></p>
+            <div>
+                <h4>
+                    {{t 'tos_consent.paragraph'
+                        link1=this.termsLink
+                        link2=this.privacyPolicyLink
+                        htmlSafe=true
+                    }}
+                </h4>
+                <h5>
+                    {{#validated-input/checkbox
+                        model=this.currentUser.user
+                        valuePath='acceptedTermsOfService'
+                        shouldShowMessages=this.didValidate
+                    }}
+                        {{t 'tos_consent.have_read_and_agree'}}
+                    {{/validated-input/checkbox}}
+                </h5>
+            </div>
+            <OsfButton
+                data-analytics-name='Continue'
+                @type='primary'
+                @buttonType='submit'
+                @onClick={{action (perform this.saveUser)}}
+            >
+                {{t 'tos_consent.continue'}}
+            </OsfButton>
+            <p></p>
+        </div>
+    </BsAlert>
+</div>

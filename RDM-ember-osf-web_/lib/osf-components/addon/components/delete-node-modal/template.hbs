@@ -1,0 +1,37 @@
+<BsModal
+    @open={{@openModal}}
+    @onSubmit={{action @delete}}
+    @onHidden={{action @closeModal}}
+    as |modal|
+>
+    <modal.header>
+        <h3 data-test-delete-warning>{{t 'delete_modal.title' nodeType=(t this.nodeTypeKey)}}</h3>
+    </modal.header>
+    <modal.body>
+        <p>{{t 'delete_modal.body' nodeType=(t this.nodeTypeKey)}}</p>
+        <label local-class='DeleteModal__label-wrap'>
+            <p local-class='DeleteModal__input-label'>{{t 'delete_modal.type_this'}} <strong>{{this.scientistName}}</strong></p>
+            <Input
+                local-class='DeleteModal__input'
+                @class='form-control'
+                @value={{this.scientistInput}}
+            />
+        </label>
+    </modal.body>
+    <modal.footer data-analytics-scope='Delete node modal'>
+        <OsfButton
+            data-analytics-name='Cancel'
+            @onClick={{action modal.close}}
+        >
+            {{t 'general.cancel'}}
+        </OsfButton>
+        <OsfButton
+            data-analytics-name='Delete Fork'
+            @disabled={{not (eq this.scientistInput this.scientistName)}}
+            @onClick={{action modal.submit}}
+            @type='danger'
+        >
+            {{t 'general.delete'}}
+        </OsfButton>
+    </modal.footer>
+</BsModal>

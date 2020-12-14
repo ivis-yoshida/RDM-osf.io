@@ -1,0 +1,20 @@
+{{#if this.label}}
+    <label for='{{this.inputElementId}}'>{{this.label}}</label>
+{{/if}}
+
+{{yield this.inputElementId}}
+
+{{#if (or this.hasError this.hasWarning)}}
+    {{#if this.changeset}}
+        <ValidationErrors
+            class='help-block'
+            @changeset={{this.changeset}}
+            @key={{this.valuePath}}
+            @errors={{@errors}}
+        />
+    {{else}}
+        <div class='help-block'>
+            {{v-get this.model this.valuePath 'message'}}
+        </div>
+    {{/if}}
+{{/if}}

@@ -1,0 +1,7 @@
+<ul local-class='OptionsList'>
+    {{#each this.selectedOptions as |option|}}
+        <li>{{option}}</li>
+    {{else}}
+        <span>{{t 'registries.form_view.none_selected'}}</span>
+    {{/each}}
+</ul>

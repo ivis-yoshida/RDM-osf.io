@@ -1,0 +1,14 @@
+<DocsDemo as |demo|>
+    <demo.example @name='copyable-text.hbs'>
+        <CopyableText
+            @text='bunchoftextblahblahblah'
+        />
+        {{!-- Optional arguments:
+            @success={{action @onCopySuccess}}
+            @error={{action this.onCopyError}}
+            @analyticsLabel='This Page - Clicked copy button'
+        --}}
+    </demo.example>
+
+    <demo.snippet @name='copyable-text.hbs' />
+</DocsDemo>

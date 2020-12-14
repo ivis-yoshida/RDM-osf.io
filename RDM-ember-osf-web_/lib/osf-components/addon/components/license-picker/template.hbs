@@ -1,0 +1,57 @@
+<label>
+    {{yield}}
+</label>
+<this.form.select
+    @model={{this.node}}
+    @valuePath='license'
+    @search={{perform this.queryLicenses}}
+    @options={{this.licensesAcceptable}}
+    @onchange={{action this.changeLicense}}
+    @noMatchesMessage={{t 'new_project.no_matches'}}
+    @placeholder={{this.placeholder}}
+    as |license|
+>
+    {{license.name}}
+</this.form.select>
+<small>
+    <a
+        target='_blank'
+        rel='noopener noreferrer'
+        href={{this.helpLink}}
+    >
+        {{t 'app_components.license_picker.faq'}}
+    </a>
+</small>
+{{#if this.selected}}
+    {{#if this.requiredFields.length}}
+        <br>
+    {{/if}}
+    <this.form.custom
+        @model={{this.node}}
+        @valuePath='nodeLicense'
+    >
+        {{#each this.requiredFields as |key|}}
+            <br>
+            <label for='nodeLicense-{{key}}'>{{t (concat 'app_components.license_picker.fields.' key)}}</label>
+            <br>
+            <Input
+                @class='form-control'
+                @id={{concat 'nodeLicense-' key}}
+                @value={{readonly (get this.node.nodeLicense key)}}
+                @change={{fn this.updateNodeLicense key}}
+                @placeholder={{t 'general.required'}}
+            />
+        {{/each}}
+    </this.form.custom>
+    <button
+        type='button'
+        local-class='button-link'
+        class='btn btn-link'
+        {{on 'click' (fn (mut this.showText) (not this.showText))}}
+    >
+        {{t (concat 'app_components.license_picker.' (if this.showText 'hide' 'show'))}}
+    </button>
+    {{#if this.showText}}
+        <LicenseText @node={{this.node}} />
+    {{/if}}
+{{/if}}

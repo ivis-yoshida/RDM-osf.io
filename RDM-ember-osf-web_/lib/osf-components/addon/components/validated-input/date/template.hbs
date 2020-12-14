@@ -1,0 +1,20 @@
+{{#validated-input/x-input-wrapper
+    model=this.model
+    changeset=this.changeset
+    errors=this.errors
+    label=this.label
+    valuePath=this.valuePath
+    validationStatus=this.validationStatus
+    as |inputElementId|
+}}
+    <EmberFlatpickr
+        class='form-control'
+        placeholder={{this.placeholder}}
+        id={{inputElementId}}
+        aria-label={{this.ariaLabel}}
+        @onChange={{action this.onChange}}
+        @minDate={{@minDate}}
+        @maxDate={{@maxDate}}
+        @disabled={{@disabled}}
+    />
+{{/validated-input/x-input-wrapper}}

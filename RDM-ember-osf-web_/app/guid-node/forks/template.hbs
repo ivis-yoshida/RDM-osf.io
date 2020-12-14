@@ -1,0 +1,110 @@
+{{! using unsafeTitle here to avoid double encoding because the title helper does its own }}
+{{title (t 'forks.page_title' nodeTitle=this.model.taskInstance.value.unsafeTitle)}}
+<div data-analytics-scope='Forks' class='container' local-class='Forks'>
+    <BsModal
+        @open={{this.newModal}}
+        @onSubmit={{action this.newFork}}
+        @onHide={{action (mut this.newModal) false}}
+        as |modal|
+    >
+        <modal.body
+            data-test-new-fork-modal-body
+            data-analytics-scope='Forks - forks modal'
+        >
+            <OsfButton
+                data-test-close-create-forks-modal
+                data-analytics-name='close_modal'
+                aria-label={{t 'general.close'}}
+                @class='close'
+                @onClick={{action (mut this.newModal false)}}
+            >
+                {{fa-icon 'times' size='sm'}}
+            </OsfButton>
+            <h3>{{t 'forks.create_fork_modal'}}</h3>
+        </modal.body>
+        <modal.footer data-analytics-scope='Forks - forks modal footer'>
+            <OsfButton
+                data-test-cancel-create-fork
+                data-analytics-name='Cancel'
+                @onClick={{action (mut this.newModal) false}}
+            >
+                {{t 'general.cancel'}}
+            </OsfButton>
+            <OsfButton
+                data-test-confirm-create-fork
+                data-analytics-name='Create fork'
+                @onClick={{action modal.submit}}
+                @type='info'
+            >
+                {{t 'forks.fork'}}
+            </OsfButton>
+        </modal.footer>
+    </BsModal>
+    <DeleteNodeModal
+        @delete={{action this.delete}}
+        @openModal={{this.deleteModal}}
+        @closeModal={{action this.closeDeleteModal}}
+        @nodeType={{this.nodeType}}
+    />
+    <div local-class='Forks__header' class='page-header visible-xs'>
+        <h2 class='text-300'>{{t 'forks.title'}}</h2>
+    </div>
+    <div class='m-md' local-class='Forks__nav'>
+        <OsfLink
+            data-test-back-to-analytics
+            data-analytics-name='forks.back'
+            @route='guid-node.analytics'
+            @models={{array this.model.guid}}
+        >
+            {{fa-icon 'arrow-left'}} {{t 'forks.back'}}
+        </OsfLink>
+        <p
+            data-test-forks-info
+            local-class='Forks__nav__link'
+        >
+            {{t 'forks.info'}}
+        </p>
+    </div>
+    <div local-class='Forks__forks'>
+        {{#paginated-list/has-many
+            data-analytics-scope='Project Forks'
+            modelTaskInstance=this.model.taskInstance
+            relationshipName='forks'
+            bindReload=(action (mut this.reloadList))
+            query=this.forksQueryParams
+            as |list|
+        }}
+            <list.item as |fork|>
+                <NodeCard
+                    @node={{fork}}
+                    @delete={{action this.openDeleteModal fork}}
+                />
+            </list.item>
+
+            <list.empty>
+                <div local-class='Forks__placeholder'>
+                    {{t 'forks.no_forks'}}
+                </div>
+            </list.empty>
+        {{/paginated-list/has-many}}
+    </div>
+    <div local-class='Forks__new-fork'>
+        <div class='m-md'>
+            {{#if this.currentUser.user}}
+                <OsfButton
+                    data-test-new-fork-button
+                    data-analytics-name='Create fork modal'
+                    @type='success'
+                    @disabled={{this.loadingNew}}
+                    @onClick={{action (mut this.newModal) true}}
+                >
+                    {{#if this.loadingNew}}
+                        {{t 'forks.loading_new'}}
+                    {{else}}
+                        {{t 'forks.new'}}
+                    {{/if}}
+                </OsfButton>
+            {{/if}}
+        </div>
+    </div>
+</div>

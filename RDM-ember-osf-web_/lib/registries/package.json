@@ -1,0 +1,49 @@
+{
+  "name": "registries",
+  "keywords": [
+    "ember-addon",
+    "ember-engine"
+  ],
+  "dependencies": {
+    "@ember/render-modifiers": "*",
+    "@glimmer/component": "*",
+    "@glimmer/tracking": "*",
+    "ember-angle-bracket-invocation-polyfill": "*",
+    "ember-basic-dropdown": "*",
+    "ember-bootstrap": "*",
+    "ember-changeset": "*",
+    "ember-changeset-validations": "*",
+    "ember-cli-babel": "*",
+    "ember-cli-htmlbars": "*",
+    "ember-cli-moment-shim": "*",
+    "ember-cli-sanitize-html": "*",
+    "ember-cli-sass": "*",
+    "ember-cli-showdown": "*",
+    "ember-cli-template-lint": "*",
+    "ember-cli-typescript": "*",
+    "ember-component-attributes": "*",
+    "ember-composable-helpers": "*",
+    "ember-content-placeholders": "*",
+    "ember-cookies": "*",
+    "ember-css-modules": "*",
+    "ember-css-modules-sass": "*",
+    "ember-decorators": "*",
+    "ember-element-helper": "*",
+    "ember-flatpickr": "*",
+    "ember-font-awesome": "*",
+    "ember-intl": "*",
+    "ember-moment": "*",
+    "ember-page-title": "*",
+    "ember-parachute": "*",
+    "ember-responsive": "*",
+    "ember-toastr": "*",
+    "ember-truth-helpers": "*",
+    "immutable": "*"
+  },
+  "ember-addon": {
+    "paths": [
+      "../app-components",
+      "../osf-components"
+    ]
+  }
+}

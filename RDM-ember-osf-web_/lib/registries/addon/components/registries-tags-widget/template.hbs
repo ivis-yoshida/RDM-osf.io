@@ -1,0 +1,33 @@
+<TagInput
+    data-test-tags-widget-tag-input={{if this.readOnly 'readonly' 'edit'}}
+    aria-label={{t 'osf-components.tags-widget.tags'}}
+    local-class='TagsWidget'
+    @tags={{if this.readOnly @manager.registration.tags @manager.tags}}
+    @addTag={{action this.addTag}}
+    @allowSpacesInTags={{true}}
+    @placeholder={{t 'osf-components.tags-widget.add_tag'}}
+    @readOnly={{this.readOnly}}
+    @maxlength={{1024}}
+    @showRemoveButtons={{false}}
+    as |tag|
+>
+    <span
+        data-test-tags-widget-tag='{{tag}}'
+        data-analytics-name='Click tag'
+        role='link'
+        {{action @manager.clickTag tag}}
+    >
+        {{tag}}
+    </span>
+    {{#unless this.readOnly}}
+        <OsfButton
+            local-class='RemoveButton'
+            data-analytics-name='Remove Tag'
+            data-analytics-extra={{tag}}
+            @type='link'
+            @onClick={{action this.removeTag tag}}
+        >
+            <FaIcon @icon='times' @fixedWidth={{true}} />
+        </OsfButton>
+    {{/unless}}
+</TagInput>

@@ -1,0 +1,144 @@
+{{! using unsafeTitle here to avoid double encoding because the title helper does its own }}
+{{title (t 'analytics.pageTitle' nodeTitle=this.node.unsafeTitle)}}
+<div class='container'>
+    <div local-class='Counts' class='row'>
+        <div class='col-sm-4 panel panel-default' local-class='CountBox'>
+            <div class='panel-body'>
+                <h3>{{t 'analytics.forks'}}</h3>
+                {{#if this.loading}}
+                    {{loading-indicator dark=true}}
+                {{else}}
+                    <h2>{{this.forksCount}}</h2>
+                    {{#link-to-external
+                        (if this.node.isProject 'nodeForks' 'registrationForks')
+                        this.model.id
+                    }}
+                        {{t 'analytics.viewForks'}}
+                    {{/link-to-external}}
+                {{/if}}
+            </div>
+        </div>
+        <div class='col-sm-4' local-class='CountBox'>
+            <div class='panel panel-default'>
+                <div class='panel-body'>
+                    <h3>{{t 'analytics.links'}}</h3>
+                    {{#if this.loading}}
+                        {{loading-indicator dark=true}}
+                    {{else}}
+                        <h2>{{this.linkedByCount}}</h2>
+                        <button
+                            type='button'
+                            class='btn btn-link'
+                            local-class='button-link'
+                            {{on 'click' this.showLinksModal}}
+                        >
+                            {{t 'analytics.viewLinks'}}
+                        </button>
+                        {{#if this.linksModalShown}}
+                            {{#bs-modal-simple
+                                title=(t 'analytics.links')
+                                closeTitle=(t 'general.close')
+                                onHide=(action 'hideLinksModal')
+                            }}
+                                {{#if this.node}}
+                                    <ul class='list-group'>
+                                        {{#paginated-list/has-many
+                                            model=this.node
+                                            relationshipName='linkedByNodes'
+                                            query=this.linkedByQueryParams
+                                            analyticsScope='Project Analytics - Links'
+                                            as |list|
+                                        }}
+                                            <list.item as |node|>
+                                                <NodeCard
+                                                    @node={{node}}
+                                                    @readOnly={{true}}
+                                                    @analyticsScope='Project Analytics - Links'
+                                                />
+                                            </list.item>
+
+                                            <list.empty>
+                                                {{t 'analytics.noLinks'}}
+                                            </list.empty>
+                                        {{/paginated-list/has-many}}
+                                    </ul>
+                                {{else}}
+                                    <LoadingIndicator @dark={{true}} />
+                                {{/if}}
+                            {{/bs-modal-simple}}
+                        {{/if}}
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+        <div class='col-sm-4 panel panel-default' local-class='CountBox'>
+            <div class='panel-body'>
+                <h3>{{t 'analytics.templateCopies'}}</h3>
+                {{#if this.loading}}
+                    {{loading-indicator dark=true}}
+                {{else}}
+                    <h2>{{this.templatedByCount}}</h2>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+
+    {{#if this.nodePublic}}
+        {{#unless this.hideAdblockWarning}}
+            {{#bs-alert type='info' onDismissed=(action this.dismissAdblockWarning)}}
+                <div class='text-center'>
+                    {{t 'analytics.adblockWarning'}}
+                </div>
+            {{/bs-alert}}
+        {{/unless}}
+
+        <div local-class='PickDateRange'>
+            <label>
+                {{t 'analytics.showForDateRange'}}
+                <BsDropdown as |dd|>
+                    <dd.button
+                        aria-haspopup='true'
+                        aria-expanded='false'
+                        local-class='DateRangeButton'
+                    >
+                        {{t (concat 'analytics.dateRanges.' this.activeDateRange.key)}}
+                        {{fa-icon 'caret-down'}}
+                    </dd.button>
+                    <dd.menu
+                        local-class='DateRangeMenu'
+                        @align='right'
+                    >
+                        {{#each this.dateRanges as |dateRange|}}
+                            <li role='menuitem'>
+                                <button
+                                    type='button'
+                                    local-class='DateRangeOption'
+                                    {{on 'click' (fn this.setDateRange dateRange)}}
+                                >
+                                    {{t (concat 'analytics.dateRanges.' dateRange.key)}}
+                                </button>
+                            </li>
+                        {{/each}}
+                    </dd.menu>
+                </BsDropdown>
+            </label>
+        </div>
+    {{else}}
+        {{!nodePublic}}
+        <div class='row'>
+            <div local-class='PrivateProject' class='col-xs-12'>
+                {{t 'analytics.privateProject' htmlSafe=true}}
+            </div>
+        </div>
+    {{/if}}
+
+    <div class='clearfix'></div>
+    <div class='row'>
+        {{analytics-charts
+            chartsEnabled=this.chartsEnabled
+            nodeTaskInstance=this.model.taskInstance
+            startDate=this.activeDateRange.start
+            endDate=this.activeDateRange.end
+        }}
+    </div>
+</div>

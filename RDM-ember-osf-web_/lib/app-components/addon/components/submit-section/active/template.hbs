@@ -1,0 +1,9 @@
+<header local-class={{unless this.panel.open 'closed'}}>
+    {{this.title}}
+</header>
+{{#this.panel.body}}
+    {{#if this.description}}
+        <p>{{this.description}}</p>
+    {{/if}}
+    {{yield}}
+{{/this.panel.body}}

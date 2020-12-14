@@ -1,0 +1,33 @@
+{{#if @selectedFiles}}
+    <div data-test-selected-files
+        local-class='selected-list'
+        ...attributes
+    >
+        <AnimatedContainer>
+            <AnimatedEach
+                @items={{@selectedFiles}}
+                @use={{this.transition}}
+                @duration={{500}}
+                as |file|
+            >
+                <div
+                    data-test-selected-file='{{file.id}}'
+                    local-class='selected-item'
+                >
+                    <span>{{file.itemName}}</span>
+                    <OsfButton
+                        data-test-unselect-file
+                        data-analytics-name='Unselect file'
+                        local-class='unselect'
+                        aria-label={{t 'osf-components.files-widget.unselect_file'}}
+                        tabindex='0'
+                        @onClick={{action @unselect file}}
+                        @type='link'
+                    >
+                        <FaIcon @icon='times' @fixedWith={{true}} />
+                    </OsfButton>
+                </div>
+            </AnimatedEach>
+        </AnimatedContainer>
+    </div>
+{{/if}}

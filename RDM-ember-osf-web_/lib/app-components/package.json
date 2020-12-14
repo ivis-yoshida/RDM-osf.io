@@ -1,0 +1,34 @@
+{
+  "name": "app-components",
+  "keywords": [
+    "ember-addon"
+  ],
+  "dependencies": {
+    "@glimmer/tracking": "*",
+    "@glimmer/component": "*",
+    "ember-angle-bracket-invocation-polyfill": "*",
+    "ember-bootstrap": "*",
+    "ember-bootstrap-datepicker": "*",
+    "ember-cli-babel": "*",
+    "ember-cli-htmlbars": "*",
+    "ember-cli-sanitize-html": "*",
+    "ember-cli-sass": "*",
+    "ember-cli-template-lint": "*",
+    "ember-cli-typescript": "*",
+    "ember-collapsible-panel": "*",
+    "ember-component-attributes": "*",
+    "ember-cp-validations": "*",
+    "ember-css-modules": "*",
+    "ember-css-modules-sass": "*",
+    "ember-intl": "*",
+    "ember-moment": "*",
+    "ember-page-title": "*",
+    "ember-power-select": "*",
+    "ember-sortable": "*",
+    "ember-tag-input": "*",
+    "ember-toastr": "*",
+    "ember-wormhole": "*",
+    "katex": "*",
+    "liquid-fire": "*"
+  }
+}

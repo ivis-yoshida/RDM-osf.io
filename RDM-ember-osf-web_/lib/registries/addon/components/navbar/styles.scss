@@ -1,0 +1,125 @@
+.Nav {
+    display: flex;
+    height: 50px;
+    justify-content: space-between;
+}
+
+.NavbarContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.Section {
+    display: flex;
+    align-items: center;
+
+    &.Bordered > .Item:not(:last-child) {
+        border-right-style: solid;
+        border-right-width: 1px;
+    }
+
+    &.Bordered:last-child {
+        border-left-style: solid;
+        border-left-width: 1px;
+    }
+}
+
+.Divider {
+    height: 60%;
+    margin: 0 5px;
+    width: 1px;
+}
+
+.Icon {
+    font-size: 16px;
+}
+
+.Item {
+    display: inline-flex;
+    padding: 0 16px;
+
+    &:active,
+    &:focus,
+    &:hover {
+        outline: 0;
+        text-decoration: none;
+    }
+}
+
+.Default {
+    padding: 16px;
+    outline: 0;
+}
+
+.Primary {
+    &:active,
+    &:hover {
+        border-radius: 2px;
+        background-color: $secondary-green;
+    }
+}
+
+.Secondary {
+    &:active,
+    &:hover {
+        border-radius: 2px;
+        background-color: $secondary-blue;
+    }
+}
+
+// --- \Color "Themes" ---
+.Nav.Dark {
+    color: $primary-blue;
+    background: $midnight-blue;
+
+    & .Icon {
+        color: $alto;
+    }
+
+    & .Divider {
+        background: $dark-slate-gray;
+    }
+
+    & .Item {
+        color: $white;
+    }
+
+    & .Primary,
+    & .Secondary {
+        padding: 10px 16px;
+        margin: 10px 0;
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    & .Section.Bordered > .Item:not(:last-child) {
+        border-right-color: $dark-slate-gray;
+    }
+}
+
+.Nav.Light {
+    color: $primary-blue;
+    background: $porcelain;
+
+    & .Icon {
+        color: $primary-blue;
+    }
+
+    & .Divider {
+        background: $white;
+    }
+
+    & .Item {
+        color: $primary-blue;
+    }
+
+
+    & .Section.Bordered > .Item:not(:last-child) {
+        border-right-color: $white;
+    }
+
+    & .Section.Bordered:last-child {
+        border-left-color: $white;
+    }
+}
+// --- \Color "Themes" ---

@@ -1,0 +1,40 @@
+<form>
+    <ValidatedInput::Custom
+        data-test-publication-doi-input
+        @changeset={{@manager.changeset}}
+        @valuePath='articleDoi'
+        @shouldShowMessages={{@manager.didValidate}}
+        @placeholder={{this.doiPlaceholder}}
+    >
+        <div class='input-group'>
+            <span class='input-group-addon'>{{this.doiUrlPrefix}}</span>
+            <Input
+                @value={{get @manager.changeset 'articleDoi'}}
+                @type='text'
+                @class='form-control form-group'
+                @placeholder={{this.doiPlaceholder}}
+            />
+        </div>
+    </ValidatedInput::Custom>
+
+    <div local-class='Controls'>
+        <OsfButton
+            data-analytics-name='Cancel'
+            data-test-cancel-publication-doi
+            @onClick={{action @manager.cancel}}
+            @disabled={{@manager.save.isRunning}}
+        >
+            {{t 'general.cancel'}}
+        </OsfButton>
+        <OsfButton
+            data-analytics-name='Save'
+            data-test-save-publication-doi
+            @type='primary'
+            @buttonType='submit'
+            @onClick={{action @manager.save}}
+            @disabled={{@manager.save.isRunning}}
+        >
+            {{t 'general.save'}}
+        </OsfButton>
+    </div>
+</form>

@@ -1,0 +1,40 @@
+<div local-class='Sidebar__ActiveFilters' class='well well-sm'>
+    <div class='row'>
+        <div class='col-xs-6'>
+            <h4>{{t 'registries.discover.sidebar.active_filters'}}:</h4>
+        </div>
+        <div class='col-xs-6'>
+            <button
+                data-test-clear-filters
+                type='button'
+                class='pull-right btn btn-sm btn-default'
+                {{on 'click' this.clearFilters}}
+            >
+                {{t 'registries.discover.sidebar.clear_filters'}}
+                {{fa-icon 'times'}}
+            </button>
+        </div>
+    </div>
+
+    {{#each this.filters as |filter|}}
+        <button
+            type='button'
+            class='{{filter.class}}'
+            local-class='Sidebar__ActiveFilter'
+            {{on 'click' (fn this.removeFilter filter.filter)}}
+        >
+            {{filter.display}}
+            {{fa-icon 'times-circle'}}
+        </button>
+    {{/each}}
+</div>
+
+<h4>{{t 'registries.discover.sidebar.refine_your_search'}}</h4>
+
+<div local-class='Sidebar__Facets'>
+    {{yield (hash
+        filters=this.filters
+        searchOptions=@searchOptions
+        onSearchOptionsUpdated=(action this._onSearchOptionsUpdated)
+    )}}
+</div>

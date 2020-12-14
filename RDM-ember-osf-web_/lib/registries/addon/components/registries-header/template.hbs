@@ -1,0 +1,58 @@
+<div class='container'>
+
+    <div class='row m-v-md'>
+        <div class='text-center m-t-lg col-xs-12'>
+            <div local-class='RegistriesHeader__Brand'></div>
+            <p class='lead'>
+                {{yield (hash lead=(element ''))}}
+            </p>
+        </div>
+    </div>
+
+    <div class='row m-t-md m-b-lg text-center'>
+        <div class='col-xs-12 col-sm-8 col-sm-offset-2'>
+            <div class='input-group input-group-lg'>
+                <Input
+                    data-test-search-box='true'
+                    @value={{this.value}}
+                    @class='form-control'
+                    @placeholder={{t 'registries.header.search_placeholder'}}
+                />
+                <span class='input-group-btn'>
+                    {{#if this.showHelp}}
+                        <button
+                            class='btn btn-default'
+                            type='button'
+                            {{on 'click' this.toggleHelp}}
+                        >
+                            {{fa-icon 'question' class='text-muted'}}
+                        </button>
+                    {{/if}}
+                    <button
+                        data-test-search-button
+                        class='btn btn-default'
+                        type='button'
+                        {{on 'click' this.onClick}}
+                    >
+                        {{t 'registries.header.search'}}
+                    </button>
+                </span>
+            </div>
+            <p class='p-l-md text-left'>
+                {{#if this.searchable}}
+                    {{t 'registries.header.searchable_as_of'
+                        registrations=(number-format this.searchable)
+                        today=(moment-format this.today 'MMMM D, YYYY')
+                    }}
+                {{/if}}
+            </p>
+        </div>
+    </div>
+
+    <div class='row p-v-sm'>
+        {{yield (hash row=(element ''))}}
+    </div>
+
+    {{search-help-modal isOpen=(mut this.showingHelp)}}
+
+</div>

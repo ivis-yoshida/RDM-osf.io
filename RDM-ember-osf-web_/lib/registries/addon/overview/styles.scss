@@ -1,0 +1,41 @@
+.Container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+
+    margin: 25px 0;
+}
+
+.ContentBackground {
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    background-image: url('img/bg-light.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.Loading {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.MetadataTitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0;
+}
+
+.OverviewBody {
+    background: $white;
+    padding: 30px;
+}
+
+.SideMetadata {
+    padding: 20px;
+    min-width: 300px;
+}

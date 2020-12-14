@@ -1,0 +1,24 @@
+{{title (t 'registries.drafts.draft.form.title')}}
+
+{{#let
+    this.draftRegistrationManager
+    this.navigationManager
+    as |draftManager navManager|
+}}
+    {{#if draftManager.initializing}}
+        <LoadingIndicator @dark={{true}} />
+    {{else}}
+        <main
+            {{did-insert this.checkRouteParams this.page}}
+            {{did-update this.checkRouteParams this.page}}
+        >
+            {{#if navManager.currentPageManager}}
+                <Registries::PageRenderer
+                    @pageManager={{navManager.currentPageManager}}
+                    @onInput={{perform draftManager.onPageInput navManager.currentPageManager}}
+                    @node={{this.node}}
+                />
+            {{/if}}
+        </main>
+    {{/if}}
+{{/let}}
