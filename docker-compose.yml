@@ -252,7 +252,8 @@ services:
   #################
 
   ember_osf_web:
-    image: quay.io/centerforopenscience/osf-web:develop-local
+ #   image: yacchin1205/rdm-ember-osf-web:nii-mergework-202007
+    build: RDM-ember-osf-web_
     command:
       - /bin/bash
       - -c
@@ -271,7 +272,8 @@ services:
       - 4200:4200
       - 41953:41953
     volumes:
-      - ember_osf_web_dist_vol:/code/dist
+      #- ember_osf_web_dist_vol:/code/dist
+      - RDM-ember-osf-web_
     stdin_open: true
 
   #############
