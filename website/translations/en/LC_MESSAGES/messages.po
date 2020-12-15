@@ -3772,3 +3772,7 @@ msgstr ""
 #: website/templates/util/render_node.mako:66
 msgid "Manage Contributors"
 msgstr ""
+
+#: website/templates/util/render_addon_widget.mako:245
+msgid "My Screen Test"
+msgstr ""

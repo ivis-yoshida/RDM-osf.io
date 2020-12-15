@@ -3892,3 +3892,7 @@ msgstr "%(summaryTitle)sのフォークを作成"
 #: website/templates/util/render_node.mako:66
 msgid "Manage Contributors"
 msgstr "メンバー管理"
+
+#: website/templates/util/render_addon_widget.mako:245
+msgid "My Screen Test"
+msgstr "My Screen テスト"

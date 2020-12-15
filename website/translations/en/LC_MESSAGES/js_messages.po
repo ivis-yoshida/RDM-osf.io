@@ -6664,3 +6664,6 @@ msgstr ""
 #~ msgid "${user}updated file ${path} in Dropbox Business in ${node}"
 #~ msgstr ""
 
+#: addons/myscreen/static/widget-cfg.js:22
+msgid "My Screen Param1 Label"
+msgstr ""

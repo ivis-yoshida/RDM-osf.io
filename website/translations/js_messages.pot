@@ -6658,3 +6658,6 @@ msgstr ""
 msgid "Could not GET wiki menu pages"
 msgstr ""
 
+#: addons/myscreen/static/widget-cfg.js:22
+msgid "My Screen Param1 Label"
+msgstr ""

@@ -7791,3 +7791,6 @@ msgstr "%1$sに報告してください"
 msgid "Could not GET wiki menu pages"
 msgstr "Wikiメニューページを取得できませんでした"
 
+#: addons/myscreen/static/widget-cfg.js:22
+msgid "My Screen Param1 Label"
+msgstr "パラメーター1"

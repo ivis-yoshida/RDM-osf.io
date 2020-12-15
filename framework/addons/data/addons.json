@@ -589,6 +589,36 @@
                 "status": "partial",
                 "text": "IQB-RIMS content will be registered, but version history will not be copied to the registration."
             }
+        },
+        "My Screen": {
+            "Permissions": {
+                "status": "none",
+                "text": "The GakuNin RDM does not affect the permissions of My Screen."
+            },
+            "View / download file versions": {
+                "status": "none",
+                "text": "The My Screen add-on does not provide Storage Features."
+            },
+            "Add / update files": {
+                "status": "none",
+                "text": "The My Screen add-on does not provide Storage Features."
+            },
+            "Delete files": {
+                "status": "none",
+                "text": "The My Screen add-on does not provide Storage Features."
+            },
+            "Logs": {
+                "status": "none",
+                "text": "The My Screen add-on does not provide Storage Features."
+            },
+            "Forking": {
+                "status": "partial",
+                "text": "Forking a project or component copies information about linked My Screen but the GakuNin RDM does not affect authentication of My Screen."
+            },
+            "Registering": {
+                "status": "none",
+                "text": "My Screen information will not be registered."
+            }
         }
     },
     "disclaimers": [
