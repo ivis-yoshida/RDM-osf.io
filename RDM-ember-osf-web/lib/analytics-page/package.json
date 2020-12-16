@@ -1,0 +1,31 @@
+{
+  "name": "analytics-page",
+  "keywords": [
+    "ember-addon",
+    "ember-engine"
+  ],
+  "dependencies": {
+    "ember-bootstrap": "*",
+    "ember-truth-helpers": "*",
+    "ember-component-attributes": "*",
+    "ember-composable-helpers": "*",
+    "ember-content-placeholders": "*",
+    "ember-cli-babel": "*",
+    "ember-cli-htmlbars": "*",
+    "ember-cli-sass": "*",
+    "ember-cli-template-lint": "*",
+    "ember-cli-typescript": "*",
+    "ember-concurrency": "*",
+    "ember-css-modules": "*",
+    "ember-css-modules-sass": "*",
+    "ember-intl": "*",
+    "ember-font-awesome": "*",
+    "ember-moment": "*",
+    "ember-page-title": "*"
+  },
+  "ember-addon": {
+    "paths": [
+      "../osf-components"
+    ]
+  }
+}

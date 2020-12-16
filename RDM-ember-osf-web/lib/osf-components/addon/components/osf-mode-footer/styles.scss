@@ -1,0 +1,37 @@
+.DevBanner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    border-top-right-radius: 8px;
+    background-color: $color-bg-red;
+    padding: 0.5em;
+    z-index: 999;
+
+    strong {
+        text-transform: uppercase;
+    }
+
+    button {
+        color: $color-text-white;
+        padding: 0;
+    }
+}
+
+.Tabs {
+    min-width: 60vw;
+
+    :global(.tab-content) {
+        padding: 10px;
+    }
+}
+
+.OptionsList {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.features {
+    columns: 2;
+    list-style-type: none;
+    padding-left: 0;
+}

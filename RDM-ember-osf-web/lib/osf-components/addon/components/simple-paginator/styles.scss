@@ -1,0 +1,20 @@
+.SimplePaginator__element {
+    padding-left: 20px;
+
+    &:first-of-type {
+        padding-left: 0;
+    }
+
+    button {
+        appearance: none;
+        outline: none;
+        border: 0;
+        background: transparent;
+        font-size: large;
+    }
+}
+
+.SimplePaginator__text {
+    display: inline-block;
+    width: 10em;
+}

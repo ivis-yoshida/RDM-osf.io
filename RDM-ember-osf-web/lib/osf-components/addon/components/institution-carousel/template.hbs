@@ -1,0 +1,43 @@
+{{#if this.slides}}
+    <BsCarousel
+        data-analytics-scope='Institution Carousel'
+        @interval={{0}}
+        @tabindex={{0}}
+        @showIndicators={{false}}
+        @prevControlLabel={{t 'general.previous'}}
+        @nextControlLabel={{t 'general.next'}}
+        @prevControlIcon='fa fa-angle-left'
+        @nextControlIcon='fa fa-angle-right'
+        @prevControlClassName={{local-class 'InstitutionCarousel__control left'}}
+        @nextControlClassName={{local-class 'InstitutionCarousel__control right'}}
+        @showControls={{this.showControls}}
+        as |carousel|
+    >
+        {{#each this.slides as |slide|}}
+            <carousel.slide>
+                {{#each slide as |institution index|}}
+                    <div
+                        class='{{if index 'col-sm-2' (concat 'col-sm-2 col-sm-offset-' this.columnOffset)}}'
+                        local-class='InstitutionCarousel__item'
+                        role='option'
+                        data-test-institution-carousel-item='{{institution.id}}'
+                    >
+                        <OsfLink
+                            data-analytics-name='visit_institution'
+                            @href={{institution.links.html}}
+                        >
+                            <img
+                                class='img-circle img-responsive'
+                                name={{institution.name}}
+                                logopath={{institution.logoRoundedUrl}}
+                                src={{institution.logoRoundedUrl}}
+                                alt='{{institution.name}}'
+                                title='{{institution.name}}'
+                            >
+                        </OsfLink>
+                    </div>
+                {{/each}}
+            </carousel.slide>
+        {{/each}}
+    </BsCarousel>
+{{/if}}

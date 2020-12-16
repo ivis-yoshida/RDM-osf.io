@@ -1,0 +1,19 @@
+<button
+    type='button'
+    local-class='SharingIconsPopover__anchor'
+    class='btn-link pull-right'
+    tabindex='0'
+    ...attributes
+>
+    <FaIcon @icon='share-alt' />
+    {{#bs-popover placement='left' triggerEvents='focus' local-class='Popover' viewportSelector=(concat '#' @parentId) autoPlacement=true }}
+        <SharingIcons
+            @title={{@title}}
+            @description={{@description}}
+            @hyperlink={{@hyperlink}}
+            @resultId={{@resultId}}
+            @parentId={{@parentId}}
+            @showText={{@showText}}
+        />
+    {{/bs-popover}}
+</button>

@@ -1,0 +1,95 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "allowJs": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noEmitOnError": true,
+    "noEmit": true,
+    "inlineSourceMap": true,
+    "inlineSources": true,
+    "baseUrl": ".",
+    "module": "es6",
+    "paths": {
+      "collections/*": [
+        "lib/collections/addon/*"
+      ],
+      "collections/config/*": [
+        "lib/collections/config/*"
+      ],
+      "registries/*": [
+        "lib/registries/addon/*"
+      ],
+      "registries/config/*": [
+        "lib/registries/config/*"
+      ],
+      "ember-osf-web/tests/*": [
+        "tests/*"
+      ],
+      "ember-osf-web/*": [
+        "app/*"
+      ],
+      "ember-osf-web/mirage/*": [
+        "mirage/*"
+      ],
+      "app-components": [
+        "lib/app-components/addon"
+      ],
+      "app-components/*": [
+        "lib/app-components/addon/*"
+      ],
+      "osf-components": [
+        "lib/osf-components/addon"
+      ],
+      "osf-components/*": [
+        "lib/osf-components/addon/*"
+      ],
+      "handbook": [
+        "lib/handbook/addon"
+      ],
+      "handbook/*": [
+        "lib/handbook/addon/*"
+      ],
+      "analytics-page": [
+        "lib/analytics-page/addon"
+      ],
+      "analytics-page/*": [
+        "lib/analytics-page/addon/*"
+      ],
+      "config/*": [
+        "config/*"
+      ],
+      "ember-bootstrap/components/*": [
+        "node_modules/ember-bootstrap/addon/components/bs3/*",
+        "node_modules/ember-bootstrap/addon/components/bs4/*"
+      ],
+      "*": [
+        "types/*"
+      ]
+    },
+    "experimentalDecorators": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "app",
+    "config",
+    "tests",
+    "mirage",
+    "types",
+    "lib/analytics-page",
+    "lib/collections",
+    "lib/app-components",
+    "lib/handbook",
+    "lib/osf-components",
+    "lib/registries"
+  ]
+}

@@ -1,0 +1,27 @@
+{{#if this.showDiscard}}
+    <button
+        data-test-submit-section-discard
+        type='button'
+        class='btn btn-default'
+        {{on 'click' this.discard}}
+    >
+        {{#if @discardButtonLabel}}
+            {{@discardButtonLabel}}
+        {{else}}
+            {{t (concat 'app_components.submit_section.discard')}}
+        {{/if}}
+    </button>
+{{/if}}
+<button
+    data-test-submit-section-continue
+    type='button'
+    class='btn btn-primary'
+    disabled={{this.continueDisabled}}
+    {{on 'click' this.continue}}
+>
+    {{#if @continueButtonLabel}}
+        {{@continueButtonLabel}}
+    {{else}}
+        {{t (concat 'app_components.submit_section.save')}}
+    {{/if}}
+</button>

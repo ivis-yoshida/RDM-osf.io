@@ -1,0 +1,31 @@
+.header {
+    padding-top: 90px;
+    border-bottom: 1px solid #eee;
+    height: 200px;
+
+    h1 {
+        text-align: center;
+    }
+}
+
+.body {
+    background-color: #f8f8f8;
+
+    label {
+        display: inline;
+    }
+
+    textarea {
+        height: 10em;
+    }
+}
+
+.buttons {
+    margin: 20px 10%;
+    padding: 10px 20px 20px;
+}
+
+.last-buttons {
+    margin: 20px 10%;
+    padding: 10px 20px 20px;
+}

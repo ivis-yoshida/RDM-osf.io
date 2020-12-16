@@ -1,0 +1,13 @@
+<@gutters.left-gutter as |leftGutter|>
+    <OsfLayout::RegistriesSideNav
+        inert={{and (not-eq leftGutter.mode 'column') leftGutter.closed}}
+        @onLinkClicked={{@toggleSidenav}}
+        as |sideNav|
+    >
+        {{yield (hash
+            link=sideNav.link
+            leftGutterMode=leftGutter.mode
+            toggleSidenav=@toggleSidenav
+        )}}
+    </OsfLayout::RegistriesSideNav>
+</@gutters.left-gutter>

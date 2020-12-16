@@ -1,0 +1,49 @@
+.branded-nav-wrapper {
+    :global(.navbar) {
+        box-shadow: 2px 1px 4px rgba(82, 81, 81, 0.7);
+    }
+
+    :global(.navbar-toggle) {
+        border-color: transparent;
+    }
+
+    :global(.navbar-collapse) {
+        border-top-color: transparent;
+    }
+}
+
+.navbar-image {
+    float: left;
+    clear: both;
+    text-align: center;
+    height: 48px;
+    width: 48px;
+    display: block;
+    transform: translateY(-12px);
+    margin-right: 16px;
+    background-position-x: center;
+    background-position-y: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.NavBarBuffer {
+    height: 50px;
+}
+
+// The default 340px isn't quite enough for the auth dropdown
+.secondary-navigation {
+    max-height: 400px !important;
+}
+
+@media (min-width: 992px) {
+    .secondary-navigation {
+        /* necessary for the parent flexbox container to shrink smaller than the child element's text */
+        min-width: 0;
+        margin-left: auto !important;
+    }
+
+    .links > li > a {
+        line-height: 27px !important;
+    }
+}

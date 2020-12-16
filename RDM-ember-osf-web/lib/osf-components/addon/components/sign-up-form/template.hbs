@@ -1,0 +1,90 @@
+<form
+    data-analytics-scope='Sign up form'
+    local-class='SignUpForm'
+    {{action 'submit' on='submit'}}
+>
+    {{validated-input/text
+        (html-attributes data-test-sign-up-full-name=true)
+        model=this.userRegistration
+        valuePath='fullName'
+        shouldShowMessages=this.didValidate
+        disabled=this.hasSubmitted
+        placeholder=(t 'osf-components.sign-up-form.full_name')
+        ariaLabel=(t 'osf-components.sign-up-form.full_name')
+    }}
+    {{validated-input/text
+        (html-attributes data-test-sign-up-email-1=true)
+        model=this.userRegistration
+        valuePath='email1'
+        shouldShowMessages=this.didValidate
+        disabled=this.hasSubmitted
+        placeholder=(t 'osf-components.sign-up-form.contact_email')
+        ariaLabel=(t 'osf-components.sign-up-form.contact_email')
+    }}
+    {{validated-input/text
+        (html-attributes data-test-sign-up-email-2=true)
+        model=this.userRegistration
+        valuePath='email2'
+        shouldShowMessages=this.didValidate
+        disabled=this.hasSubmitted
+        placeholder=(t 'osf-components.sign-up-form.confirm_email')
+        ariaLabel=(t 'osf-components.sign-up-form.confirm_email')
+    }}
+    {{validated-input/text
+        (html-attributes data-test-sign-up-password=true)
+        password=true
+        model=this.userRegistration
+        valuePath='password'
+        shouldShowMessages=this.didValidate
+        disabled=this.hasSubmitted
+        onKeyUp=(perform this.strength this.userRegistration.password)
+        placeholder=(t 'osf-components.sign-up-form.password')
+        ariaLabel=(t 'osf-components.sign-up-form.password')
+    }}
+    <div class='row' hidden={{not this.progress}}>
+        <div class='col-xs-12'>
+            <div class='progress' local-class='CreatePassword'>
+                <div
+                    class='progress-bar progress-bar-sm progress-bar-{{this.progress}} progress-bar-{{this.progressStyle}}'
+                    role='progressbar'>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ValidatedInput::Checkbox
+        data-test-sign-up-tos
+        local-class='tos-checkbox'
+        disabled={{this.hasSubmitted}}
+        @model={{this.userRegistration}}
+        @valuePath='acceptedTermsOfService'
+        @shouldShowMessages={{this.didValidate}}
+    >
+        <SignUpPolicy />
+    </ValidatedInput::Checkbox>
+    {{#if this.hasSubmitted}}
+        <div class='osf-box-lt' local-class='help-block'>
+            <p class='ext-success p-xs'>{{t 'osf-components.sign-up-form.registration_success' email=this.userRegistration.email1}}</p>
+        </div>
+    {{else}}
+        <div class='col-md-12' local-class='RecaptchaParent'>
+            <ValidatedInput::Recaptcha
+                data-test-recaptcha
+                @model={{this.userRegistration}}
+                @valuePath='recaptchaResponse'
+                @shouldShowMessages={{this.didValidate}}
+                @bindReset={{action (mut this.resetRecaptcha)}}
+            />
+        </div>
+        <div>
+            <OsfButton
+                data-test-sign-up-button
+                data-analytics-name='Submit sign up'
+                @buttonType='submit'
+                @type='success'
+                @onClick={{action this.submit}}
+            >
+                {{t 'osf-components.sign-up-form.sign_up_button_label'}}
+            </OsfButton>
+        </div>
+    {{/if}}
+</form>

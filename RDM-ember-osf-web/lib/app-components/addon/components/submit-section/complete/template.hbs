@@ -1,0 +1,21 @@
+{{#if @showReopen}}
+    {{#if this.editable}}
+        <div
+            data-test-submit-section-click-to-edit
+            role='button'
+            {{on 'click' this.edit}}
+        >
+            {{yield}}
+            <p
+                local-class='edit-message'
+                class='text-smaller'
+            >
+                {{t 'app_components.submit_section.click_to_edit'}}
+            </p>
+        </div>
+    {{else}}
+        <div data-test-submit-section-click-to-edit>
+            {{yield}}
+        </div>
+    {{/if}}
+{{/if}}

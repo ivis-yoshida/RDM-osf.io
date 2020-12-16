@@ -1,0 +1,27 @@
+{{#validated-input/x-input-wrapper
+    model=this.model
+    changeset=this.changeset
+    errors=this.errors
+    valuePath=this.valuePath
+    validationStatus=this.validationStatus
+}}
+    <div local-class='Checkboxes'>
+        {{#each this.options as |option|}}
+            {{#let (unique-id this.elementId) as |checkboxId|}}
+                {{yield (hash
+                    option=option
+                    checkboxId=checkboxId
+                    checkbox=(component 'validated-input/checkboxes/x-checkbox'
+                        relationArray=this.value
+                        option=option
+                        checkboxName=this.valuePath
+                        ariaLabel=this.ariaLabel
+                        disabled=this.disabled
+                        checkboxId=checkboxId
+                        onCheck=(action this.onCheck)
+                    )
+                )}}
+            {{/let}}
+        {{/each}}
+    </div>
+{{/validated-input/x-input-wrapper}}

@@ -1,0 +1,112 @@
+{{#if this.session.isAuthenticated}}
+    <BsDropdown
+        data-test-auth-dropdown
+        local-class='DropdownContainer'
+        @tagName='li'
+        @classNames='dropdown secondary-nav-dropdown'
+        as |dd|
+    >
+        <dd.toggle data-test-auth-dropdown-toggle @classNames='btn-link'>
+            <div class='osf-profile-image'>
+                <img src='{{this.user.profileImage}}&s=25' alt='{{t 'auth_dropdown.user_gravatar'}}'>
+            </div>
+            <div class='nav-profile-name'>{{this.user.fullName}}</div>
+            <span class='caret'></span>
+        </dd.toggle>
+
+        <dd.menu
+            class='auth-dropdown'
+            local-class='AuthDropdown'
+            @align='right'
+            as |ddm|
+        >
+            {{#if @headline}}
+                <ddm.item role='none' local-class='Headline'>
+                    {{@headline}}
+                </ddm.item>
+            {{/if}}
+            <ddm.item role='menuitem'>
+                <OsfLink
+                    data-test-ad-my-profile
+                    data-analytics-name='MyProfile'
+                    @href={{this.profileURL}}
+                >
+                    <i class='fa fa-user fa-lg p-r-xs'></i>
+                    {{t 'auth_dropdown.my_profile'}}
+                </OsfLink>
+            </ddm.item>
+            <ddm.item role='menuitem'>
+                <OsfLink
+                    data-test-ad-settings
+                    data-analytics-name='Settings'
+                    @href={{this.settingsURL}}
+                >
+                    <i class='fa fa-cog fa-lg p-r-xs'></i>
+                    {{t 'general.settings'}}
+                </OsfLink>
+            </ddm.item>
+            {{#if (or useNavSupport useNavGlobalSupport)}}
+            <ddm.item role='menuitem'>
+                {{#if replaceGlobalSupportUrl}}
+                <a href="{{globalSupportURL}}" onclick={{action '_onLinkClicked' 'Navbar - Support'}} target="{{globalSupportTarget}}">
+                    <i class="fa fa-life-ring fa-lg p-r-xs"></i>
+                    {{t 'auth_dropdown.osf_support'}}
+                </a>
+                {{else}}
+                <OsfLink
+                    data-test-ad-support
+                    data-analytics-name='Support'
+                    @route='support'
+                >
+                    <i class='fa fa-life-ring fa-lg p-r-xs'></i>
+                    {{t 'auth_dropdown.osf_support'}}
+                </OsfLink>
+                {{/if}}
+            </ddm.item>
+            {{/if}}
+            <ddm.item role='menuitem'>
+                <OsfButton
+                    data-test-ad-logout
+                    data-analytics-name='Logout'
+                    class='logoutLink'
+                    @type='link'
+                    @onClick={{action 'logout'}}
+                >
+                    <i class='fa fa-sign-out fa-lg p-r-xs'></i>
+                    {{t 'auth_dropdown.log_out'}}
+                </OsfButton>
+            </ddm.item>
+        </dd.menu>
+    </BsDropdown>
+{{else}}
+    <li class='sign-in'>
+        <div>
+            {{#if useNavSignUp}}
+            <OsfLink
+                data-test-ad-sign-up-button
+                data-analytics-name='SignUp'
+                class='btn btn-success btn-top-signup m-l-sm m-r-xs'
+                @route='register'
+                @queryParams={{this.signUpQueryParams}}
+            >
+                {{t 'auth_dropdown.sign_up'}}
+            </OsfLink>
+            {{/if}}
+            {{#if (not useNavEmbeddedDS)}}
+            <OsfButton
+                data-test-sign-in-button
+                data-analytics-name='SignIn'
+                class='btn-top-login'
+                @onClick={{action this.login}}
+                @size='xs'
+                @type='info'
+            >
+                {{t 'auth_dropdown.sign_in'}}
+            </OsfButton>
+            {{else}}
+            <div id='embDS' />
+            {{embedded-ds 'embDS'}}
+            {{/if}}
+        </div>
+    </li>
+{{/if}}

@@ -1,0 +1,15 @@
+<ul local-class='ul'>
+    {{#each this.items as |item|}}
+        <li local-class='li'>
+            <button
+                data-test-page={{item.text}}
+                type='button'
+                local-class={{if (eq this.current item.text) 'active'}}
+                disabled={{item.disabled}}
+                {{action (or item.action this.setPage) item.text}}
+            >
+                {{item.text}}
+            </button>
+        </li>
+    {{/each}}
+</ul>

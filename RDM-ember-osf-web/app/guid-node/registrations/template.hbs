@@ -1,0 +1,248 @@
+{{! using unsafeTitle here to avoid double encoding because the title helper does its own }}
+{{title (t 'node.registrations.page_title' nodeTitle=this.node.unsafeTitle)}}
+<div
+    data-test-registrations-container
+    data-analytics-scope='Registrations'
+    class='container'
+    local-class='RegistrationsContainer'
+>
+    <div class='row'>
+        <div class='col-xs-9 col-sm-8'>
+            <BsTab
+                data-analytics-scope='Registrations Tab'
+                @activeId={{this.activeTab}}
+                @onChange={{action this.changeTab}}
+                as |tab|
+            >
+                <tab.pane
+                    @id='registrations'
+                    @title={{t 'node.registrations.registrations'}}
+                >
+                    <div class='row' local-class='RegistrationsPane' data-test-registrations-pane>
+                        <NodeList
+                            @modelTaskInstance={{this.model.taskInstance}}
+                            @relationshipName='registrations'
+                            @showTags={{true}}
+                            as |nl|
+                        >
+                            <nl.empty>
+                                <p>
+                                    {{t 'node.registrations.no_registrations'}}
+                                    {{#if (and this.node.currentUserIsContributor (not this.node.userHasAdminPermission))}}
+                                        {{t 'node.registrations.only_admins_can_initiate'}}
+                                    {{/if}}
+                                </p>
+                                {{#if this.node.userHasAdminPermission}}
+                                    <p>{{t 'node.registrations.start_new'}}</p>
+                                {{/if}}
+                                <p>
+                                    {{t 'node.registrations.learn_more'
+                                        learnMoreLink='https://openscience.zendesk.com/hc/en-us/articles/360019930893'
+                                        htmlSafe=true
+                                    }}
+                                </p>
+                            </nl.empty>
+                        </NodeList>
+                    </div>
+                </tab.pane>
+                {{#if this.node.userHasAdminPermission}}
+                    <tab.pane
+                        data-analytics-scope='Drafts tab'
+                        @id='drafts'
+                        @title={{t 'node.registrations.draft_registrations'}}
+                    >
+                        <div class='row' local-class='RegistrationsPane' data-test-draft-registrations-pane>
+                            <PaginatedList::HasMany
+                                data-analytics-scope='Project Draft Registrations'
+                                @modelTaskInstance={{this.model.taskInstance}}
+                                @relationshipName='draftRegistrations'
+                                @bindReload={{action (mut this.reloadDrafts)}}
+                                @query={{this.draftsQueryParams}}
+                                as |list|
+                            >
+                                <list.item as |draftRegistration|>
+                                    <DraftRegistrationCard
+                                        @draftRegistration={{draftRegistration}}
+                                        @onDelete={{action list.doReload 1}}
+                                    />
+                                </list.item>
+
+                                <list.empty>
+                                    <p>{{t 'node.registrations.no_drafts'}}</p>
+                                    <p>{{t 'node.registrations.start_new'}}</p>
+                                    <p>
+                                        {{t 'node.registrations.learn_more'
+                                          learnMoreLink='https://openscience.zendesk.com/hc/en-us/articles/360019930893'
+                                          htmlSafe=true
+                                        }}
+                                    </p>
+                                </list.empty>
+                            </PaginatedList::HasMany>
+                        </div>
+                    </tab.pane>
+                {{/if}}
+            </BsTab>
+        </div>
+        {{#if this.node.userHasAdminPermission}}
+            <div class='col-xs-3 col-sm-4'>
+                <OsfButton
+                    data-test-new-registration-button
+                    data-analytics-name='Open new registration modal'
+                    @type='success'
+                    @onClick={{action (mut this.newModalOpen) true}}
+                >
+                    {{t 'node.registrations.new'}}
+                </OsfButton>
+                <BsModal
+                    data-test-new-registration-modal
+                    @size='lg'
+                    @open={{this.newModalOpen}}
+                    @onSubmit={{action this.createDraft}}
+                    @onHidden={{action this.closeNewModal}}
+                    as |modal|
+                >
+                    <modal.header data-test-new-registration-modal-header>
+                        <h4 class='NewRegistrationModal__header'>{{t 'node.registrations.new_registration_modal.title'}}</h4>
+                    </modal.header>
+                    <modal.body data-test-new-registration-modal-body data-analytics-scope='Node - Registrations - New registration modal'>
+                        <p class='NewRegistrationModal__info'>{{t 'node.registrations.new_registration_modal.info' htmlSafe=true}}</p>
+                        <div class='NewRegistrationModal__schema-list'>
+                            {{#if this.getRegistrationSchemas.isRunning}}
+                                <ContentPlaceholders as |placeholder|>
+                                    {{placeholder.list items=8}}
+                                </ContentPlaceholders>
+                            {{else}}
+                                <ul>
+                                    {{#each this.schemas as |schema|}}
+                                        <li data-test-new-registration-modal-schema={{schema.name}}>
+                                            <RadioButton
+                                                @value={{schema}}
+                                                @groupValue={{this.selectedSchema}}
+                                                @changed={{action this.schemaChanged}}
+                                            >
+                                                <div>
+                                                    {{schema.name}}
+                                                    <span>
+                                                        {{fa-icon 'info-circle'}}
+                                                        <BsTooltip>
+                                                            {{schema.schema.description}}
+                                                        </BsTooltip>
+                                                    </span>
+                                                </div>
+                                            </RadioButton>
+                                        </li>
+                                    {{/each}}
+                                </ul>
+                            {{/if}}
+                        </div>
+                    </modal.body>
+                    <modal.footer
+                        data-test-new-registration-modal-footer
+                        data-analytics-scope='Node - Registrations - New registration modal footer'
+                    >
+                        <OsfButton
+                            data-test-new-registration-modal-cancel-button
+                            data-analytics-name='Close new registration modal'
+                            @onClick={{action modal.close}}
+                        >
+                            {{t 'general.cancel'}}
+                        </OsfButton>
+                        <OsfButton
+                            data-test-new-registration-modal-create-draft-button
+                            data-analytics-name='Create draft'
+                            @onClick={{action modal.submit}}
+                            @type='info'
+                        >
+                            {{t 'node.registrations.new_registration_modal.create'}}
+                        </OsfButton>
+                    </modal.footer>
+                </BsModal>
+                <BsModal
+                    data-test-prereg-challenge-modal
+                    @size='lg'
+                    @open={{this.preregModalOpen}}
+                    @onSubmit={{action this.createDraft}}
+                    @onHidden={{action this.closePreregModal}}
+                    as |modal|
+                >
+                    <modal.header data-test-prereg-challenge-modal-header>
+                        <h3 class='PreRegChallengeModal__title'>{{t 'node.registrations.prereg_modal.title'}}</h3>
+                    </modal.header>
+                    <modal.body data-test-prereg-challenge-modal-body>
+                        <h2 class='PreRegChallengeModal__notice'>{{t 'node.registrations.prereg_modal.notice'}}</h2>
+                        <div class='row m-t-xl'>
+                            <div class='col-lg-10 col-lg-offset-1'>
+                                <p class='PreRegChallengeModal__eligibility'>
+                                    {{t 'node.registrations.prereg_modal.eligibility'
+                                        approvedJournalLink=this.preregLinks.approvedJournal
+                                        htmlSafe=true
+                                    }}
+                                </p>
+                                <p class='PreRegChallengeModal__info'>
+                                    {{t 'node.registrations.prereg_modal.info'
+                                        learnMoreLink=this.preregLinks.learnMore
+                                        htmlSafe=true
+                                    }}
+                                </p>
+                                <ol class='PreRegChallengeModal__list'>
+                                    {{t
+                                        'node.registrations.prereg_modal.list'
+                                        eligibleJournalLink=this.preregLinks.eligibleJournal
+                                        embargoedCountriesLink=this.preregLinks.embargoedCountries
+                                        termsLink=this.preregLinks.terms
+                                        htmlSafe=true
+                                    }}
+                                </ol>
+                                <label data-test-prereg-challenge-modal-consent-checkbox class='PreRegChallengeModal__consent'>
+                                    <Input
+                                        @type='checkbox'
+                                        @change={{action this.togglePreregConsent}}
+                                    />
+                                    {{t 'node.registrations.prereg_modal.consent'}}
+                                </label>
+                            </div>
+                        </div>
+                    </modal.body>
+                    <modal.footer
+                        data-test-prereg-challenge-modal-footer
+                        data-analytics-scope='Node - Registrations - Prereg Challenge modal footer'
+                    >
+                        <div class='row'>
+                            <div class='col-lg-10 col-lg-offset-1'>
+                                <OsfButton
+                                    data-test-prereg-challenge-modal-cancel-button
+                                    data-analytics-name='Close Prereg Challenge modal'
+                                    @onClick={{action modal.close}}
+                                >
+                                    {{t 'general.cancel'}}
+                                </OsfButton>
+                                <OsfButton
+                                    data-test-prereg-challenge-modal-continue-button
+                                    data-analytics-name='Continue'
+                                    @onClick={{action modal.submit}}
+                                    @type='info'
+                                    @disabled={{not this.preregConsented}}
+                                >
+                                    {{t 'node.registrations.prereg_modal.continue'}}
+                                </OsfButton>
+                            </div>
+                        </div>
+                    </modal.footer>
+                </BsModal>
+            </div>
+        {{/if}}
+    </div>
+    {{#if this.isComponentRootAdmin}}
+        <div class='row'>
+            {{t 'node.registrations.register_entire_project' rootNodeTitle=this.node.root.title}}
+            <OsfLink
+                data-analytics-name='Go to registation'
+                @route='guid-node.registrations'
+                @models={{array this.node.root.id}}
+            >
+                {{t 'node.registrations.here'~}}
+            </OsfLink>
+            {{~t 'general.period'}}
+        </div>
+    {{/if}}
+</div>

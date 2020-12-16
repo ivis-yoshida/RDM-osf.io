@@ -1,0 +1,19 @@
+<DocsDemo as |demo|>
+    <demo.example @name='delete-button.demo-disabled.hbs'>
+        <DeleteButton
+            @disabled={{true}}
+            @delete={{action @delete 'disabled'}}
+        />
+        <DeleteButton
+            @small={{true}}
+            @disabled={{true}}
+            @delete={{action @delete 'disabled'}}
+        />
+    </demo.example>
+
+    <demo.snippet @name='delete-button.demo-disabled.hbs' />
+    <demo.snippet
+        @name='delete-button.delete-action.ts'
+        @label='component.ts'
+    />
+</DocsDemo>

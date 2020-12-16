@@ -1,0 +1,37 @@
+<div
+    local-class='col-division-right'
+    class='col-xs-12 col-md-5'
+>
+    <ProjectContributors::Search
+        @node={{@node}}
+        @contributors={{@contributors}}
+        @onAddContributor={{action this.reloadContributors}}
+    />
+</div>
+<div class='col-xs-12 col-md-7'>
+    <h2 local-class='inline'>
+        {{t 'app_components.project_contributors.title'}}
+    </h2>
+    <FaIcon @icon='question-circle'>
+        <BsPopover
+            @placement='bottom'
+            @triggerEvents='hover'
+            @title={{t 'app_components.project_contributors.contributors_popover_title'}}
+        >
+            {{t 'app_components.project_contributors.contributors_popover'}}
+        </BsPopover>
+    </FaIcon>
+    <p>
+        {{t 'app_components.project_contributors.instructions'}}
+    </p>
+    <ProjectContributors::List
+        @node={{this.node}}
+        @bindReload={{action (mut this.reloadContributorsList)}}
+    />
+</div>
+<SubmitSectionButtons
+    @showDiscard={{false}}
+    @discard={{this.discard}}
+    @continue={{this.continue}}
+    @continueButtonLabel={{t 'app_components.submit_section.continue'}}
+/>

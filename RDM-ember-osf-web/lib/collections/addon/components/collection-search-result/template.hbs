@@ -1,0 +1,34 @@
+{{#component
+    (concat 'collection-search-result/' this.type)
+    item=this.item
+    status=this.result.status
+}}
+    {{#each this.choiceFilters as |choiceFilter|}}
+        <span
+            data-test-collection-search-result-choice-filter={{choiceFilter.value}}
+            role='button'
+            local-class='choiceFilter'
+            onclick={{action 'addChoiceFilter' choiceFilter.facet choiceFilter.value}}
+        >
+            <b>
+                {{t choiceFilter.label}}
+                {{choiceFilter.value}}
+            </b>
+        </span>
+    {{/each}}
+{{/component}}
+
+{{#if @expandable}}
+    <div class='text-center'>
+        <button
+            data-test-collection-search-expand-button
+            type='button'
+            class='btn btn-link'
+            local-class='toggleShowBody'
+            aria-label={{t (concat 'collections.collection_search_result.' (if this.showBody 'collapse' 'expand'))}}
+            {{action 'toggleShowBody'}}
+        >
+            {{fa-icon (concat 'caret-' (if this.showBody 'up' 'down'))}}
+        </button>
+    </div>
+{{/if}}

@@ -1,0 +1,11 @@
+<ul>
+    {{#each this.fileList as |file|}}
+        <li>
+            <OsfLink @href={{file.viewUrl}}>
+                {{file.selectedFileName}}
+            </OsfLink>
+        </li>
+    {{else}}
+        <li>{{t 'registries.overview.form_view.no_files'}}</li>
+    {{/each}}
+</ul>

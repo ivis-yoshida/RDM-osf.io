@@ -1,0 +1,13 @@
+.Editable__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+
+    .EditButton {
+        padding: 0;
+    }
+}
+
+.DialogMain {
+    min-width: 30vw;
+}

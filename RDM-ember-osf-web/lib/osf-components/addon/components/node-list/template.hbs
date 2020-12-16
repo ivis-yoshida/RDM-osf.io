@@ -1,0 +1,16 @@
+<PaginatedList::HasMany
+    @modelTaskInstance={{@modelTaskInstance}}
+    @relationshipName={{@relationshipName}}
+    @query={{this.queryParams}}
+    @bindReload={{this.bindReload}}
+    as |list|
+>
+    <list.item as |node|>
+        <NodeCard
+            @node={{node}}
+            @showTags={{@showTags}}
+        />
+    </list.item>
+
+    {{yield (hash empty=list.empty)}}
+</PaginatedList::HasMany>
