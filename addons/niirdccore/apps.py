@@ -18,7 +18,7 @@ class AddonAppConfig(BaseAddonAppConfig):
 
     owners = ['node']
 
-    views = []
+    views = ['page']
     configs = ['node']
 
     categories = ['other']

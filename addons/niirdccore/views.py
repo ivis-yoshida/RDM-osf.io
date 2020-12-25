@@ -59,5 +59,7 @@ def niirdccore_get_dmp_info(**kwargs):
     dmp_info = requests.get(url, headers=headers)
 
     return {'data': {'id': node._id, 'type': 'dmp-status',
-                    'attributes': dmp_info.text}}
+                    #'attributes': dmp_info.text}}
+                    #dummy
+                    'attributes': {'name': 'testname', 'mbox': 'testaddress', 'title': 'testtitle', 'description': 'testdescription'}}}
 
