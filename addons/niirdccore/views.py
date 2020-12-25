@@ -50,14 +50,8 @@ def niirdccore_set_config(**kwargs):
 @must_have_permission('admin')
 @must_have_addon(SHORT_NAME, 'node')
 def niirdccore_get_dmp_info(**kwargs):
-    node = kwargs['node'] or kwargs['project']
-    addon = node.get_addon(SHORT_NAME)
-
-    dmp_id = addon.get_dmp_id()
-    url = settings.DMR_URL + '/v1/dmp/' + str(dmp_id)
-    headers = {'Authorization': 'Bearer ' + addon.get_dmr_api_key()}
-    dmp_info = requests.get(url, headers=headers)
-
+    
+    #dummy
     return {'data': {'id': node._id, 'type': 'dmp-status',
-                    'attributes': dmp_info.text}}
+                    'attributes': {'name': 'testname', 'mbox': 'testaddress', 'title': 'testtitle', 'description': 'testdescription'}}}
 
