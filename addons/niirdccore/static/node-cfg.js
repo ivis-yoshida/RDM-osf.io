@@ -21,7 +21,8 @@ function NodeSettings() {
   self.loadConfig = function() {
     var url = self.baseUrl + 'settings';
     console.log(logPrefix, 'loading: ', url);
-
+  }
+}
 var settings = new NodeSettings();
 osfHelpers.applyBindings(settings, `#${SHORT_NAME}Scope`);
 settings.loadConfig();
