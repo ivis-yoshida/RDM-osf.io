@@ -13,6 +13,7 @@ from website.project.decorators import (
     must_have_addon,
 )
 from addons.jupyterhub.apps import JupyterhubAddonAppConfig
+from addons.niirdccore.models import AddonList
 
 logger = logging.getLogger(__name__)
 
@@ -53,11 +54,32 @@ def niirdccore_get_dmp_info(**kwargs):
     node = kwargs['node'] or kwargs['project']
     addon = node.get_addon(SHORT_NAME)
 
-    dmp_id = addon.get_dmp_id()
-    url = settings.DMR_URL + '/v1/dmp/' + str(dmp_id)
-    headers = {'Authorization': 'Bearer ' + addon.get_dmr_api_key()}
-    dmp_info = requests.get(url, headers=headers)
+    # dmp_id = addon.get_dmp_id()
+    # url = settings.DMR_URL + '/v1/dmp/' + str(dmp_id)
+    # headers = {'Authorization': 'Bearer ' + addon.get_dmr_api_key()}
+    # dmp_info = requests.get(url, headers=headers)
 
     return {'data': {'id': node._id, 'type': 'dmp-status',
-                    'attributes': dmp_info.text}}
+                    'attributes':{'name': 'testname', 'mbox': 'testaddress', 'title': 'testtitle', 'description': 'testdescription'}}}
 
+@must_be_valid_project
+@must_have_permission('admin')
+@must_have_addon(SHORT_NAME, 'node')
+def apply_dmp_subscribe(**kwargs):
+
+    node = kwargs['node'] or kwargs['project']
+    addon = node.get_addon(SHORT_NAME)
+
+
+
+    try:
+        addon_id = request.json['apply_subscription']['addon_id']
+        dmp_endpoint = request.json['apply_subscription']['dmp_endpoint']
+    except KeyError:
+        raise HTTPError(http_status.HTTP_400_BAD_REQUEST)
+
+    # add to addon_list
+    addon_list = AddonList(node._id, addon_id, dmp_endpoint)
+    # addon_list.set_project_id(node._id)
+    # addon_list.set_addon_id(addon_id)
+    # addon_list.set_dmp_endpoint(dmp_endpoint)

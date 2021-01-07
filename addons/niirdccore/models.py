@@ -21,15 +21,17 @@ class NodeSettings(BaseNodeSettings):
     """
     プロジェクトにアタッチされたアドオンに関するモデルを定義する。
     """
-    dmp_id = models.TextField(blank=False, null=True)
+    dmp_id = models.TextField(blank=True, null=True)
+
+
 
     def get_dmr_api_key(self):
         return settings.DMR_API_KEY
-    
+
     def set_dmp_id(self, dmp_id):
         self.dmp_id = dmp_id
         self.save()
-    
+
     def get_dmp_id(self):
         return self.dmp_id
 
@@ -56,3 +58,38 @@ class NodeSettings(BaseNodeSettings):
             return
 
         instance.add_addon(SHORT_NAME, auth=None, log=False)
+
+class AddonList(BaseNodeSettings):
+    """
+    送信先アドオンリストに関するモデルを定義する。
+    """
+    owner = models.ForeignKey("AddonList", related_name="addon_list")
+    project_id = models.TextField(blank=False, null=True)
+    addon_id = models.TextField(blank=False, null=True)
+    endpoint = models.TextField(blank=False, null=True)
+
+    def __init__(self, project_id, addon_id, endpoint):
+        self.project_id = project_id
+        self.addon_id = addon_id
+        self.endpoint = endpoint
+
+    def get_project_id(self):
+        return self.project_id
+
+    def set_project_id(self, project_id):
+        self.project_id = project_id
+        self.save()
+
+    def get_addon_id(self):
+        return self.addon_id
+
+    def set_addon_id(self, addon_id):
+        self.addon_id = addon_id
+        self.save()
+
+    def get_endpoint(self):
+        return self.endpoint
+
+    def set_endpoint(self, endpoint):
+        self.endpoint = endpoint
+        self.save()
