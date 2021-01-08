@@ -122,6 +122,7 @@ INSTALLED_APPS = (
     'addons.dropboxbusiness',
     'addons.nextcloudinstitutions',
     'addons.niirdccore',
+    'addons.testSkelton',
 )
 
 # local development using https

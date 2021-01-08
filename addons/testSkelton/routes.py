@@ -16,6 +16,10 @@ api_routes = {
             '/project/<pid>/{}/settings'.format(SHORT_NAME),
             '/project/<pid>/node/<nid>/{}/settings'.format(SHORT_NAME),
         ], 'put', views.myskelton_set_config, json_renderer),
+        Rule([
+            '/project/<pid>/{}/apply_subscription'.format(SHORT_NAME),
+            '/project/<pid>/node/<nid>/{}/apply_subscription'.format(SHORT_NAME),
+        ], 'post', views.apply_subscription, json_renderer),
     ],
     'prefix': '/api/v1',
 }
