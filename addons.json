@@ -26,7 +26,8 @@
         "nextcloudinstitutions",
         "iqbrims",
         "dropboxbusiness",
-        "niirdccore"
+        "niirdccore",
+        "testSkelton"
     ],
     "addons_default": [
         "osfstorage",

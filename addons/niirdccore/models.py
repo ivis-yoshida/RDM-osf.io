@@ -76,6 +76,7 @@ class AddonList(BaseNodeSettings):
     def get_project_id(self):
         return self.project_id
 
+    # @receiver(post_save, sender=Node)
     def set_project_id(self, project_id):
         self.project_id = project_id
         self.save()

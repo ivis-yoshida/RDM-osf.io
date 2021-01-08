@@ -70,8 +70,6 @@ def apply_dmp_subscribe(**kwargs):
     node = kwargs['node'] or kwargs['project']
     addon = node.get_addon(SHORT_NAME)
 
-
-
     try:
         addon_id = request.json['apply_subscription']['addon_id']
         dmp_endpoint = request.json['apply_subscription']['dmp_endpoint']
@@ -80,6 +78,3 @@ def apply_dmp_subscribe(**kwargs):
 
     # add to addon_list
     addon_list = AddonList(node._id, addon_id, dmp_endpoint)
-    # addon_list.set_project_id(node._id)
-    # addon_list.set_addon_id(addon_id)
-    # addon_list.set_dmp_endpoint(dmp_endpoint)
