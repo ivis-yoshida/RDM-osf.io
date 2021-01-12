@@ -19,7 +19,7 @@ api_routes = {
         Rule([
             '/project/<pid>/{}/apply_subscription'.format(SHORT_NAME),
             '/project/<pid>/node/<nid>/{}/apply_subscription'.format(SHORT_NAME),
-        ], 'get', views.apply_subscription, json_renderer),
+        ], 'post', views.apply_subscription, json_renderer),
     ],
     'prefix': '/api/v1',
 }
