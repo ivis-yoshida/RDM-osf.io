@@ -63,6 +63,9 @@ def niirdccore_get_dmp_info(**kwargs):
     return {'data': {'id': node._id, 'type': 'dmp-status',
                     'attributes':{'name': 'testname', 'mbox': 'testaddress', 'title': 'testtitle', 'description': 'testdescription'}}}
 
+@must_be_valid_project
+@must_have_permission('admin')
+@must_have_addon(SHORT_NAME, 'node')
 def apply_dmp_subscribe(**kwargs):
     node = kwargs['node']
 
