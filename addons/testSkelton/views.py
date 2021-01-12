@@ -46,4 +46,17 @@ def myskelton_set_config(**kwargs):
 @must_have_permission('admin')
 @must_have_addon(SHORT_NAME, 'node')
 def apply_subscription(**kwargs):
-    return core_views.apply_dmp_subscribe(**kwargs)
+    node = kwargs['node'] or kwargs['project']
+    addon = node.get_addon(SHORT_NAME)
+
+    try:
+        addon_id = request.json['apply_subscription']['addon_id']
+        dmp_endpoint = request.json['apply_subscription']['dmp_endpoint']
+    except KeyError:
+        raise HTTPError(http_status.HTTP_400_BAD_REQUEST)
+
+    return core_views.apply_dmp_subscribe(
+        node = node,
+        addon_id = addon_id,
+        dmp_endpoint = dmp_endpoint
+    )

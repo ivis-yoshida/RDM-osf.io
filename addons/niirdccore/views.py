@@ -63,28 +63,20 @@ def niirdccore_get_dmp_info(**kwargs):
     return {'data': {'id': node._id, 'type': 'dmp-status',
                     'attributes':{'name': 'testname', 'mbox': 'testaddress', 'title': 'testtitle', 'description': 'testdescription'}}}
 
-@must_be_valid_project
-@must_have_permission('admin')
-@must_have_addon(SHORT_NAME, 'node')
+# @must_be_valid_project
+# @must_have_permission('admin')
+# @must_have_addon(SHORT_NAME, 'node')
 def apply_dmp_subscribe(**kwargs):
-
-    node = kwargs['node'] or kwargs['project']
-    addon = node.get_addon(SHORT_NAME)
-
-    try:
-        addon_id = request.json['apply_subscription']['addon_id']
-        dmp_endpoint = request.json['apply_subscription']['dmp_endpoint']
-    except KeyError:
-        raise HTTPError(http_status.HTTP_400_BAD_REQUEST)
+    node = kwargs['node']
 
     # add to addon_list
     addon_list = AddonList()
 
-    addon_list.set_addon_id(addon_id)
-    addon_list.set_endpoint(dmp_endpoint)
-    addon_list.set_owner(addon)
+    addon_list.set_addon_id(kwargs['addon_id'])
+    addon_list.set_endpoint(kwargs['dmp_endpoint'])
+    addon_list.set_owner(node.get_addon(SHORT_NAME))
 
-    return "SUCCESS( NODE_ID:{}, ADDON_ID:{}, ENDPOINT:{} )".format(node._id, addon_id, dmp_endpoint)
+    return "SUCCESS( ADDON_ID:{}, ENDPOINT:{} )".format(kwargs['addon_id'], kwargs['dmp_endpoint'])
 
 @must_be_valid_project
 @must_have_permission('admin')
