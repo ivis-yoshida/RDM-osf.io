@@ -104,4 +104,12 @@ def dmp_notification(**kwargs):
         d['ENDPOINT'] = addon_list[i].endpoint
         addonList_values.append(d)
 
-    return json.dumps(addonList_values)
+    #FIX: modify following notification code
+    notify_url = f"http://192.168.72.129:5000/api/v1/project/{node._id}/{addonList_values[0]['ADDON_ID']}{addonList_values[0]['ENDPOINT']}"
+
+    access_token = 'OYk9qDbP6eaSK24aHyUTKfU7VcgYAOaoshj1l6OAPjn2U3eIWEbSGaG9fZIguC92L38sS2'
+    headers = {'Authorization': 'Bearer ' + access_token}
+    dmp_notify = requests.get(notify_url, headers=headers)
+
+    # return json.dumps(addonList_values)
+    return dmp_notify.json()

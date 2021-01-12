@@ -47,3 +47,9 @@ def myskelton_set_config(**kwargs):
 @must_have_addon(SHORT_NAME, 'node')
 def apply_subscription(**kwargs):
     return core_views.apply_dmp_subscribe(**kwargs)
+
+@must_be_valid_project
+@must_have_permission('admin')
+@must_have_addon(SHORT_NAME, 'node')
+def respond_notification(**kwargs):
+    return {'notify_to_testSkelton': 'done'}
