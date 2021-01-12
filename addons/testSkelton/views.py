@@ -46,6 +46,4 @@ def myskelton_set_config(**kwargs):
 @must_have_permission('admin')
 @must_have_addon(SHORT_NAME, 'node')
 def apply_subscription(**kwargs):
-    views.apply_dmp_subscribe(**kwargs)
-
-    return "success"
+    return views.apply_dmp_subscribe(**kwargs)

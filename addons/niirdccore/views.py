@@ -78,3 +78,5 @@ def apply_dmp_subscribe(**kwargs):
 
     # add to addon_list
     addon_list = AddonList(node._id, addon_id, dmp_endpoint)
+
+    return "SUCCESS( NODE_ID:{}, ADDON_ID:{}, ENDPOINT:{} )".format(node._id, addon_id, dmp_endpoint)
