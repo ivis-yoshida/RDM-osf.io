@@ -3,6 +3,7 @@ from rest_framework import status as http_status
 from flask import request
 import logging
 import requests
+import json
 
 from . import SHORT_NAME
 from . import settings
@@ -77,6 +78,30 @@ def apply_dmp_subscribe(**kwargs):
         raise HTTPError(http_status.HTTP_400_BAD_REQUEST)
 
     # add to addon_list
-    addon_list = AddonList(node._id, addon_id, dmp_endpoint)
+    addon_list = AddonList()
+
+    addon_list.set_addon_id(addon_id)
+    addon_list.set_endpoint(dmp_endpoint)
+    addon_list.set_owner(addon)
 
     return "SUCCESS( NODE_ID:{}, ADDON_ID:{}, ENDPOINT:{} )".format(node._id, addon_id, dmp_endpoint)
+
+@must_be_valid_project
+@must_have_permission('admin')
+@must_have_addon(SHORT_NAME, 'node')
+def dmp_notification(**kwargs):
+
+    node = kwargs['node'] or kwargs['project']
+    addon = node.get_addon(SHORT_NAME)
+
+    addon_list = AddonList.objects.all()
+
+    addonList_values = []
+
+    for i in range(len(addon_list)):
+        d = {}
+        d['ADDON_ID'] = addon_list[i].addon_id
+        d['ENDPOINT'] = addon_list[i].endpoint
+        addonList_values.append(d)
+
+    return json.dumps(addonList_values)

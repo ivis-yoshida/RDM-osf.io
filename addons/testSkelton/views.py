@@ -15,7 +15,7 @@ from website.project.decorators import (
     must_be_valid_project,
     must_have_permission,
 )
-from addons.niirdccore import views
+from addons.niirdccore import views as core_views
 
 logger = logging.getLogger(__name__)
 
@@ -46,4 +46,4 @@ def myskelton_set_config(**kwargs):
 @must_have_permission('admin')
 @must_have_addon(SHORT_NAME, 'node')
 def apply_subscription(**kwargs):
-    return views.apply_dmp_subscribe(**kwargs)
+    return core_views.apply_dmp_subscribe(**kwargs)

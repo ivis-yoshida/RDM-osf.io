@@ -23,8 +23,6 @@ class NodeSettings(BaseNodeSettings):
     """
     dmp_id = models.TextField(blank=True, null=True)
 
-
-
     def get_dmr_api_key(self):
         return settings.DMR_API_KEY
 
@@ -63,22 +61,15 @@ class AddonList(BaseNodeSettings):
     """
     送信先アドオンリストに関するモデルを定義する。
     """
-    owner = models.ForeignKey("AddonList", related_name="addon_list")
-    # project_id = models.TextField(blank=False, null=True)
-    addon_id = models.TextField(blank=False, null=True)
-    endpoint = models.TextField(blank=False, null=True)
+    owner = models.ForeignKey("NodeSettings", null=True, blank=True, related_name="node")
+    addon_id = models.CharField(max_length=50, null=True, blank=True)
+    endpoint = models.CharField(max_length=50, null=True, blank=True)
 
-    def __init__(self, addon_id, endpoint):
-        # self.project_id = project_id
-        self.addon_id = addon_id
-        self.endpoint = endpoint
-        self.save()
+    def get_owner(self):
+        return self.owner
 
-    def get_project_id(self):
-        return self.project_id
-
-    def set_project_id(self, project_id):
-        self.project_id = project_id
+    def set_owner(self, owner):
+        self.owner = owner
         self.save()
 
     def get_addon_id(self):
