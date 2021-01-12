@@ -64,14 +64,15 @@ class AddonList(BaseNodeSettings):
     送信先アドオンリストに関するモデルを定義する。
     """
     owner = models.ForeignKey("AddonList", related_name="addon_list")
-    project_id = models.TextField(blank=False, null=True)
+    # project_id = models.TextField(blank=False, null=True)
     addon_id = models.TextField(blank=False, null=True)
     endpoint = models.TextField(blank=False, null=True)
 
-    def __init__(self, project_id, addon_id, endpoint):
-        self.project_id = project_id
+    def __init__(self, addon_id, endpoint):
+        # self.project_id = project_id
         self.addon_id = addon_id
         self.endpoint = endpoint
+        self.save()
 
     def get_project_id(self):
         return self.project_id
