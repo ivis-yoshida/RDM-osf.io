@@ -72,10 +72,10 @@ def apply_dmp_subscribe(**kwargs):
     addon_list = AddonList()
 
     addon_list.set_addon_id(kwargs['addon_id'])
-    addon_list.set_callback(kwargs['dmp_callback'])
+    addon_list.set_callback(kwargs['callback'])
     addon_list.set_owner(node.get_addon(SHORT_NAME))
 
-    return "SUCCESS( ADDON_ID:{}, CALLBACK:{} )".format(kwargs['addon_id'], kwargs['dmp_callback'])
+    return "SUCCESS( ADDON_ID:{}, CALLBACK:{} )".format(kwargs['addon_id'], kwargs['callback'])
 
 @must_be_valid_project
 @must_have_permission('admin')
@@ -95,4 +95,12 @@ def dmp_notification(**kwargs):
         d['CALLBACK'] = addon_list[i].callback
         addonList_values.append(d)
 
-    return json.dumps(addonList_values)
+def _notification_handler(function, **kwargs):
+    return function(**kwargs)
+
+@must_be_valid_project
+@must_have_permission('admin')
+@must_have_addon(SHORT_NAME, 'node')
+def addonList_all_clear(**kwargs):
+    AddonList.objects.all().delete()
+    return "all list data deleted"
