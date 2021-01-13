@@ -51,14 +51,14 @@ def apply_subscription(**kwargs):
 
     try:
         addon_id = request.json['apply_subscription']['addon_id']
-        dmp_endpoint = request.json['apply_subscription']['dmp_endpoint']
+        callback = request.json['apply_subscription']['callback']
     except KeyError:
         raise HTTPError(http_status.HTTP_400_BAD_REQUEST)
 
     return core_views.apply_dmp_subscribe(
         node = node,
         addon_id = addon_id,
-        dmp_endpoint = dmp_endpoint
+        callback = callback
     )
 
 @must_be_valid_project
