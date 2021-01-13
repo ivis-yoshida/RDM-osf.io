@@ -62,9 +62,9 @@ def apply_subscription(**kwargs):
     )
 
 
-# @must_be_valid_project
-# @must_have_permission('admin')
-# @must_have_addon(SHORT_NAME, 'node')
-def get_notification():
-    # return {'notify_to_testSkelton': 'done'}
-    return "success!"
+@must_be_valid_project
+@must_have_permission('admin')
+@must_have_addon(SHORT_NAME, 'node')
+def get_notification(**kwargs):
+    dmp_record = kwargs['dmp_record']
+    return

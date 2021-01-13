@@ -87,8 +87,9 @@ def apply_dmp_subscribe(**kwargs):
 @must_have_permission('admin')
 @must_have_addon(SHORT_NAME, 'node')
 def dmp_notification(**kwargs):
-    def _notification_handler(func, *args):
-        return func(*args)
+    # コールバック関数呼び出し
+    def _notification_handler(func, **kwargs):
+        return func(**kwargs)
 
     node = kwargs['node'] or kwargs['project']
     addon = node.get_addon(SHORT_NAME)
@@ -100,23 +101,12 @@ def dmp_notification(**kwargs):
 
     addon_list = AddonList.objects.all()
 
-    # addonList_values = []
-    # for i in range(len(addon_list)):
-    #     d = {}
-    #     d['ADDON_ID'] = addon_list[i].addon_id
-    #     d['CALLBACK'] = addon_list[i].callback
-    #     addonList_values.append(d)
-
-    result = "failed"
     for i in range(len(addon_list)):
-        result = _notification_handler(eval(addon_list[i].callback))
+        # デコレータ対策のため、nodeも引数に含める
+        result = _notification_handler(func=eval(addon_list[i].callback),
+            node=node, dmp_record=dmp_record)
 
-    # headers = {'Authorization': 'Bearer ' + access_token}
-    # dmp_notify = requests.get(notify_url, headers=headers)
-
-    # return json.dumps(addonList_values)
-    # return dmp_notify.json()
-    return result
+    return
 
 
 @must_be_valid_project
