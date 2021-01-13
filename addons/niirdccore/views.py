@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 from rest_framework import status as http_status
 from flask import request
+from django.db.models import Subquery
 import logging
 import requests
 import json
 
+from osf.models import RdmAddonOption
+from addons.niirdccore.models import NodeSettings as CoreNodeSettings
 from . import SHORT_NAME
 from . import settings
 from framework.exceptions import HTTPError
@@ -95,7 +98,16 @@ def dmp_notification(**kwargs):
     #FIX: modify following notification code
     notify_url = f"http://192.168.72.129:5000/api/v1/project/{node._id}/{addonList_values[0]['ADDON_ID']}{addonList_values[0]['ENDPOINT']}"
 
-    access_token = 'OYk9qDbP6eaSK24aHyUTKfU7VcgYAOaoshj1l6OAPjn2U3eIWEbSGaG9fZIguC92L38sS2'
+    # get access_token
+    management_node = _get_management_node(node)
+    management_node_addon = CoreNodeSettings.objects.get(owner=management_node)
+    if management_node_addon is None:
+        raise HTTPError(http_status.HTTP_400_BAD_REQUEST, 'NII-RDC-CORE addon disabled in management node')
+    try:
+        access_token = management_node_addon.fetch_access_token()
+    except exceptions.InvalidAuthError:
+        raise HTTPError(403)
+
     headers = {'Authorization': 'Bearer ' + access_token}
     dmp_notify = requests.get(notify_url, headers=headers)
 
