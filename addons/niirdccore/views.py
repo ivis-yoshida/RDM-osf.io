@@ -19,6 +19,9 @@ from website.project.decorators import (
 from addons.jupyterhub.apps import JupyterhubAddonAppConfig
 from addons.niirdccore.models import AddonList
 
+#MODIFY 変更通知api検証用インポート
+from addons.testSkelton import views as test_views
+
 logger = logging.getLogger(__name__)
 
 @must_be_valid_project
@@ -104,20 +107,17 @@ def dmp_notification(**kwargs):
     #     d['CALLBACK'] = addon_list[i].callback
     #     addonList_values.append(d)
 
+    result = "failed"
     for i in range(len(addon_list)):
-        _notification_handler(addon_list[i].callback, dmp_record)
+        result = _notification_handler(eval(addon_list[i].callback))
 
     # headers = {'Authorization': 'Bearer ' + access_token}
     # dmp_notify = requests.get(notify_url, headers=headers)
 
     # return json.dumps(addonList_values)
     # return dmp_notify.json()
+    return result
 
-# @must_be_valid_project
-# @must_have_permission('admin')
-# @must_have_addon(SHORT_NAME, 'node')
-# def _notification_handler(func, *args):
-#     return func(*args)
 
 @must_be_valid_project
 @must_have_permission('admin')

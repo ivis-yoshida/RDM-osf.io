@@ -61,8 +61,10 @@ def apply_subscription(**kwargs):
         callback = callback
     )
 
-@must_be_valid_project
-@must_have_permission('admin')
-@must_have_addon(SHORT_NAME, 'node')
-def respond_notification(**kwargs):
-    return {'notify_to_testSkelton': 'done'}
+
+# @must_be_valid_project
+# @must_have_permission('admin')
+# @must_have_addon(SHORT_NAME, 'node')
+def get_notification():
+    # return {'notify_to_testSkelton': 'done'}
+    return "success!"
