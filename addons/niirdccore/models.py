@@ -63,7 +63,7 @@ class AddonList(BaseNodeSettings):
     """
     owner = models.ForeignKey("NodeSettings", null=True, blank=True, related_name="node")
     addon_id = models.CharField(max_length=50, null=True, blank=True)
-    endpoint = models.CharField(max_length=50, null=True, blank=True)
+    callback = models.CharField(max_length=50, null=True, blank=True)
 
     def get_owner(self):
         return self.owner
@@ -79,9 +79,9 @@ class AddonList(BaseNodeSettings):
         self.addon_id = addon_id
         self.save()
 
-    def get_endpoint(self):
-        return self.endpoint
+    def get_callback(self):
+        return self.callback
 
-    def set_endpoint(self, endpoint):
-        self.endpoint = endpoint
+    def set_callback(self, callback):
+        self.callback = callback
         self.save()

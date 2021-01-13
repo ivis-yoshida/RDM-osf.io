@@ -72,10 +72,10 @@ def apply_dmp_subscribe(**kwargs):
     addon_list = AddonList()
 
     addon_list.set_addon_id(kwargs['addon_id'])
-    addon_list.set_endpoint(kwargs['dmp_endpoint'])
+    addon_list.set_callback(kwargs['dmp_callback'])
     addon_list.set_owner(node.get_addon(SHORT_NAME))
 
-    return "SUCCESS( ADDON_ID:{}, ENDPOINT:{} )".format(kwargs['addon_id'], kwargs['dmp_endpoint'])
+    return "SUCCESS( ADDON_ID:{}, CALLBACK:{} )".format(kwargs['addon_id'], kwargs['dmp_callback'])
 
 @must_be_valid_project
 @must_have_permission('admin')
@@ -92,7 +92,7 @@ def dmp_notification(**kwargs):
     for i in range(len(addon_list)):
         d = {}
         d['ADDON_ID'] = addon_list[i].addon_id
-        d['ENDPOINT'] = addon_list[i].endpoint
+        d['CALLBACK'] = addon_list[i].callback
         addonList_values.append(d)
 
     return json.dumps(addonList_values)
