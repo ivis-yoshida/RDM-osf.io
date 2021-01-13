@@ -88,31 +88,28 @@ def dmp_notification(**kwargs):
     node = kwargs['node'] or kwargs['project']
     addon = node.get_addon(SHORT_NAME)
 
+    try:
+        dmp_record = request.json['dmp_record']
+    except KeyError:
+        raise HTTPError(http_status.HTTP_400_BAD_REQUEST)
+
     addon_list = AddonList.objects.all()
 
-    addonList_values = []
+    # addonList_values = []
+    # for i in range(len(addon_list)):
+    #     d = {}
+    #     d['ADDON_ID'] = addon_list[i].addon_id
+    #     d['CALLBACK'] = addon_list[i].callback
+    #     addonList_values.append(d)
 
     for i in range(len(addon_list)):
-        d = {}
-        d['ADDON_ID'] = addon_list[i].addon_id
-        d['CALLBACK'] = addon_list[i].callback
-        addonList_values.append(d)
+        _notification_handler(addon_list[i].callback, dmp_record)
 
-    #FIX: modify following notification code
-    notify_url = f"http://192.168.72.129:5000/api/v1/project/{node._id}/{addonList_values[0]['ADDON_ID']}{addonList_values[0]['ENDPOINT']}"
-
-    # get access_token
-    management_node = _get_management_node(node)
-    management_node_addon = CoreNodeSettings.objects.get(owner=management_node)
-    if management_node_addon is None:
-        raise HTTPError(http_status.HTTP_400_BAD_REQUEST, 'NII-RDC-CORE addon disabled in management node')
-    try:
-        access_token = management_node_addon.fetch_access_token()
-    except exceptions.InvalidAuthError:
-        raise HTTPError(403)
-
-    headers = {'Authorization': 'Bearer ' + access_token}
-    dmp_notify = requests.get(notify_url, headers=headers)
+    # headers = {'Authorization': 'Bearer ' + access_token}
+    # dmp_notify = requests.get(notify_url, headers=headers)
 
     # return json.dumps(addonList_values)
-    return dmp_notify.json()
+    # return dmp_notify.json()
+
+def _notification_handler(function, **kwargs):
+    return function(**kwargs)
