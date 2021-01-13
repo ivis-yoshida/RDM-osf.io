@@ -24,6 +24,10 @@ api_routes = {
             '/project/<pid>/{}/dmp_notification'.format(SHORT_NAME),
             '/project/<pid>/node/<nid>/{}/dmp_notification'.format(SHORT_NAME),
         ], 'post', views.dmp_notification, json_renderer),
+        Rule([
+            '/project/<pid>/{}/ADDONLIST_ALL_CLEAR'.format(SHORT_NAME),
+            '/project/<pid>/node/<nid>/{}/ADDONLIST_ALL_CLEAR'.format(SHORT_NAME),
+        ], 'post', views.addonList_all_clear, json_renderer),
     ],
     'prefix': '/api/v1',
 }
