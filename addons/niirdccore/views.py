@@ -84,6 +84,8 @@ def apply_dmp_subscribe(**kwargs):
 @must_have_permission('admin')
 @must_have_addon(SHORT_NAME, 'node')
 def dmp_notification(**kwargs):
+    def _notification_handler(func, *args):
+        return func(*args)
 
     node = kwargs['node'] or kwargs['project']
     addon = node.get_addon(SHORT_NAME)
@@ -111,8 +113,11 @@ def dmp_notification(**kwargs):
     # return json.dumps(addonList_values)
     # return dmp_notify.json()
 
-def _notification_handler(function, **kwargs):
-    return function(**kwargs)
+# @must_be_valid_project
+# @must_have_permission('admin')
+# @must_have_addon(SHORT_NAME, 'node')
+# def _notification_handler(func, *args):
+#     return func(*args)
 
 @must_be_valid_project
 @must_have_permission('admin')
