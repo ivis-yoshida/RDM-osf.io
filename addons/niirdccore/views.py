@@ -94,8 +94,7 @@ def dmp_notification(**kwargs):
     node = kwargs['node'] or kwargs['project']
 
     try:
-        # MODIFY: fetching request body
-        dmp_record = request.json['dmp_record']
+        dmp_record = request.json['dmp']
     except KeyError:
         raise HTTPError(http_status.HTTP_400_BAD_REQUEST)
 
