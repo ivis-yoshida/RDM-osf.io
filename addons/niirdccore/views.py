@@ -19,7 +19,6 @@ from website.project.decorators import (
 from addons.jupyterhub.apps import JupyterhubAddonAppConfig
 from addons.niirdccore.models import AddonList
 
-# 変更通知API用インポート
 from addons import *
 
 logger = logging.getLogger(__name__)
@@ -87,15 +86,12 @@ def apply_dmp_subscribe(**kwargs):
 @must_have_permission('admin')
 @must_have_addon(SHORT_NAME, 'node')
 def dmp_notification(**kwargs):
-    # 動的インポート
-    # notification_dest = importlib.import_module('addons.testSkelton')
 
-    # コールバック関数呼び出し
+    # コールバック関数を呼び出す関数
     def _notification_handler(func, **kwargs):
         return func(**kwargs)
 
     node = kwargs['node'] or kwargs['project']
-    addon = node.get_addon(SHORT_NAME)
 
     try:
         # MODIFY: fetching request body
