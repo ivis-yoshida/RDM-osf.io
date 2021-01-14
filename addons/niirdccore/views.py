@@ -19,8 +19,8 @@ from website.project.decorators import (
 from addons.jupyterhub.apps import JupyterhubAddonAppConfig
 from addons.niirdccore.models import AddonList
 
-#MODIFY 変更通知api検証用インポート
-from addons.testSkelton import views as test_views
+# 変更通知API用インポート
+from addons import *
 
 logger = logging.getLogger(__name__)
 
@@ -87,6 +87,9 @@ def apply_dmp_subscribe(**kwargs):
 @must_have_permission('admin')
 @must_have_addon(SHORT_NAME, 'node')
 def dmp_notification(**kwargs):
+    # 動的インポート
+    # notification_dest = importlib.import_module('addons.testSkelton')
+
     # コールバック関数呼び出し
     def _notification_handler(func, **kwargs):
         return func(**kwargs)
@@ -95,6 +98,7 @@ def dmp_notification(**kwargs):
     addon = node.get_addon(SHORT_NAME)
 
     try:
+        # MODIFY: fetching request body
         dmp_record = request.json['dmp_record']
     except KeyError:
         raise HTTPError(http_status.HTTP_400_BAD_REQUEST)
