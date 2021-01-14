@@ -4,7 +4,6 @@ from flask import request
 from django.db.models import Subquery
 import logging
 import requests
-import json
 
 from osf.models import RdmAddonOption
 from addons.niirdccore.models import NodeSettings as CoreNodeSettings
