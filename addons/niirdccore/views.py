@@ -5,8 +5,6 @@ from django.db.models import Subquery
 import logging
 import requests
 
-from osf.models import RdmAddonOption
-from addons.niirdccore.models import NodeSettings as CoreNodeSettings
 from . import SHORT_NAME
 from . import settings
 from framework.exceptions import HTTPError
@@ -70,7 +68,7 @@ def niirdccore_get_dmp_info(**kwargs):
 @must_be_valid_project
 @must_have_permission('admin')
 @must_have_addon(SHORT_NAME, 'node')
-def apply_dmp_subscribe(**kwargs):
+def niirdccore_apply_dmp_subscribe(**kwargs):
     node = kwargs['node']
 
     addon_list = AddonList()
@@ -84,7 +82,7 @@ def apply_dmp_subscribe(**kwargs):
 @must_be_valid_project
 @must_have_permission('admin')
 @must_have_addon(SHORT_NAME, 'node')
-def dmp_notification(**kwargs):
+def niirdccore_dmp_notification(**kwargs):
 
     # コールバック関数を呼び出す関数
     def _notification_handler(func, **kwargs):
@@ -99,9 +97,9 @@ def dmp_notification(**kwargs):
 
     addon_list = AddonList.objects.all()
 
-    for i in range(len(addon_list)):
+    for addon in addon_list:
         # デコレータ対策のため、nodeも引数に含める
-        result = _notification_handler(func=eval(addon_list[i].callback),
+        result = _notification_handler(func=eval(addon.callback),
             node=node, dmp_record=dmp_record)
 
     return
