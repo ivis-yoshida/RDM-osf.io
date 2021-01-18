@@ -90,6 +90,29 @@ def dmp_notification(**kwargs):
     def _notification_handler(func, **kwargs):
         return func(**kwargs)
 
+@must_be_valid_project
+@must_have_permission('admin')
+@must_have_addon(SHORT_NAME, 'node')
+def niirdccore_apply_dmp_subscribe(**kwargs):
+    node = kwargs['node']
+
+    addon_list = AddonList()
+
+    addon_list.set_addon_id(kwargs['addon_id'])
+    addon_list.set_callback(kwargs['callback'])
+    addon_list.set_owner(node.get_addon(SHORT_NAME))
+
+    return
+
+@must_be_valid_project
+@must_have_permission('admin')
+@must_have_addon(SHORT_NAME, 'node')
+def niirdccore_dmp_notification(**kwargs):
+
+    # コールバック関数を呼び出す関数
+    def _notification_handler(func, **kwargs):
+        return func(**kwargs)
+
     node = kwargs['node'] or kwargs['project']
 
     try:
@@ -101,15 +124,6 @@ def dmp_notification(**kwargs):
 
     for i in range(len(addon_list)):
         # デコレータ対策のため、nodeも引数に含める
-        result = _notification_handler(func=eval(addon_list[i].callback),
             node=node, dmp_record=dmp_record)
 
     return
-
-
-@must_be_valid_project
-@must_have_permission('admin')
-@must_have_addon(SHORT_NAME, 'node')
-def addonList_all_clear(**kwargs):
-    AddonList.objects.all().delete()
-    return "all list data deleted"

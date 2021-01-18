@@ -17,17 +17,9 @@ api_routes = {
             '/project/<pid>/node/<nid>/{}/dmp'.format(SHORT_NAME),
         ], 'get', views.niirdccore_get_dmp_info, json_renderer),
         Rule([
-            '/project/<pid>/{}/apply_subscription'.format(SHORT_NAME),
-            '/project/<pid>/node/<nid>/{}/apply_subscription'.format(SHORT_NAME),
-        ], 'post', views.apply_dmp_subscribe, json_renderer),
-        Rule([
             '/project/<pid>/{}/dmp_notification'.format(SHORT_NAME),
             '/project/<pid>/node/<nid>/{}/dmp_notification'.format(SHORT_NAME),
         ], 'post', views.dmp_notification, json_renderer),
-        Rule([
-            '/project/<pid>/{}/ADDONLIST_ALL_CLEAR'.format(SHORT_NAME),
-            '/project/<pid>/node/<nid>/{}/ADDONLIST_ALL_CLEAR'.format(SHORT_NAME),
-        ], 'post', views.addonList_all_clear, json_renderer),
     ],
     'prefix': '/api/v1',
 }
