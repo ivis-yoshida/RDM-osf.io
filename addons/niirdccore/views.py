@@ -124,6 +124,6 @@ def niirdccore_dmp_notification(**kwargs):
 
     for i in range(len(addon_list)):
         # デコレータ対策のため、nodeも引数に含める
-            node=node, dmp_record=dmp_record)
+            node=node, dmp_record=dmp_record
 
     return
