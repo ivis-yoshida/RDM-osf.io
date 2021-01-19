@@ -55,7 +55,7 @@ def apply_subscription(**kwargs):
     except KeyError:
         raise HTTPError(http_status.HTTP_400_BAD_REQUEST)
 
-    return core_views.apply_dmp_subscribe(
+    return core_views.niirdccore_apply_dmp_subscribe(
         node = node,
         addon_id = addon_id,
         callback = callback
