@@ -17,8 +17,7 @@ api_routes = {
             '/project/<pid>/node/<nid>/{}/dmp'.format(SHORT_NAME),
         ], 'get', views.niirdccore_get_dmp_info, json_renderer),
         Rule([
-            '/project/<pid>/{}/dmp_notification'.format(SHORT_NAME),
-            '/project/<pid>/node/<nid>/{}/dmp_notification'.format(SHORT_NAME),
+            '/project/{}/dmp_notification'.format(SHORT_NAME),
         ], 'post', views.niirdccore_dmp_notification, json_renderer),
         Rule([
             '/project/<pid>/{}/ADDONLIST_ALL_CLEAR'.format(SHORT_NAME),

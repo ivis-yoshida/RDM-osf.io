@@ -47,7 +47,6 @@ def myskelton_set_config(**kwargs):
 @must_have_addon(SHORT_NAME, 'node')
 def apply_subscription(**kwargs):
     node = kwargs['node'] or kwargs['project']
-    addon = node.get_addon(SHORT_NAME)
 
     try:
         addon_id = request.json['apply_subscription']['addon_id']
@@ -56,7 +55,7 @@ def apply_subscription(**kwargs):
         raise HTTPError(http_status.HTTP_400_BAD_REQUEST)
 
     return core_views.niirdccore_apply_dmp_subscribe(
-        node = node,
+        node=node,
         addon_id = addon_id,
         callback = callback
     )
@@ -67,4 +66,4 @@ def apply_subscription(**kwargs):
 @must_have_addon(SHORT_NAME, 'node')
 def get_notification(**kwargs):
     dmp_record = kwargs['dmp_record']
-    return
+    return dmp_record

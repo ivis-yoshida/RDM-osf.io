@@ -72,25 +72,25 @@ def niirdccore_get_dmp_info(**kwargs):
 @must_have_addon(SHORT_NAME, 'node')
 def niirdccore_apply_dmp_subscribe(**kwargs):
     node = kwargs['node']
+    # node_id = str(node._id)
 
     addon_list = AddonList()
 
+    addon_list.set_node(node)
     addon_list.set_addon_id(kwargs['addon_id'])
     addon_list.set_callback(kwargs['callback'])
     addon_list.set_owner(node.get_addon(SHORT_NAME))
 
     return
 
-@must_be_valid_project
-@must_have_permission('admin')
-@must_have_addon(SHORT_NAME, 'node')
+# @must_be_valid_project
+# @must_have_permission('admin')
+# @must_have_addon(SHORT_NAME, 'node')
 def niirdccore_dmp_notification(**kwargs):
 
     # コールバック関数を呼び出す関数
     def _notification_handler(func, **kwargs):
         return func(**kwargs)
-
-    node = kwargs['node'] or kwargs['project']
 
     try:
         dmp_record = request.json['dmp']
@@ -99,13 +99,15 @@ def niirdccore_dmp_notification(**kwargs):
 
     addon_list = AddonList.objects.all()
 
-    for addon in addon_list:
-        if node.has_addon(addon.addon_id):
-            # デコレータ対策のため、nodeも引数に含める
-            _notification_handler(func=eval(addon.callback),
-                node=node, dmp_record=dmp_record)
+    result = []
 
-    return
+    for addon in addon_list:
+        # デコレータ対策のため、nodeも引数に含める
+        a = _notification_handler(func=eval(addon.callback),
+            node=addon.node, dmp_record=dmp_record)
+        result.append(addon.callback)
+
+    return result
 
 @must_be_valid_project
 @must_have_permission('admin')
