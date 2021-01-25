@@ -65,5 +65,7 @@ def apply_subscription(**kwargs):
 @must_have_permission('admin')
 @must_have_addon(SHORT_NAME, 'node')
 def get_notification(**kwargs):
+    node = kwargs['node']
     dmp_record = kwargs['dmp_record']
+    # return "success: " + node
     return dmp_record
