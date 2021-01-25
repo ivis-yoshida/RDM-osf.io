@@ -6,9 +6,7 @@ import logging
 import requests
 import ast
 
-from osf.models import RdmAddonOption
 from osf.models.node import Node
-from osf.models.base import Guid
 from addons.niirdccore.models import NodeSettings as CoreNodeSettings
 from . import SHORT_NAME
 from . import settings
@@ -20,7 +18,6 @@ from website.project.decorators import (
 )
 from addons.jupyterhub.apps import JupyterhubAddonAppConfig
 from addons.niirdccore.models import AddonList
-
 
 from addons import *
 
@@ -78,11 +75,10 @@ def niirdccore_apply_dmp_subscribe(**kwargs):
     node = kwargs['node']
     addon_list = AddonList()
 
-    addon_list.set_node(node)
+    addon_list.set_node_title(node.title)
     addon_list.set_addon_id(kwargs['addon_id'])
     addon_list.set_callback(kwargs['callback'])
     addon_list.set_owner(node.get_addon(SHORT_NAME))
-    addon_list.set_node_title(node.title)
 
     return
 
@@ -103,22 +99,15 @@ def niirdccore_dmp_notification(**kwargs):
 
     addon_list = AddonList.objects.all()
 
-    # 検証用リストを定義
-    result = []
-
+    node_query = ""
     for addon in addon_list:
-        # プロジェクト名に基づいてAbstractNodeQuerySetを取得
-        # （osf/models/node.py → class AbstractNodeQuerySet）
-        node_query = Node.objects.filter(title=addon.node_title)
-
         # デコレータ対策のため、nodeも引数に含める
-        a = _notification_handler(
+        _notification_handler(
             func=eval(addon.callback),
-            node=node_query.model,
+            node=Node.objects.get(title=addon.node_title),
             dmp_record=dmp_record)
-        result.append(a)
 
-    return result
+    return
 
 @must_be_valid_project
 @must_have_permission('admin')

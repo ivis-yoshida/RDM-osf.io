@@ -63,7 +63,6 @@ class AddonList(BaseNodeSettings):
     送信先アドオンリストに関するモデルを定義する。
     """
     owner    = models.ForeignKey("NodeSettings", null=True, blank=True, related_name="node")
-    # node = models.TextField(null=True, blank=True)
     node_title = models.TextField(blank=True)
     addon_id = models.CharField(max_length=50, blank=True)
     callback = models.CharField(max_length=50, blank=True)
@@ -73,13 +72,6 @@ class AddonList(BaseNodeSettings):
 
     def set_owner(self, owner):
         self.owner = owner
-        self.save()
-
-    def get_node(self):
-        return self.node
-
-    def set_node(self, node):
-        self.node = node
         self.save()
 
     def get_node_title(self):
