@@ -82,9 +82,6 @@ def niirdccore_apply_dmp_subscribe(**kwargs):
 
     return
 
-# @must_be_valid_project
-# @must_have_permission('admin')
-# @must_have_addon(SHORT_NAME, 'node')
 def niirdccore_dmp_notification(**kwargs):
 
     # コールバック関数を呼び出す関数

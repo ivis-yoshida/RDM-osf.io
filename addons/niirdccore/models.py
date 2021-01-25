@@ -14,7 +14,6 @@ from . import settings
 from . import SHORT_NAME
 from addons.base.models import BaseNodeSettings
 from website import settings as ws_settings
-from osf.models.node import Node
 
 logger = logging.getLogger(__name__)
 
@@ -63,9 +62,9 @@ class AddonList(BaseNodeSettings):
     送信先アドオンリストに関するモデルを定義する。
     """
     owner    = models.ForeignKey("NodeSettings", null=True, blank=True, related_name="node")
-    node_title = models.TextField(blank=True)
-    addon_id = models.CharField(max_length=50, blank=True)
-    callback = models.CharField(max_length=50, blank=True)
+    node_title = models.CharField(max_length=100)
+    addon_id = models.CharField(max_length=50)
+    callback = models.CharField(max_length=100)
 
     def get_owner(self):
         return self.owner
