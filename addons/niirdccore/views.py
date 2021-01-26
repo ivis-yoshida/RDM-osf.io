@@ -73,14 +73,16 @@ def niirdccore_get_dmp_info(**kwargs):
 @must_have_addon(SHORT_NAME, 'node')
 def niirdccore_apply_dmp_subscribe(**kwargs):
     node = kwargs['node']
+    addon = node.get_addon(SHORT_NAME)
     addon_list = AddonList()
 
-    addon_list.set_node_title(node.title)
+    addon_list.set_node_title(node._id)
+    addon_list.set_dmp_id(addon.get_dmp_id())
     addon_list.set_addon_id(kwargs['addon_id'])
     addon_list.set_callback(kwargs['callback'])
     addon_list.set_owner(node.get_addon(SHORT_NAME))
 
-    return
+    return addon.get_dmp_id()
 
 def niirdccore_dmp_notification(**kwargs):
 
@@ -91,17 +93,18 @@ def niirdccore_dmp_notification(**kwargs):
     # リクエストボディ取得
     try:
         dmp_record = request.json['dmp']
+        dmp_id = request.json['dmp']['redboxOid']
     except KeyError:
         raise HTTPError(http_status.HTTP_400_BAD_REQUEST)
 
-    addon_list = AddonList.objects.all()
+    addon_list = AddonList.objects.filter(dmp_id=dmp_id)
 
     result = []
     for addon in addon_list:
         # デコレータ対策のため、nodeも引数に含める
         a = _notification_handler(
             func=eval(addon.callback),
-            node=Node.objects.get(title=addon.node_title),
+            node=Node.objects.get(guids___id=addon.node_title),
             dmp_record=dmp_record)
         result.append(a)
 

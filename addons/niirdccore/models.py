@@ -63,6 +63,7 @@ class AddonList(BaseNodeSettings):
     """
     owner    = models.ForeignKey("NodeSettings", null=True, blank=True, related_name="node")
     node_title = models.CharField(max_length=100, blank=True)
+    dmp_id = models.TextField(blank=True, null=True)
     addon_id = models.CharField(max_length=50, blank=True)
     callback = models.CharField(max_length=100, blank=True)
 
@@ -79,6 +80,13 @@ class AddonList(BaseNodeSettings):
     def set_node_title(self, node_title):
         self.node_title = node_title
         self.save()
+
+    def set_dmp_id(self, dmp_id):
+        self.dmp_id = dmp_id
+        self.save()
+
+    def get_dmp_id(self):
+        return self.dmp_id
 
     def get_addon_id(self):
         return self.addon_id

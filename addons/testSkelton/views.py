@@ -59,6 +59,7 @@ def apply_subscription(**kwargs):
         addon_id = addon_id,
         callback = callback
     )
+    # return str(vars(kwargs['node_addon']))
 
 
 @must_be_valid_project
