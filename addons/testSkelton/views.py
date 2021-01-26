@@ -67,5 +67,5 @@ def apply_subscription(**kwargs):
 def get_notification(**kwargs):
     node = kwargs['node']
     dmp_record = kwargs['dmp_record']
-    # return "success: " + node
-    return dmp_record
+    return "success: " + node._id
+    # return dmp_record

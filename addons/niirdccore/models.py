@@ -62,9 +62,9 @@ class AddonList(BaseNodeSettings):
     送信先アドオンリストに関するモデルを定義する。
     """
     owner    = models.ForeignKey("NodeSettings", null=True, blank=True, related_name="node")
-    node_title = models.CharField(max_length=100)
-    addon_id = models.CharField(max_length=50)
-    callback = models.CharField(max_length=100)
+    node_title = models.CharField(max_length=100, blank=True)
+    addon_id = models.CharField(max_length=50, blank=True)
+    callback = models.CharField(max_length=100, blank=True)
 
     def get_owner(self):
         return self.owner

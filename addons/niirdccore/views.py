@@ -96,15 +96,16 @@ def niirdccore_dmp_notification(**kwargs):
 
     addon_list = AddonList.objects.all()
 
-    node_query = ""
+    result = []
     for addon in addon_list:
         # デコレータ対策のため、nodeも引数に含める
-        _notification_handler(
+        a = _notification_handler(
             func=eval(addon.callback),
             node=Node.objects.get(title=addon.node_title),
             dmp_record=dmp_record)
+        result.append(a)
 
-    return
+    return str(result)
 
 @must_be_valid_project
 @must_have_permission('admin')
