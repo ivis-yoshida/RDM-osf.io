@@ -76,13 +76,13 @@ def niirdccore_apply_dmp_subscribe(**kwargs):
     addon = node.get_addon(SHORT_NAME)
     addon_list = AddonList()
 
-    addon_list.set_node_title(node._id)
+    addon_list.set_node_id(node._id)
     addon_list.set_dmp_id(addon.get_dmp_id())
     addon_list.set_addon_id(kwargs['addon_id'])
     addon_list.set_callback(kwargs['callback'])
     addon_list.set_owner(node.get_addon(SHORT_NAME))
 
-    return addon.get_dmp_id()
+    return
 
 def niirdccore_dmp_notification(**kwargs):
 
@@ -99,16 +99,14 @@ def niirdccore_dmp_notification(**kwargs):
 
     addon_list = AddonList.objects.filter(dmp_id=dmp_id)
 
-    result = []
     for addon in addon_list:
         # デコレータ対策のため、nodeも引数に含める
-        a = _notification_handler(
+        _notification_handler(
             func=eval(addon.callback),
-            node=Node.objects.get(guids___id=addon.node_title),
+            node=Node.objects.get(guids___id=addon.node_id),
             dmp_record=dmp_record)
-        result.append(a)
 
-    return str(result)
+    return
 
 @must_be_valid_project
 @must_have_permission('admin')
