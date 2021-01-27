@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import json
+#! from celery import Celery
 
 from django.db import models
 from django.db.models import Subquery
@@ -9,6 +10,8 @@ from django.dispatch import receiver
 
 from osf.models import Contributor, RdmAddonOption, AbstractNode
 from osf.models.node import Node
+
+#! from website.settings import CeleryConfig
 
 from . import settings
 from . import SHORT_NAME
@@ -22,6 +25,8 @@ class NodeSettings(BaseNodeSettings):
     プロジェクトにアタッチされたアドオンに関するモデルを定義する。
     """
     dmp_id = models.TextField(blank=True, null=True)
+    #! app = Celery()
+    #! app.config_from_object(CeleryConfig)
 
     def get_dmr_api_key(self):
         return settings.DMR_API_KEY
@@ -56,6 +61,16 @@ class NodeSettings(BaseNodeSettings):
         #     return
 
         instance.add_addon(SHORT_NAME, auth=None, log=False)
+
+    #! (8) モニタリング機能 仮コード
+    @receiver(post_save, sender=Node)
+    def node_monitoring(**kwargs):
+        # アドオン情報、ノード情報を収集
+
+        # DMP更新タスク発行
+
+    # DMPの非同期更新処理
+
 
 class AddonList(BaseNodeSettings):
     """
