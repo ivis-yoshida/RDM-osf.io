@@ -28,13 +28,21 @@ class NodeSettings(BaseNodeSettings):
     プロジェクトにアタッチされたアドオンに関するモデルを定義する。
     """
     dmp_id = models.TextField(blank=True, null=True)
+    dmr_api_key = models.TextField(blank=True)
 
     #! Celery導入
     app = Celery()
     app.config_from_object(CeleryConfig)
 
+    # def get_dmr_api_key(self):
+    #     return settings.DMR_API_KEY
+
+    def set_dmr_api_key(self, dmr_api_key):
+        self.dmr_api_key = dmr_api_key
+        self.save()
+
     def get_dmr_api_key(self):
-        return settings.DMR_API_KEY
+        return self.dmr_api_key
 
     def set_dmp_id(self, dmp_id):
         self.dmp_id = dmp_id
