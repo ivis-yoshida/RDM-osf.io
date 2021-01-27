@@ -114,12 +114,12 @@ class AddonList(BaseNodeSettings):
         self.node_id = node_id
         self.save()
 
+    def get_dmp_id(self):
+        return self.dmp_id
+
     def set_dmp_id(self, dmp_id):
         self.dmp_id = dmp_id
         self.save()
-
-    def get_dmp_id(self):
-        return self.dmp_id
 
     def get_addon_id(self):
         return self.addon_id
