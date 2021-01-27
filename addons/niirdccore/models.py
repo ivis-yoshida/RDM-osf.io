@@ -3,6 +3,7 @@ import logging
 import json
 #!
 from celery import Celery
+import requests
 
 from django.db import models
 from django.db.models import Subquery
@@ -66,26 +67,27 @@ class NodeSettings(BaseNodeSettings):
 
         instance.add_addon(SHORT_NAME, auth=None, log=False)
 
- #! DMP情報モニタリング
-@receiver(post_save, sender=Node)
-def node_monitoring(**kwargs):
-    # アドオン情報、ノード情報を収集
-    node = kwargs['node'] or kwargs['project']
+    #! DMP情報モニタリング
+    @receiver(post_save, sender=Node)
+    def node_monitoring(sender, instance, created, **kwargs):
+        # アドオン情報、ノード情報を収集
 
-    # DMP更新タスク発行
-    dmp_update(node)
+        # DMP更新タスク発行
+        NodeSettings.dmp_update(node=instance)
 
-#! DMPの非同期更新処理
-@app.task
-def dmp_update(node):
-    addon = node.get_addon(SHORT_NAME)
+    #! DMPの非同期更新処理
+    @app.task
+    def dmp_update(node):
+        addon = node.get_addon(SHORT_NAME)
+        node_data = Node.objects.filter(guids___id=node._id)
 
-    # DMP更新リクエスト
-    dmp_id = addon.get_dmp_id()
-    dmr_url = settings.DMR_URL + 'v1/dmp' + str(dmp_id)
-    headers = {'Authorization': 'Bearer ' + addon.get_dmr_api_key()}
-    dmp_update = requests.post(dmr_url, headers=headers, data=node)
-
+        # DMP更新リクエスト
+        dmp_id = addon.get_dmp_id()
+        # dmr_url = settings.DMR_URL + 'v1/dmp' + str(dmp_id)
+        dummy_url = 'http://127.0.0.1:5000/api/v1/project/hrfwu/niirdccore/DMR_DUMMY'
+        access_token = 'ZNZ3KyWH81SoqSzCvyerIIufHDi9VkQy2DeTNAK0c4xmHNxsqU90GhmQSbtyjEFXX0iZIr'
+        headers = {'Authorization': 'Bearer ' + access_token}
+        dmp_update = requests.get(dummy_url, headers=headers)
 
 
 class AddonList(BaseNodeSettings):

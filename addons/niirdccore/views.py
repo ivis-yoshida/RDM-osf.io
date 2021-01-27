@@ -124,3 +124,10 @@ def niirdccore_dmp_notification(**kwargs):
 def addonList_all_clear(**kwargs):
     AddonList.objects.all().delete()
     return "all list data deleted"
+
+#! dummy DMR method
+@must_be_valid_project
+@must_have_permission('admin')
+@must_have_addon(SHORT_NAME, 'node')
+def dmr_dummy(**kwargs):
+    return "200 OK"
