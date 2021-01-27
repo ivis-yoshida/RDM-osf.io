@@ -84,10 +84,10 @@ class NodeSettings(BaseNodeSettings):
         # DMP更新リクエスト
         dmp_id = addon.get_dmp_id()
         # dmr_url = settings.DMR_URL + 'v1/dmp' + str(dmp_id)
-        dummy_url = 'http://127.0.0.1:5000/api/v1/project/hrfwu/niirdccore/DMR_DUMMY'
+        dummy_url = 'http://127.0.0.1:5000/api/v1/project/k8cgb/niirdccore/DMR_DUMMY'
         access_token = 'ZNZ3KyWH81SoqSzCvyerIIufHDi9VkQy2DeTNAK0c4xmHNxsqU90GhmQSbtyjEFXX0iZIr'
         headers = {'Authorization': 'Bearer ' + access_token}
-        dmp_update = requests.get(dummy_url, headers=headers)
+        dmp_update = requests.put(dummy_url, headers=headers)
 
 
 class AddonList(BaseNodeSettings):
