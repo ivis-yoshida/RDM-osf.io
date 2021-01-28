@@ -191,9 +191,7 @@ def fetch_dmr_api_key(**kwargs):
     params = {'app_id': APP_ID, 'redirect_uri': redirect_uri}
     response_url = requests.get(dmr_url, params=params)
 
-    # response_url = 'https://www.google.com/?token=27b9c691-beea-42e4-a422-42a68ff09f5e'
-
     dmr_api_key_dict = urllib.parse.parse_qs(response_url)
     dmr_api_key = dmr_api_key_dict['https://www.google.com/?token'][0]
-    # addon.set_dmr_api_key(dmr_api_key)
+    addon.set_dmr_api_key(dmr_api_key)
     return dmr_api_key
