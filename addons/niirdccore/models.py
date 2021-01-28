@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
 import json
-#!
 from celery import Celery
 import requests
 
@@ -13,7 +12,6 @@ from django.dispatch import receiver
 from osf.models import Contributor, RdmAddonOption, AbstractNode
 from osf.models.node import Node
 
-#!
 from website.settings import CeleryConfig
 
 from . import settings
@@ -30,7 +28,7 @@ class NodeSettings(BaseNodeSettings):
     dmp_id = models.TextField(blank=True, null=True)
     dmr_api_key = models.TextField(blank=True, null=True)
 
-    #! Celery導入
+    # 非同期処理のための変数を定義
     app = Celery()
     app.config_from_object(CeleryConfig)
 
@@ -50,6 +48,12 @@ class NodeSettings(BaseNodeSettings):
 
     def get_dmp_id(self):
         return self.dmp_id
+
+    def has_dmr_api_key(self):
+        if (settings.DMR_API_KEY != "") & (settings.DMR_API_KEY != None):
+            return True
+
+        return False
 
     @receiver(post_save, sender=Node)
     def add_niirdccore_addon(sender, instance, created, **kwargs):
