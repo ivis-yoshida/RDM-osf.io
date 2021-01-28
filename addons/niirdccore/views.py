@@ -174,7 +174,7 @@ def addonList_all_clear(**kwargs):
 @must_have_permission('admin')
 @must_have_addon(SHORT_NAME, 'node')
 def dmr_dummy(**kwargs):
-    return "200 OK"
+    return "https://www.google.com/?token=27b9c691-beea-42e4-a422-42a68ff09f5e"
 
 #!
 @must_be_valid_project
@@ -187,11 +187,16 @@ def fetch_dmr_api_key(**kwargs):
     APP_ID = 'GakuNinRDM'
     redirect_uri = 'https://google.com'
 
-    dmr_url = 'https://xxx.xx.xx.xx/default/rdmp/api/users/token'
-    params = {'app_id': APP_ID, 'redirect_uri': redirect_uri}
-    response_url = requests.get(dmr_url, params=params)
+    # dmr_url = 'https://xxx.xx.xx.xx/default/rdmp/api/users/token'
+    dummy_url = 'http://127.0.0.1:5000/api/v1/project/k8cgb/niirdccore/DMR_DUMMY'
+    access_token = 'ZNZ3KyWH81SoqSzCvyerIIufHDi9VkQy2DeTNAK0c4xmHNxsqU90GhmQSbtyjEFXX0iZIr'
+    headers = {'Authorization': 'Bearer ' + access_token}
+    response_url = requests.get(dummy_url, headers=headers)
 
-    dmr_api_key_dict = urllib.parse.parse_qs(response_url)
-    dmr_api_key = dmr_api_key_dict['https://www.google.com/?token'][0]
-    addon.set_dmr_api_key(dmr_api_key)
-    return dmr_api_key
+    # params = {'app_id': APP_ID, 'redirect_uri': redirect_uri}
+    # response_url = requests.get(dmr_url, params=params)
+
+    dmr_api_key_dict = urllib.parse.parse_qs(response_url._content)
+    dmr_api_key = (dmr_api_key_dict[b'\"https://www.google.com/?token'][0]).decode().split('\"')
+    # addon.set_dmr_api_key(dmr_api_key)
+    return dmr_api_key[0]
