@@ -4,6 +4,8 @@ from flask import request
 from django.db.models import Subquery
 import logging
 import requests
+#!
+import urllib.parse
 
 from osf.models.node import Node
 from . import SHORT_NAME
@@ -173,3 +175,25 @@ def addonList_all_clear(**kwargs):
 @must_have_addon(SHORT_NAME, 'node')
 def dmr_dummy(**kwargs):
     return "200 OK"
+
+#!
+@must_be_valid_project
+@must_have_permission('admin')
+@must_have_addon(SHORT_NAME, 'node')
+def fetch_dmr_api_key(**kwargs):
+    node = kwargs['node'] or kwargs['project']
+    addon = node.get_addon(SHORT_NAME)
+
+    APP_ID = 'GakuNinRDM'
+    redirect_uri = 'https://google.com'
+
+    dmr_url = 'https://xxx.xx.xx.xx/default/rdmp/api/users/token'
+    params = {'app_id': APP_ID, 'redirect_uri': redirect_uri}
+    response_url = requests.get(dmr_url, params=params)
+
+    # response_url = 'https://www.google.com/?token=27b9c691-beea-42e4-a422-42a68ff09f5e'
+
+    dmr_api_key_dict = urllib.parse.parse_qs(response_url)
+    dmr_api_key = dmr_api_key_dict['https://www.google.com/?token'][0]
+    # addon.set_dmr_api_key(dmr_api_key)
+    return dmr_api_key
