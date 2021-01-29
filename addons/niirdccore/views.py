@@ -6,7 +6,9 @@ import logging
 import requests
 #!
 import urllib.parse
-from django.shortcuts import redirect
+# from django.shortcuts import redirect
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 from osf.models.node import Node
 from . import SHORT_NAME
@@ -87,15 +89,18 @@ def project_niirdccore(**kwargs):
     node = kwargs['node']
     addon = node.get_addon(SHORT_NAME)
 
-    if addon.has_dmr_api_key():
-        # DMR基盤のAPIキーを保持していれば、DMP閲覧画面へ遷移
-        return use_ember_app()
-    else:
-        # APIキー未保持なら、ユーザ認証画面へ遷移
-        redirect_uri = "http://127.0.0.1:5000/api/v1/project/{}/niirdccore/fetch_dmr_api_key".format(node._id)
-        auth_response = redirect('https://172.20.0.3/default/rdmp/api/users/token \
-                ?app_id=GakuNinRDM&redirect_uri={}'.format(redirect_uri))
-        return auth_response
+    # if addon.has_dmr_api_key():
+    #     # DMR基盤のAPIキーを保持していれば、DMP閲覧画面へ遷移
+    #     return use_ember_app()
+    # else:
+    #     # APIキー未保持なら、ユーザ認証画面へ遷移
+    #     redirect_uri = "http://127.0.0.1:5000/api/v1/project/{}/niirdccore/fetch_dmr_api_key".format(node._id)
+    #     auth_response = redirect('https://172.20.0.3/default/rdmp/api/users/token \
+    #             ?app_id=GakuNinRDM&redirect_uri={}'.format(redirect_uri))
+    #     return auth_response
+
+    # response = redirect('https://google.com')
+    return HttpResponseRedirect(reverse('http://google.com'))
 
 
 @must_be_valid_project

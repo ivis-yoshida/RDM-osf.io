@@ -50,7 +50,7 @@ class NodeSettings(BaseNodeSettings):
         return self.dmp_id
 
     def has_dmr_api_key(self):
-        if (settings.DMR_API_KEY != "") & (settings.DMR_API_KEY != None):
+        if self.dmr_api_key != "":
             return True
 
         return False
