@@ -6,11 +6,9 @@ import logging
 import requests
 #!
 import urllib.parse
-# from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from osf.models.node import Node
 from . import SHORT_NAME
 from . import settings
 from framework.exceptions import HTTPError
@@ -86,22 +84,7 @@ def niirdccore_get_dmp_info(**kwargs):
 @must_be_valid_project
 @must_have_addon(SHORT_NAME, 'node')
 def project_niirdccore(**kwargs):
-    node = kwargs['node']
-    addon = node.get_addon(SHORT_NAME)
-
-    # if addon.has_dmr_api_key():
-    #     # DMR基盤のAPIキーを保持していれば、DMP閲覧画面へ遷移
-    #     return use_ember_app()
-    # else:
-    #     # APIキー未保持なら、ユーザ認証画面へ遷移
-    #     redirect_uri = "http://127.0.0.1:5000/api/v1/project/{}/niirdccore/fetch_dmr_api_key".format(node._id)
-    #     auth_response = redirect('https://172.20.0.3/default/rdmp/api/users/token \
-    #             ?app_id=GakuNinRDM&redirect_uri={}'.format(redirect_uri))
-    #     return auth_response
-
-    # response = redirect('https://google.com')
-    return HttpResponseRedirect(reverse('http://google.com'))
-
+    return use_ember_app()
 
 @must_be_valid_project
 @must_have_permission('admin')
@@ -112,14 +95,17 @@ def niirdccore_apply_dmp_subscribe(**kwargs):
     addon_list = AddonList()
 
     addon_list.set_node_id(node._id)
-    addon_list.set_dmp_id(addon.get_dmp_id())
     addon_list.set_addon_id(kwargs['addon_id'])
     addon_list.set_callback(kwargs['callback'])
     addon_list.set_owner(node.get_addon(SHORT_NAME))
 
     return
 
+@must_be_valid_project
+@must_have_permission('admin')
+@must_have_addon(SHORT_NAME, 'node')
 def niirdccore_dmp_notification(**kwargs):
+    node = kwargs['node']
 
     # コールバック関数を呼び出す関数
     def _notification_handler(func, **kwargs):
@@ -128,17 +114,16 @@ def niirdccore_dmp_notification(**kwargs):
     # リクエストボディ取得
     try:
         dmp_record = request.json['dmp']
-        dmp_id = request.json['dmp']['redboxOid']
     except KeyError:
         raise HTTPError(http_status.HTTP_400_BAD_REQUEST)
 
-    addon_list = AddonList.objects.filter(dmp_id=dmp_id)
+    addon_list = AddonList.objects.filter(node_id=node._id)
 
     for addon in addon_list:
         # デコレータ対策のため、nodeも引数に含める
         _notification_handler(
             func=eval(addon.callback),
-            node=Node.objects.get(guids___id=addon.node_id),
+            node=node,
             dmp_record=dmp_record)
 
     return
