@@ -47,10 +47,10 @@ api_routes = {
             '/project/<pid>/{}/DMR_DUMMY'.format(SHORT_NAME),
             '/project/<pid>/node/<nid>/{}/DMR_DUMMY'.format(SHORT_NAME),
         ], 'get', views.dmr_dummy, json_renderer),
-        Rule([
-            '/project/<pid>/{}/fetch_dmr_api_key'.format(SHORT_NAME),
-            '/project/<pid>/node/<nid>/{}/fetch_dmr_api_key'.format(SHORT_NAME),
-        ], 'get', views.fetch_dmr_api_key, json_renderer),
+        # Rule([
+        #     '/project/<pid>/{}/fetch_dmr_api_key'.format(SHORT_NAME),
+        #     '/project/<pid>/node/<nid>/{}/fetch_dmr_api_key'.format(SHORT_NAME),
+        # ], 'get', views.fetch_dmr_api_key, json_renderer),
     ],
     'prefix': '/api/v1',
 }

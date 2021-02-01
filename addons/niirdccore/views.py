@@ -37,11 +37,15 @@ def niirdccore_set_config(**kwargs):
     try:
         dmp_id = request.json['dmp']['redboxOid']
         dmp_metadata = request.json['dmp']['metadata']
+
+        # fetch API key
+        dmr_api_key = request.json['dmp']['dmr_api_key']
     except KeyError:
         raise HTTPError(http_status.HTTP_400_BAD_REQUEST)
 
-    # save dmp_id
+    # save dmp_id, API key
     addon.set_dmp_id(dmp_id)
+    addon.set_dmr_api_key(dmr_api_key)
 
     # provisioning
     dataAnalysisResources = dmp_metadata.get("vivo:Dataset_redbox:DataAnalysisResources")
@@ -143,19 +147,19 @@ def dmr_dummy(**kwargs):
     return "200 OK"
 
 #! dummy fetch API_key method
-@must_be_valid_project
-@must_have_permission('admin')
-@must_have_addon(SHORT_NAME, 'node')
-def fetch_dmr_api_key(**kwargs):
-    node = kwargs['node'] or kwargs['project']
-    addon = node.get_addon(SHORT_NAME)
+# @must_be_valid_project
+# @must_have_permission('admin')
+# @must_have_addon(SHORT_NAME, 'node')
+# def fetch_dmr_api_key(**kwargs):
+#     node = kwargs['node'] or kwargs['project']
+#     addon = node.get_addon(SHORT_NAME)
 
-    # クエリパラメータ（APIキー）を取得
-    token_string = urllib.parse.urlparse(request.url).query.split('token=')
-    dmr_api_key = token_string[1]
+#     # クエリパラメータ（APIキー）を取得
+#     token_string = urllib.parse.urlparse(request.url).query.split('token=')
+#     dmr_api_key = token_string[1]
 
-    # APIキーをDBへ保存
-    addon.set_dmr_api_key(dmr_api_key)
+#     # APIキーをDBへ保存
+#     addon.set_dmr_api_key(dmr_api_key)
 
-    # DMP閲覧画面へ遷移
-    return use_ember_app()
+#     # DMP閲覧画面へ遷移
+#     return use_ember_app()
