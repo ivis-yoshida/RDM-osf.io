@@ -39,7 +39,7 @@ def niirdccore_set_config(**kwargs):
         dmp_metadata = request.json['dmp']['metadata']
 
         # fetch API key
-        dmr_api_key = request.json['dmp']['dmr_api_key']
+        dmr_api_key = request.json['dmr_api_key']
     except KeyError:
         raise HTTPError(http_status.HTTP_400_BAD_REQUEST)
 
