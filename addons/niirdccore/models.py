@@ -32,9 +32,6 @@ class NodeSettings(BaseNodeSettings):
     app = Celery()
     app.config_from_object(CeleryConfig)
 
-    # def get_dmr_api_key(self):
-    #     return settings.DMR_API_KEY
-
     def set_dmr_api_key(self, dmr_api_key):
         self.dmr_api_key = dmr_api_key
         self.save()

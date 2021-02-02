@@ -145,21 +145,3 @@ def addonList_all_clear(**kwargs):
 @must_have_addon(SHORT_NAME, 'node')
 def dmr_dummy(**kwargs):
     return "200 OK"
-
-#! dummy fetch API_key method
-# @must_be_valid_project
-# @must_have_permission('admin')
-# @must_have_addon(SHORT_NAME, 'node')
-# def fetch_dmr_api_key(**kwargs):
-#     node = kwargs['node'] or kwargs['project']
-#     addon = node.get_addon(SHORT_NAME)
-
-#     # クエリパラメータ（APIキー）を取得
-#     token_string = urllib.parse.urlparse(request.url).query.split('token=')
-#     dmr_api_key = token_string[1]
-
-#     # APIキーをDBへ保存
-#     addon.set_dmr_api_key(dmr_api_key)
-
-#     # DMP閲覧画面へ遷移
-#     return use_ember_app()
