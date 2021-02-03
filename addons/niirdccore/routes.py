@@ -44,8 +44,8 @@ api_routes = {
             '/project/<pid>/node/<nid>/{}/ADDONLIST_ALL_CLEAR'.format(SHORT_NAME),
         ], 'post', views.addonList_all_clear, json_renderer),
         Rule([
-            '/project/<pid>/{}/DMR_DUMMY'.format(SHORT_NAME),
-            '/project/<pid>/node/<nid>/{}/DMR_DUMMY'.format(SHORT_NAME),
+            '/project/<pid>/{}/DMR_DUMMY/v1/dmp/<dmp_id>'.format(SHORT_NAME),
+            '/project/<pid>/node/<nid>/{}/DMR_DUMMY/v1/dmp/<dmp_id>'.format(SHORT_NAME),
         ], 'get', views.dmr_dummy, json_renderer),
     ],
     'prefix': '/api/v1',
