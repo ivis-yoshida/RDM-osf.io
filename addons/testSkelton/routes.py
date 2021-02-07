@@ -20,10 +20,6 @@ api_routes = {
             '/project/<pid>/{}/apply_subscription'.format(SHORT_NAME),
             '/project/<pid>/node/<nid>/{}/apply_subscription'.format(SHORT_NAME),
         ], 'post', views.apply_subscription, json_renderer),
-        Rule([
-            '/project/<pid>/{}/DMR_DUMMY'.format(SHORT_NAME),
-            '/project/<pid>/node/<nid>/{}/DMR_DUMMY'.format(SHORT_NAME),
-        ], 'put', views.dmr_dummy, json_renderer),
     ],
     'prefix': '/api/v1',
 }

@@ -70,9 +70,3 @@ def get_notification(**kwargs):
     dmp_record = kwargs['dmp_record']
     return "success: " + node._id
     # return dmp_record
-
-@must_be_valid_project
-@must_have_permission('admin')
-@must_have_addon(SHORT_NAME, 'node')
-def dmr_dummy(**kwargs):
-    return "200 OK"
