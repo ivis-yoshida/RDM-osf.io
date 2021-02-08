@@ -26,8 +26,6 @@
         "nextcloudinstitutions",
         "iqbrims",
         "dropboxbusiness",
-        "niirdccore",
-        "testSkelton",
         "myscreen"
     ],
     "addons_default": [
@@ -58,7 +56,7 @@
         "nextcloudinstitutions": "partial",
         "iqbrims": "partial",
         "dropboxbusiness": "partial",
-        "niirdccore": "partial"
+        "myscreen": "partial"
     },
     "addons_commentable": [
         "osfstorage",
@@ -82,7 +80,7 @@
         "nextcloudinstitutions",
         "iqbrims",
         "dropboxbusiness",
-        "niirdccore"
+        "myscreen"
     ],
     "addons_based_on_ids": [
         "osfstorage",
@@ -119,7 +117,7 @@
         "iqbrims": "IQB-RIMS is a file storage add-on. Connect your Google Drive account to a GakuNin RDM project to interact with files hosted on Google Drive via the GakuNin RDM.",
         "nextcloudinstitutions": "Nextcloud for Institutions is a file storage add-on for Institutions. Connect your Nextcloud account to a GakuNin RDM project to interact with files hosted on Nextcloud via the GakuNin RDM.",
         "dropboxbusiness": "Dropbox Business for Institutions is a file storage add-on for Institutions. Connect your Dropbox Business administrator account to a GakuNin RDM project to interact with files hosted on Dropbox via the GakuNin RDM.",
-        "niirdccore": "NII Research Data Cloudの他基盤と連携するためのアドオンです。"
+        "myscreen": "My Screen Addon is ..."
     },
     "addons_url": {
         "box": "http://www.box.com",
@@ -143,6 +141,6 @@
         "nextcloud": "https://nextcloud.com/",
         "iqbrims": "https://drive.google.com",
         "dropboxbusiness": "http://www.dropbox.com",
-        "niirdccore": "https://rcos.nii.ac.jp/service/"
+        "myscreen": "https://dummy.nii.ac.jp/myscreen"
     }
 }

@@ -232,6 +232,26 @@
                     </div>
                 % endif
 
+                <!-- widget: from here -->
+                % if addon_name == 'myscreen':
+                    <div id="myscreen-content" class="scripted">
+                        <!-- ko if: loading -->
+                        <div>${_("Loading")}</div>
+                        <!-- /ko -->
+                        <!-- ko if: loadFailed -->
+                        <div class="text-danger">${_("Error occurred")}</div>
+                        <!-- /ko -->
+                        <!-- ko if: loadCompleted -->
+                        <h5 style="padding: 0.2em;">${_("My Screen Test")}</h5>
+                        <div>
+                            <label data-bind="text: param_1_label"></label>
+                            <p data-bind="text: param_1"></p>
+                        </div>
+                        <!-- /ko -->
+                    </div>
+                % endif
+                <!-- widget: to hear -->
+
                 </div>
             % else:
                 <div class='addon-config-error p-sm'>

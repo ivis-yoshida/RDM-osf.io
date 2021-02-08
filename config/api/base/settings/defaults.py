@@ -121,8 +121,6 @@ INSTALLED_APPS = (
     'addons.iqbrims',
     'addons.dropboxbusiness',
     'addons.nextcloudinstitutions',
-    'addons.niirdccore',
-    'addons.testSkelton',
     'addons.myscreen'
 )
 

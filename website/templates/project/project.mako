@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 <%inherit file="project/project_base.mako"/>
 <%namespace name="render_nodes" file="util/render_nodes.mako" />
 <%namespace name="contributor_list" file="util/contributor_list.mako" />
@@ -431,6 +432,12 @@
 
     <div class="col-sm-12 col-md-6 osf-dash-col">
 
+        <!-- widget: from here -->
+        % if 'myscreen' in addons_enabled and addons['myscreen']['has_widget']:
+            ${ render_addon_widget.render_addon_widget('myscreen', addons_widget_data['myscreen']) }
+        % endif
+        <!-- widget: to here -->
+
         %if user['show_wiki_widget']:
             ${ render_addon_widget.render_addon_widget('wiki', addons_widget_data['wiki']) }
         %endif
@@ -470,7 +477,9 @@
             <!-- Show widgets in left column if present -->
             % for addon in addons_enabled:
                 % if addons[addon]['has_widget']:
-                    %if addon != 'wiki' and addon != 'iqbrims': ## We already show the wiki widget at the top
+                    <!-- widget: ここから -->
+                    %if addon != 'wiki' and addon != 'iqbrims' and addon != 'myscreen': ## We already show the wiki widget at the top
+                    <!-- widget: ここまで -->
                         ${ render_addon_widget.render_addon_widget(addon, addons_widget_data[addon]) }
                     %endif
                 % endif

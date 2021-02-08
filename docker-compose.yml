@@ -284,7 +284,8 @@ services:
   #################
 
   ember_osf_web:
-    image: quay.io/centerforopenscience/osf-web:develop-local
+    # image: quay.io/centerforopenscience/osf-web:develop-local
+    image: rdm-osfio_ember_osf_web_1:202012
     command:
       - /bin/bash
       - -c

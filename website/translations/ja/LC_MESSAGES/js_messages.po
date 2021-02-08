@@ -204,10 +204,6 @@ msgstr "Wiki構文のヘルプ"
 msgid "Autocomplete"
 msgstr "自動更新"
 
-#: addons/jupyterhub/static/files.js:92
-msgid "Launch"
-msgstr "起動"
-
 #: admin/static/js/collection_providers/collectionProviders.js:9
 msgid "Hide Form"
 msgstr "フォームを隠す"
@@ -7794,3 +7790,7 @@ msgstr "%1$sに報告してください"
 #: website/static/js/pages/wiki-edit-page.js:110
 msgid "Could not GET wiki menu pages"
 msgstr "Wikiメニューページを取得できませんでした"
+
+#: addons/myscreen/static/widget-cfg.js:22
+msgid "My Screen Param1 Label"
+msgstr "パラメーター1"
