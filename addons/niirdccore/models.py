@@ -107,6 +107,9 @@ class NodeSettings(BaseNodeSettings):
                     "categories": eval(addon_apps).categories
                 }
             }
+            if addon.short_name == 'jupyterhub':
+                addon_dict['attributes']['services'] = addon.get_services()
+
             addon_list.append(addon_dict)
 
         contributor_list = []
