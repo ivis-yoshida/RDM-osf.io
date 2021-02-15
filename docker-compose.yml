@@ -278,14 +278,12 @@ services:
       - "${CAS_POSTGRES_DATA_VOL:-cas_postgres_data_vol}:/var/lib/postgresql/data/"
     stdin_open: true
 
-
   #################
   # Ember OSF Web #
   #################
 
   ember_osf_web:
-    # image: quay.io/centerforopenscience/osf-web:develop-local
-    image: rdm-osfio_ember_osf_web_1:202012
+    image: quay.io/centerforopenscience/osf-web:develop-local
     command:
       - /bin/bash
       - -c
@@ -303,8 +301,8 @@ services:
     ports:
       - 4200:4200
       - 41953:41953
-    volumes:
-      - ember_osf_web_dist_vol:/code/dist
+#    volumes:
+#      - ember_osf_web_dist_vol:/code/dist
     stdin_open: true
 
   #############
