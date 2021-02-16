@@ -47,6 +47,29 @@ api_routes = {
             '/project/<pid>/{}/DMR_DUMMY/v1/dmp/<dmp_id>'.format(SHORT_NAME),
             '/project/<pid>/node/<nid>/{}/DMR_DUMMY/v1/dmp/<dmp_id>'.format(SHORT_NAME),
         ], 'get', views.dmr_dummy, json_renderer),
+            '/project/<pid>/{}/dmp-dataset'.format(SHORT_NAME),
+            '/project/<pid>/node/<nid>/{}/dmp-dataset'.format(SHORT_NAME),
+        ], 'get', views.niirdccore_get_dataset, json_renderer),
+        Rule([
+            '/project/<pid>/{}/dmp-dataset'.format(SHORT_NAME),
+            '/project/<pid>/node/<nid>/{}/dmp-dataset'.format(SHORT_NAME),
+        ], 'patch', views.niirdccore_update_dataset, json_renderer),
+        Rule([
+            '/project/<pid>/{}/dmp-dataset'.format(SHORT_NAME),
+            '/project/<pid>/node/<nid>/{}/dmp-dataset'.format(SHORT_NAME),
+            '/project/null/{}/dmp-dataset'.format(SHORT_NAME),
+            '/project/null/node/<nid>/{}/dmp-dataset'.format(SHORT_NAME),
+        ], 'post', views.niirdccore_create_dataset, json_renderer),
+        # dammy start
+        Rule([
+            '/project/<pid>/{}/dammy/v1/dmp/<dmp_id>'.format(SHORT_NAME),
+            '/project/<pid>/node/<nid>/{}/dammy/v1/dmp/<dmp_id>'.format(SHORT_NAME),
+        ], 'get', views.niirdccore_dammy, json_renderer),
+        Rule([
+            '/project/<pid>/{}/dammy/v1/dataset/<dmp_id>'.format(SHORT_NAME),
+            '/project/<pid>/node/<nid>/{}/dammy/v1/dataset/<dmp_id>'.format(SHORT_NAME),
+        ], 'get', views.niirdccore_dataset_dammy, json_renderer),
+        # dammy end
     ],
     'prefix': '/api/v1',
 }
