@@ -125,7 +125,7 @@ class NodeSettings(BaseNodeSettings):
                 },
                 "links": {
                     "self": util.api_v2_url('/users/' + contributor._id),
-                    "href": ws_settings.DOMAIN + contributor._id
+                    "href": ws_settings.DOMAIN + '/' + contributor._id
                 }
             }
             contributor_list.append(contributor_dict)
