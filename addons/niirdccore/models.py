@@ -124,8 +124,8 @@ class NodeSettings(BaseNodeSettings):
                     "date_registered": str(contributor.date_registered)
                 },
                 "links": {
-                    "self": '/' + contributor._id,
-                    "href": '/v2/users/' + contributor._id
+                    "self": '/v2/users/' + contributor._id,
+                    "href": '/' + contributor._id
                 }
             }
             contributor_list.append(contributor_dict)
@@ -137,8 +137,8 @@ class NodeSettings(BaseNodeSettings):
                 "contributors": contributor_list,
 
                 "links": {
-                    "self": util.web_url_for(view_name='project_niirdccore', pid=node._id),
-                    "href": '/v2/nodes/' + node._id
+                    "self": '/v2/nodes/' + node._id, pid=node._id,
+                    "href": util.web_url_for(view_name='project_niirdccore')
                 }
             }
         }
