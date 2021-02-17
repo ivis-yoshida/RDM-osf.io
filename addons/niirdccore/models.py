@@ -124,8 +124,8 @@ class NodeSettings(BaseNodeSettings):
                     "date_registered": str(contributor.date_registered)
                 },
                 "links": {
-                    "self": ws_settings.defaults.API_DOMAIN + '/v2/users/' + contributor._id,
-                    "href": ws_settings.defaults.DOMAIN + contributor._id
+                    "self": util.api_v2_url('/users/' + contributor._id),
+                    "href": ws_settings.DOMAIN + contributor._id
                 }
             }
             contributor_list.append(contributor_dict)
@@ -137,8 +137,8 @@ class NodeSettings(BaseNodeSettings):
                 "contributors": contributor_list,
 
                 "links": {
-                    "self": ws_settings.defaults.API_DOMAIN + '/v2/nodes/' + node._id,
-                    "href": ws_settings.defaults.DOMAIN + util.web_url_for(view_name='project_niirdccore', pid=node._id)
+                    "self": util.api_v2_url('/nodes/' + node._id),
+                    "href": util.web_url_for(view_name='project_niirdccore', _absolute=True, pid=node._id)
                 }
             }
         }
