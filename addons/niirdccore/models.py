@@ -19,6 +19,8 @@ from . import SHORT_NAME
 from addons.base.models import BaseNodeSettings
 from website import settings as ws_settings
 
+import addons
+
 logger = logging.getLogger(__name__)
 
 class NodeSettings(BaseNodeSettings):
@@ -76,28 +78,75 @@ class NodeSettings(BaseNodeSettings):
 
         instance.add_addon(SHORT_NAME, auth=None, log=False)
 
-    #! DMP情報モニタリング
+    # DMP情報モニタリング
     @receiver(post_save, sender=Node)
     def node_monitoring(sender, instance, created, **kwargs):
-        # アドオン情報、ノード情報を収集
-
         # DMP更新タスク発行
         NodeSettings.dmp_update(node=instance)
 
-    #! DMPの非同期更新処理
+    # DMPの非同期更新処理
     @app.task
     def dmp_update(node):
-        addon = node.get_addon(SHORT_NAME)
-        node_data = Node.objects.filter(guids___id=node._id)
+        # fetch addon data
+        json_open = open('addons.json', 'r')
+        addons_json = json.load(json_open)
+
+        addon_list = []
+        for addon in node.get_addons():
+            addon_apps = eval('addons.' + addon.short_name).default_app_config
+
+            addon_dict = {
+                "type": "addon",
+                "id": addon.short_name,
+                "attributes": {
+                    "name": eval(addon_apps).full_name,
+                    "url": addons_json.get('addons_url').get(addon.short_name, ''),
+                    "description": addons_json.get('addons_description').get(addon.short_name, ''),
+                    "categories": eval(addon_apps).categories
+                }
+            }
+            if addon.short_name == 'jupyterhub':
+                addon_dict['attributes']['services'] = addon.get_services()
+
+            addon_list.append(addon_dict)
+
+        contributor_list = []
+        for contributor in node.contributors:
+            contributor_dict = {
+                "type": contributor.settings_type,
+                "id": contributor._id,
+                "attributes": {
+                    "family_name": contributor.family_name,
+                    "given_name": contributor.given_name,
+                    "middle_names": contributor.middle_names,
+                    "full_name": contributor.fullname,
+                    "date_registered": str(contributor.date_registered)
+                },
+                "links": {
+                    "self": settings.CONTRIBUTOR_LINKS_SELF + contributor._id,
+                    "href": settings.CONTRIBUTOR_LINKS_HREF + contributor._id
+                }
+            }
+            contributor_list.append(contributor_dict)
+
+        request_body = {
+            "data": {
+                "title": node.title,
+                "addons": addon_list,
+                "contributors": contributor_list,
+
+                "links": {
+                    "self": settings.DATA_LINKS_SELF + node._id,
+                    "href": settings.DATA_LINKS_HREF + node._id
+                }
+            }
+        }
 
         # DMP更新リクエスト
-        dmp_id = addon.get_dmp_id()
-        # dmr_url = settings.DMR_URL + 'v1/dmp' + str(dmp_id)
-        dummy_url = 'http://127.0.0.1:5000/api/v1/project/k8cgb/niirdccore/DMR_DUMMY'
-        access_token = 'ZNZ3KyWH81SoqSzCvyerIIufHDi9VkQy2DeTNAK0c4xmHNxsqU90GhmQSbtyjEFXX0iZIr'
+        dmr_url = settings.DMR_URL + 'v1/dmp' + str(self.dmp_id)
+        access_token = settings.DMR_ACCESS_TOKEN
         headers = {'Authorization': 'Bearer ' + access_token}
-        dmp_update = requests.put(dummy_url, headers=headers)
-
+        requests.put(dmr_url, headers=headers, json=request_body)
 
 class AddonList(BaseNodeSettings):
     """
