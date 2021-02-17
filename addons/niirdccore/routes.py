@@ -47,6 +47,7 @@ api_routes = {
             '/project/<pid>/{}/DMR_DUMMY/v1/dmp/<dmp_id>'.format(SHORT_NAME),
             '/project/<pid>/node/<nid>/{}/DMR_DUMMY/v1/dmp/<dmp_id>'.format(SHORT_NAME),
         ], 'get', views.dmr_dummy, json_renderer),
+        Rule([
             '/project/<pid>/{}/dmp-dataset'.format(SHORT_NAME),
             '/project/<pid>/node/<nid>/{}/dmp-dataset'.format(SHORT_NAME),
         ], 'get', views.niirdccore_get_dataset, json_renderer),

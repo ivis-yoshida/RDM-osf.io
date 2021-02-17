@@ -64,7 +64,12 @@ def niirdccore_get_dmp_info(**kwargs):
 
     dmp_id = addon.get_dmp_id()
     url = settings.DMR_URL + 'v1/dmp/' + str(dmp_id)
-    headers = {'Authorization': 'Bearer ' + addon.get_dmr_api_key()}
+    # headers = {'Authorization': 'Bearer ' + addon.get_dmr_api_key()}
+    #! dummy header start
+    token = 'ZNZ3KyWH81SoqSzCvyerIIufHDi9VkQy2DeTNAK0c4xmHNxsqU90GhmQSbtyjEFXX0iZIr'
+    headers = {'Authorization': 'Bearer ' + token}
+    #! dummy header end
+
     response = requests.get(url, headers=headers)
     data = response.json()
 
@@ -193,7 +198,7 @@ def project_niirdccore(**kwargs):
 def niirdccore_dammy(**kwargs):
     return {
         "version": 1,
-         "dmp": {
+        "dmp": {
             "dmp_id": {
             "identifier": "6f19e6f0ce79cd0c87c1e498ada46078",
             "type": "other"
