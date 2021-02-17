@@ -13,6 +13,7 @@ from osf.models import Contributor, RdmAddonOption, AbstractNode
 from osf.models.node import Node
 
 from website.settings import CeleryConfig
+from website import util
 
 from . import settings
 from . import SHORT_NAME
@@ -105,7 +106,7 @@ class NodeSettings(BaseNodeSettings):
                     "categories": eval(addon_apps).categories
                 }
             }
-            if addon.short_name == 'jupyterhub':
+            if addon.short_name == addons.jupyterhub.apps.JupyterhubAddonAppConfig.short_name:
                 addon_dict['attributes']['services'] = addon.get_services()
 
             addon_list.append(addon_dict)
@@ -123,8 +124,8 @@ class NodeSettings(BaseNodeSettings):
                     "date_registered": str(contributor.date_registered)
                 },
                 "links": {
-                    "self": settings.CONTRIBUTOR_LINKS_SELF + contributor._id,
-                    "href": settings.CONTRIBUTOR_LINKS_HREF + contributor._id
+                    "self": '/' + contributor._id,
+                    "href": '/v2/users/' + contributor._id
                 }
             }
             contributor_list.append(contributor_dict)
@@ -136,14 +137,15 @@ class NodeSettings(BaseNodeSettings):
                 "contributors": contributor_list,
 
                 "links": {
-                    "self": settings.DATA_LINKS_SELF + node._id,
-                    "href": settings.DATA_LINKS_HREF + node._id
+                    "self": util.web_url_for(view_name='project_niirdccore', pid=node._id),
+                    "href": '/v2/nodes/' + node._id
                 }
             }
         }
 
         # DMP更新リクエスト
-        dmr_url = settings.DMR_URL + 'v1/dmp' + str(self.dmp_id)
+        # dmr_url = settings.DMR_URL + '/v1/dmp' + str(self.dmp_id)
+        dmr_url = 'http://192.168.72.1:3000/api/dmpUpdateTest'
         access_token = settings.DMR_ACCESS_TOKEN
         headers = {'Authorization': 'Bearer ' + access_token}
         requests.put(dmr_url, headers=headers, json=request_body)
