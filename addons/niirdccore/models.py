@@ -107,7 +107,8 @@ class NodeSettings(BaseNodeSettings):
                 }
             }
             if addon.short_name == addons.jupyterhub.apps.JupyterhubAddonAppConfig.short_name:
-                addon_dict['attributes']['services'] = [{'name': name, 'base_url': url} for name, url in addon.get_services()]
+                addon_dict['attributes']['services'] = \
+                    [{'name': name, 'base_url': url} for name, url in addon.get_services()+ addons.jupyterhub.settings.SERVICES]
 
             addon_list.append(addon_dict)
 
