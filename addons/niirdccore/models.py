@@ -139,7 +139,7 @@ class NodeSettings(BaseNodeSettings):
 
                 "links": {
                     "self": util.api_v2_url('/nodes/' + node._id),
-                    "href": util.web_url_for(view_name='project_niirdccore', _absolute=True, pid=node._id)
+                    "href": ws_settings.DOMAIN + '/' + node._id
                 }
             }
         }
