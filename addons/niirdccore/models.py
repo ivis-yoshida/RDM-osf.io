@@ -85,7 +85,11 @@ class NodeSettings(BaseNodeSettings):
         if SHORT_NAME not in ws_settings.ADDONS_AVAILABLE_DICT:
             return
 
-        sender_dmp_id = instance.get_addon(name=SHORT_NAME).get_dmp_id()
+        sender_node = instance.get_addon(name=SHORT_NAME)
+        if sender_node == None:
+            return
+
+        sender_dmp_id = sender_node.get_dmp_id()
         if sender_dmp_id == None:
             return
 
