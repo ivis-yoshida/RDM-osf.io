@@ -82,6 +82,13 @@ class NodeSettings(BaseNodeSettings):
     # DMP情報モニタリング
     @receiver(post_save, sender=Node)
     def node_monitoring(sender, instance, created, **kwargs):
+        if SHORT_NAME not in ws_settings.ADDONS_AVAILABLE_DICT:
+            return
+
+        sender_dmp_id = instance.get_addon(name=SHORT_NAME).get_dmp_id()
+        if sender_dmp_id == None:
+            return
+
         # DMP更新タスク発行
         NodeSettings.dmp_update(node=instance)
 
