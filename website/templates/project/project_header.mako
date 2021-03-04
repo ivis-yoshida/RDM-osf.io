@@ -42,18 +42,19 @@
                         </li>
                         <!-- Add-on tabs  -->
                         % for addon in addons_enabled:
+                            <li>
+                                <a href="${node['url']}${addons[addon]['short_name']}">
 
-                            % if addons[addon]['has_page']:
-                                <li>
-                                    <a href="${node['url']}${addons[addon]['short_name']}">
-
-                                        % if addons[addon]['icon'] and addons[addon]['has_page_icon']:
-                                            <img src="${addons[addon]['icon']}" class="addon-logo"/>
-                                        % endif
+                                    % if addons[addon]['icon'] and addons[addon]['has_page_icon']:
+                                        <img src="${addons[addon]['icon']}" class="addon-logo"/>
+                                    % endif
+                                    % if addons[addon]['short_name'] == 'niirdccore':
+                                        DMP
+                                    % else:
                                         ${addons[addon]['full_name']}
-                                    </a>
-                                </li>
-                            % endif
+                                    % endif
+                                </a>
+                            </li>
                         % endfor
 
                         % if project_analytics:
