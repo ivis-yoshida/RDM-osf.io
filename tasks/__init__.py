@@ -13,6 +13,7 @@ import sqlite3
 
 import invoke
 from invoke import Collection
+import importlib
 
 from website import settings
 from .utils import pip_install, bin_prefix
@@ -34,7 +35,8 @@ NO_TESTS_COLLECTED = 5
 ns = Collection()
 
 try:
-    from tasks import local-dist as local_tasks
+    # from tasks import local as local_tasks
+    local_tasks = importlib.import_module('tasks.local-dist')
     ns.add_collection(Collection.from_module(local_tasks), name='local')
 except ImportError:
     pass
