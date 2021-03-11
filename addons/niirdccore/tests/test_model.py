@@ -11,11 +11,13 @@ import unittest
 from nose.tools import *  # noqa
 
 from framework.auth import Auth
+from osf.models.node import Node
+
 from addons.base.tests.views import (
     OAuthAddonAuthViewsTestCaseMixin, OAuthAddonConfigViewsTestCaseMixin
 )
 from tests.base import OsfTestCase, get_default_metaschema
-from osf_tests.factories import ProjectFactory, UserFactory, InstitutionFactory
+from osf_tests.factories import ProjectFactory, ProjectWithAddonFactory, UserFactory, InstitutionFactory
 from admin.rdm_addons.utils import get_rdm_addon_option
 
 from website.util import api_url_for
@@ -30,6 +32,7 @@ class TestNiirdccoreModels(NiirdccoreAddonTestCase, OsfTestCase):
     def setUp(self):
         super(TestNiirdccoreModels, self).setUp()
         self.set_node_settings(self.node_settings)
+        # self.dummy_project = ProjectWithAddonFactory(addon='niirdccore')
         self.addon_list = models.AddonList()
 
 ################################ NodeSettings ###################################
@@ -37,11 +40,18 @@ class TestNiirdccoreModels(NiirdccoreAddonTestCase, OsfTestCase):
         self.node_settings.set_dmp_id('dmp_id')
         assert_equal(self.node_settings.get_dmp_id(), 'dmp_id')
 
-    def test_dmp_id_error(self):
-        with pytest.raises(TransactionManagementError):
-            self.node_settings.set_dmp_id(True)
-            self.node_settings.set_dmp_id(11111)
-            self.node_settings.set_dmp_id(111.11)
+        self.node_settings.set_dmp_id(111 > 100)
+        self.assertTrue(self.node_settings.get_dmp_id())
+
+        self.node_settings.set_dmp_id(None)
+        self.assertIsNone(self.node_settings.get_dmp_id())
+
+    def test_add_niirdccore_addon_normal(self):
+        mock_node = mock.MagicMock(spec=Node, return_value=True)
+        with mock.patch('osf.models.node.Node.has_addon', return_value=True):
+            addon_result = self.node_settings.add_niirdccore_addon(mock_node, '2021-03-11')
+            self.assertIsNone(addon_result)
+            mock_node.add_addon.assert_not_called()
 
 
 ################################ AddonList #######################################
