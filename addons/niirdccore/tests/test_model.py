@@ -32,10 +32,19 @@ class TestNiirdccoreModels(NiirdccoreAddonTestCase, OsfTestCase):
         self.set_node_settings(self.node_settings)
         self.addon_list = models.AddonList()
 
+################################ NodeSettings ###################################
     def test_dmp_id_normal(self):
         self.node_settings.set_dmp_id('dmp_id')
         assert_equal(self.node_settings.get_dmp_id(), 'dmp_id')
 
+    def test_dmp_id_error(self):
+        with pytest.raises(TransactionManagementError):
+            self.node_settings.set_dmp_id(True)
+            self.node_settings.set_dmp_id(11111)
+            self.node_settings.set_dmp_id(111.11)
+
+
+################################ AddonList #######################################
     def test_addonList_owner_normal(self):
         self.addon_list.set_owner(self.node_settings)
         self.assertIs(type(self.addon_list.get_owner()), models.NodeSettings)
