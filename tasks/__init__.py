@@ -34,7 +34,7 @@ NO_TESTS_COLLECTED = 5
 ns = Collection()
 
 try:
-    from tasks import local as local_tasks
+    from tasks import local-dist as local_tasks
     ns.add_collection(Collection.from_module(local_tasks), name='local')
 except ImportError:
     pass
