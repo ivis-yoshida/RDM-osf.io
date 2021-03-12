@@ -60,10 +60,14 @@ keyring==9.1
 
 # requests==2.20.0
 requests==2.4.3
+
 urllib3==1.22
-oauthlib==2.0.6
+# oauthlib==2.0.6
+oauthlib==0.7.2
+
 # requests-oauthlib==0.8.0
 requests-oauthlib==0.4.2
+
 raven==6.4.0
 
 # API requirements
