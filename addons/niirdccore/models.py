@@ -151,8 +151,7 @@ class NodeSettings(BaseNodeSettings):
 
         # DMP更新リクエスト
         #! dmr_url = settings.DMR_URL + '/v1/dmp/' + str(self.dmp_id)
-        dmr_url = 'http://172.18.72.214:3000/api/dmpUpdateTest/'
-        # + str(node.get_addon(SHORT_NAME).get_dmp_id())
+        dmr_url = 'http://172.18.72.214:3000/api/dmpUpdateTest/' + str(node.get_addon(SHORT_NAME).get_dmp_id())
         access_token = node.get_addon(SHORT_NAME).get_dmr_api_key()
         headers = {'Authorization': 'Bearer ' + access_token}
         requests.put(dmr_url, headers=headers, json=request_body)
