@@ -78,7 +78,8 @@ def niirdccore_get_dmp_info(**kwargs):
     if dmp_id is None:
         raise HTTPError(http_status.HTTP_410_GONE)
 
-    url = settings.DMR_URL + '/v1/dmp/' + str(dmp_id)
+    #! url = settings.DMR_URL + '/v1/dmp/' + str(dmp_id)
+    url = 'http://172.18.72.214:3000/v1/dmp/'
     headers = {'Authorization': 'Bearer ' + addon.get_dmr_api_key()}
     response = requests.get(url, headers=headers)
 
@@ -104,9 +105,9 @@ def niirdccore_update_dmp_info(**kwargs):
 
     if dmp_id is None:
         raise HTTPError(http_status.HTTP_410_GONE)
-    
+
     # update/create dataset
-    try: 
+    try:
         recv_data = request.json['data']['attributes']
         dataset = recv_data['dataset'][0]
         dataset_is_new = dataset['dataset_is_new']
@@ -122,20 +123,23 @@ def niirdccore_update_dmp_info(**kwargs):
     if dataset_is_new:
         # create dataset
         send_data['data']['dmp_id'] = {'identifier': dmp_id, 'type': 'other'}
-        url = settings.DMR_URL + '/v1/dataset/metadata'
-        response = requests.post(url, json=send_data, headers=headers)        
+        #!url = settings.DMR_URL + '/v1/dataset/metadata'
+        url = 'http://172.18.72.214:3000/v1/dataset/metadata'
+        response = requests.post(url, json=send_data, headers=headers)
     else:
         # update dataset
-        url = settings.DMR_URL + '/v1/dataset/{}/metadata'.format(str(dataset_id))
+        #!url = settings.DMR_URL + '/v1/dataset/{}/metadata'.format(str(dataset_id))
+        url = 'http://172.18.72.214:3000/v1/dataset/metadata'
         response = requests.put(url, json=send_data, headers=headers)
     try:
         response.raise_for_status()
     except requests.exceptions.RequestException as e:
-        logger.error("Failed to post/put request to DMR, error message: " + str(e)) 
+        logger.error("Failed to post/put request to DMR, error message: " + str(e))
         raise e
 
     # get updated dmp
-    url = settings.DMR_URL + '/v1/dmp/' + str(dmp_id)
+    #!url = settings.DMR_URL + '/v1/dmp/' + str(dmp_id)
+    url = 'http://172.18.72.214:3000/v1/dmp/'
     response = requests.get(url, headers=headers)
     try:
         response.raise_for_status()
