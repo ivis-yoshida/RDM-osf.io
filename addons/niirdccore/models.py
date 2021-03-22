@@ -174,7 +174,7 @@ class AddonList(BaseNodeSettings):
         self.save()
 
     def get_node_id(self):
-        return node_id
+        return self.node_id
 
     def set_node_id(self, node_id):
         self.node_id = node_id
