@@ -97,6 +97,8 @@ class NodeSettings(BaseNodeSettings):
         json_open = open('addons.json', 'r')
         addons_json = json.load(json_open)
 
+        node_dmp_id = node.get_addon(SHORT_NAME).get_dmp_id()
+
         addon_list = []
         for addon in node.get_addons():
             addon_apps = eval('addons.' + addon.short_name).default_app_config
@@ -150,8 +152,7 @@ class NodeSettings(BaseNodeSettings):
         }
 
         # DMP更新リクエスト
-        #! dmr_url = settings.DMR_URL + '/v1/dmp/' + str(self.dmp_id)
-        dmr_url = 'http://172.18.72.214:3000/api/dmpUpdateTest/1edc6bd709f998a47d0aca7947340d8f'
+        dmr_url = settings.DMR_URL + '/v1/dmp/' + node_dmp_id
 
         access_token = node.get_addon(SHORT_NAME).get_dmr_api_key()
         headers = {'Authorization': 'Bearer ' + access_token}
