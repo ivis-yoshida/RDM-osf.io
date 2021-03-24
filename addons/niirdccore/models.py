@@ -148,11 +148,13 @@ class NodeSettings(BaseNodeSettings):
                     "self": util.api_v2_url('/nodes/' + node._id),
                     "href": ws_settings.DOMAIN + '/' + node._id
                 }
-            }
+            },
+            "dmp_id": node_dmp_id
         }
 
         # DMP更新リクエスト
-        dmr_url = settings.DMR_URL + '/v1/dmp/' + node_dmp_id
+        # dmr_url = settings.DMR_URL + '/v1/dmp/' + node_dmp_id
+        dmr_url = 'http://172.18.72.214:3000/v1/dmp/' + node_dmp_id
 
         access_token = node.get_addon(SHORT_NAME).get_dmr_api_key()
         headers = {'Authorization': 'Bearer ' + access_token}
