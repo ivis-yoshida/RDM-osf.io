@@ -8,7 +8,7 @@ var osfHelpers = require('js/osfHelpers');
 var ChangeMessageMixin = require('js/changeMessage');
 var SaveManager = require('js/saveManager');
 
-var SHORT_NAME = 'myskelton';
+var SHORT_NAME = 'testSkelton';
 var logPrefix = `[${SHORT_NAME}] `;
 
 

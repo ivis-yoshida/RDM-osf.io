@@ -3,6 +3,8 @@ from rest_framework import status as http_status
 from flask import request
 import logging
 import urllib.request
+import json
+import requests
 
 from . import SHORT_NAME
 from . import settings
@@ -13,7 +15,7 @@ from website.project.decorators import (
     must_be_valid_project,
     must_have_permission,
 )
-from addons.niirdccore import views
+from addons.niirdccore import views as core_views
 
 logger = logging.getLogger(__name__)
 
@@ -44,13 +46,27 @@ def myskelton_set_config(**kwargs):
 @must_have_permission('admin')
 @must_have_addon(SHORT_NAME, 'node')
 def apply_subscription(**kwargs):
-    views.apply_dmp_subscribe(**kwargs)
+    node = kwargs['node'] or kwargs['project']
 
-    return "success"
-    # return core_views.apply_dmp_subscribe(**kwargs)
+    try:
+        addon_id = request.json['apply_subscription']['addon_id']
+        callback = request.json['apply_subscription']['callback']
+    except KeyError:
+        raise HTTPError(http_status.HTTP_400_BAD_REQUEST)
+
+    return core_views.niirdccore_apply_dmp_subscribe(
+        node=node,
+        addon_id = addon_id,
+        callback = callback
+    )
+    # return str(vars(kwargs['node_addon']))
+
 
 @must_be_valid_project
 @must_have_permission('admin')
 @must_have_addon(SHORT_NAME, 'node')
-def respond_notification(**kwargs):
-    return {'notify_to_testSkelton': 'done'}
+def get_notification(**kwargs):
+    node = kwargs['node']
+    dmp_record = kwargs['dmp_record']
+    return "success: " + node._id
+    # return dmp_record
