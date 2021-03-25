@@ -59,7 +59,6 @@ def apply_subscription(**kwargs):
         addon_id = addon_id,
         callback = callback
     )
-    # return str(vars(kwargs['node_addon']))
 
 
 @must_be_valid_project
@@ -68,5 +67,5 @@ def apply_subscription(**kwargs):
 def get_notification(**kwargs):
     node = kwargs['node']
     dmp_record = kwargs['dmp_record']
-    return "success: " + node._id
-    # return dmp_record
+    print(dmp_record)
+    return "<<success>> " + str(dmp_record)
