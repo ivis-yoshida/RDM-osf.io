@@ -197,9 +197,9 @@ def niirdccore_dmp_notification(**kwargs):
 
     for addon in addon_list:
         # デコレータ対策のため、nodeも引数に含める
-        _notification_handler(
+        a = _notification_handler(
             func=eval(addon.callback),
             node=node,
             dmp_record=dmp_record)
 
-    return
+    return a
