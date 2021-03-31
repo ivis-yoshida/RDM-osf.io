@@ -5,11 +5,9 @@ from celery import Celery
 import requests
 
 from django.db import models
-from django.db.models import Subquery
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from osf.models import Contributor, RdmAddonOption, AbstractNode
 from osf.models.node import Node
 
 from website.settings import CeleryConfig
@@ -80,11 +78,11 @@ class NodeSettings(BaseNodeSettings):
             return
 
         sender_node = instance.get_addon(name=SHORT_NAME)
-        if sender_node == None:
+        if sender_node is None:
             return
 
         sender_dmp_id = sender_node.get_dmp_id()
-        if sender_dmp_id == None:
+        if sender_dmp_id is None:
             return
 
         # DMP更新タスク発行
@@ -115,7 +113,7 @@ class NodeSettings(BaseNodeSettings):
             }
             if addon.short_name == addons.jupyterhub.apps.JupyterhubAddonAppConfig.short_name:
                 addon_dict['attributes']['services'] = \
-                    [{'name': name, 'base_url': url} for name, url in addon.get_services()+ addons.jupyterhub.settings.SERVICES]
+                    [{'name': name, 'base_url': url} for name, url in addon.get_services() + addons.jupyterhub.settings.SERVICES]
 
             addon_list.append(addon_dict)
 
@@ -162,7 +160,7 @@ class AddonList(BaseNodeSettings):
     '''
     送信先アドオンリストに関するモデルを定義する。
     '''
-    owner    = models.ForeignKey('NodeSettings', null=True, blank=True, related_name='node')
+    owner = models.ForeignKey('NodeSettings', null=True, blank=True, related_name='node')
     node_id = models.CharField(max_length=100, blank=True)
     addon_id = models.CharField(max_length=50, blank=True)
     callback = models.CharField(max_length=100, blank=True)
