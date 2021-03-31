@@ -16,7 +16,7 @@ from website.ember_osf_web.views import use_ember_app
 from addons.jupyterhub.apps import JupyterhubAddonAppConfig
 from addons.niirdccore.models import AddonList
 
-import addons
+# import addons
 
 logger = logging.getLogger(__name__)
 
@@ -52,8 +52,7 @@ def niirdccore_set_config(**kwargs):
         except KeyError:
             raise HTTPError(http_status.HTTP_400_BAD_REQUEST)
 
-        if typeName == JupyterhubAddonAppConfig.full_name \
-        or typeName == JupyterhubAddonAppConfig.short_name:
+        if typeName == JupyterhubAddonAppConfig.full_name or typeName == JupyterhubAddonAppConfig.short_name:
 
             # add jupyterHub
             node.add_addon(JupyterhubAddonAppConfig.short_name, auth=None, log=False)
