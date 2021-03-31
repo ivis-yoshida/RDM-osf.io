@@ -25,9 +25,9 @@ import addons
 logger = logging.getLogger(__name__)
 
 class NodeSettings(BaseNodeSettings):
-    """
+    '''
     プロジェクトにアタッチされたアドオンに関するモデルを定義する。
-    """
+    '''
     dmp_id = models.TextField(blank=True, null=True)
     dmr_api_key = models.TextField(blank=True, null=True)
 
@@ -104,13 +104,13 @@ class NodeSettings(BaseNodeSettings):
             addon_apps = eval('addons.' + addon.short_name).default_app_config
 
             addon_dict = {
-                "type": "addon",
-                "id": addon.short_name,
-                "attributes": {
-                    "name": eval(addon_apps).full_name,
-                    "url": addons_json.get('addons_url').get(addon.short_name, ''),
-                    "description": addons_json.get('addons_description').get(addon.short_name, ''),
-                    "categories": eval(addon_apps).categories
+                'type': 'addon',
+                'id': addon.short_name,
+                'attributes': {
+                    'name': eval(addon_apps).full_name,
+                    'url': addons_json.get('addons_url').get(addon.short_name, ''),
+                    'description': addons_json.get('addons_description').get(addon.short_name, ''),
+                    'categories': eval(addon_apps).categories
                 }
             }
             if addon.short_name == addons.jupyterhub.apps.JupyterhubAddonAppConfig.short_name:
@@ -122,31 +122,31 @@ class NodeSettings(BaseNodeSettings):
         contributor_list = []
         for contributor in node.contributors:
             contributor_dict = {
-                "type": contributor.settings_type,
-                "id": contributor._id,
-                "attributes": {
-                    "family_name": contributor.family_name,
-                    "given_name": contributor.given_name,
-                    "middle_names": contributor.middle_names,
-                    "full_name": contributor.fullname,
-                    "date_registered": str(contributor.date_registered)
+                'type': contributor.settings_type,
+                'id': contributor._id,
+                'attributes': {
+                    'family_name': contributor.family_name,
+                    'given_name': contributor.given_name,
+                    'middle_names': contributor.middle_names,
+                    'full_name': contributor.fullname,
+                    'date_registered': str(contributor.date_registered)
                 },
-                "links": {
-                    "self": util.api_v2_url('/users/' + contributor._id),
-                    "href": ws_settings.DOMAIN + '/' + contributor._id
+                'links': {
+                    'self': util.api_v2_url('/users/' + contributor._id),
+                    'href': ws_settings.DOMAIN + '/' + contributor._id
                 }
             }
             contributor_list.append(contributor_dict)
 
         request_body = {
-            "data": {
-                "title": node.title,
-                "addons": addon_list,
-                "contributors": contributor_list,
+            'data': {
+                'title': node.title,
+                'addons': addon_list,
+                'contributors': contributor_list,
 
-                "links": {
-                    "self": util.api_v2_url('/nodes/' + node._id),
-                    "href": ws_settings.DOMAIN + '/' + node._id
+                'links': {
+                    'self': util.api_v2_url('/nodes/' + node._id),
+                    'href': ws_settings.DOMAIN + '/' + node._id
                 }
             }
         }
@@ -159,10 +159,10 @@ class NodeSettings(BaseNodeSettings):
         requests.put(dmr_url, headers=headers, json=request_body)
 
 class AddonList(BaseNodeSettings):
-    """
+    '''
     送信先アドオンリストに関するモデルを定義する。
-    """
-    owner    = models.ForeignKey("NodeSettings", null=True, blank=True, related_name="node")
+    '''
+    owner    = models.ForeignKey('NodeSettings', null=True, blank=True, related_name='node')
     node_id = models.CharField(max_length=100, blank=True)
     addon_id = models.CharField(max_length=50, blank=True)
     callback = models.CharField(max_length=100, blank=True)
