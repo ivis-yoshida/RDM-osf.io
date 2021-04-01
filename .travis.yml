@@ -164,7 +164,7 @@ install:
 
 # Run Python tests (core and addon) and JS tests
 before_script:
-    - env DJANGO_SETTINGS_MODULE=api.base.settings python manage.py makemigrations
+    # - env DJANGO_SETTINGS_MODULE=api.base.settings python manage.py makemigrations
     - env DJANGO_SETTINGS_MODULE=api.base.settings python manage.py migrate addons_osfstorage
     - env DJANGO_SETTINGS_MODULE=api.base.settings python manage.py osf 0001_initial
     - env DJANGO_SETTINGS_MODULE=api.base.settings python manage.py migrate
