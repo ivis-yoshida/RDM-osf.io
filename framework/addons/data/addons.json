@@ -589,6 +589,36 @@
                 "status": "partial",
                 "text": "IQB-RIMS content will be registered, but version history will not be copied to the registration."
             }
+        },
+        "NII RDC Core": {
+            "Permissions": {
+                "status": "none",
+                "text": "The GakuNin RDM does not affect the permissions of NII RDC Core."
+            },
+            "View / download file versions": {
+                "status": "full",
+                "text": "some DMP/Dataset information can be viewed/download via GakuNin RDM."
+            },
+            "Add / update files": {
+                "status": "full",
+                "text": "some DMP/Dataset information can be add/update via GakuNin RDM."
+            },
+            "Delete files": {
+                "status": "none",
+                "text": "Deleting DMP/Dataset information is not implemented yet."
+            },
+            "Logs": {
+                "status": "none",
+                "text": "The NII RDC Core add-on does not provide Storage Features."
+            },
+            "Forking": {
+                "status": "partial",
+                "text": "Forking a project or component copies information about linked DMP Systems but the GakuNin RDM does not affect authentication of these DMP Systems."
+            },
+            "Registering": {
+                "status": "none",
+                "text": "Registering DMP/Dataset information is not implemented yet."
+            }
         }
     },
     "disclaimers": [
