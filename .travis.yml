@@ -163,6 +163,11 @@ install:
     - netstat -an|grep tcp.*LISTEN
 
 # Run Python tests (core and addon) and JS tests
+before_script:
+    - python manage.py makemigrations
+    - python manage.py migrate addons_osfstorage
+    - python manage.py osf 0001_initial
+    - python manage.py migrate
 
 after_script:
     # This ensures failed tests are removed from the cache so they can be re-tried.
