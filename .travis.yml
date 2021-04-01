@@ -163,17 +163,19 @@ install:
     - netstat -an|grep tcp.*LISTEN
 
 # Run Python tests (core and addon) and JS tests
-before_script:
-    # - env DJANGO_SETTINGS_MODULE=api.base.settings python manage.py makemigrations
-    - env DJANGO_SETTINGS_MODULE=api.base.settings python manage.py migrate addons_osfstorage
-    - env DJANGO_SETTINGS_MODULE=api.base.settings python manage.py osf 0001_initial
-    - env DJANGO_SETTINGS_MODULE=api.base.settings python manage.py migrate
+# before_script:
+
 
 after_script:
     # This ensures failed tests are removed from the cache so they can be re-tried.
     - inv remove_failures_from_testmon --db-path=$HOME/.cache/testmon/.testmondata_$TEST_BUILD
 
 script:
+    - env DJANGO_SETTINGS_MODULE=api.base.settings python manage.py makemigrations
+    - env DJANGO_SETTINGS_MODULE=api.base.settings python manage.py migrate addons_osfstorage
+    - env DJANGO_SETTINGS_MODULE=api.base.settings python manage.py osf 0001_initial
+    - env DJANGO_SETTINGS_MODULE=api.base.settings python manage.py migrate
+
     - export COVERAGE=`if [ $(echo "$TRAVIS_BRANCH"|grep -e "feature/") ]; then echo "--coverage"; else echo ""; fi`
     # Testmon will run for PRs, but will be disabled when merging into master or develop
     - export TESTMON=`if [[ "$TRAVIS_PULL_REQUEST_BRANCH" == "" && "$TRAVIS_BRANCH" == "develop" || "$TRAVIS_PULL_REQUEST_BRANCH" == "" && "$TRAVIS_BRANCH" == "master" ]]; then echo ""; else  echo "--testmon"; fi`
