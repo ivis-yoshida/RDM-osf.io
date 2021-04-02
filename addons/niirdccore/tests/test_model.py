@@ -69,30 +69,17 @@ class TestNiirdccoreModels(NiirdccoreAddonTestCase, OsfTestCase):
 
         # set Max length
         self.addon_list.set_node_id(
-            '0000000000\
-            1111111111\
-            2222222222\
-            3333333333\
-            4444444444'
+            '00000000001111111111222222222233333333334444444444'
         )
         assert_equal(
             self.addon_list.get_node_id(),
-            '0000000000\
-            1111111111\
-            2222222222\
-            3333333333\
-            4444444444'
+            '00000000001111111111222222222233333333334444444444'
         )
 
     def test_addonList_node_id_error(self):
         with pytest.raises(DataError):
             self.addon_list.set_node_id(
-            '0000000000\
-            1111111111\
-            2222222222\
-            3333333333\
-            4444444444\
-            5'
+            '000000000011111111112222222222333333333344444444445'
         )
 
         with pytest.raises(TransactionManagementError):
