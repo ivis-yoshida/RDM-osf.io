@@ -14,6 +14,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
+        ('osf', '0001_initial'),
     ]
 
     operations = [
