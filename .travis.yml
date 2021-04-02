@@ -163,9 +163,6 @@ install:
     - netstat -an|grep tcp.*LISTEN
 
 # Run Python tests (core and addon) and JS tests
-# before_script:
-
-
 after_script:
     # This ensures failed tests are removed from the cache so they can be re-tried.
     - inv remove_failures_from_testmon --db-path=$HOME/.cache/testmon/.testmondata_$TEST_BUILD
@@ -175,11 +172,6 @@ script:
     # Testmon will run for PRs, but will be disabled when merging into master or develop
     - export TESTMON=`if [[ "$TRAVIS_PULL_REQUEST_BRANCH" == "" && "$TRAVIS_BRANCH" == "develop" || "$TRAVIS_PULL_REQUEST_BRANCH" == "" && "$TRAVIS_BRANCH" == "master" ]]; then echo ""; else  echo "--testmon"; fi`
     - export TESTMON_DATAFILE=$HOME/.cache/testmon/.testmondata_$TEST_BUILD
-
-    # - env DJANGO_SETTINGS_MODULE=api.base.settings python manage.py makemigrations
-    # - env DJANGO_SETTINGS_MODULE=api.base.settings python manage.py migrate addons_osfstorage
-    # - env DJANGO_SETTINGS_MODULE=api.base.settings python manage.py osf 0001_initial
-    # - env DJANGO_SETTINGS_MODULE=api.base.settings python manage.py migrate
     - invoke test_travis_$TEST_BUILD -n 1 $COVERAGE $TESTMON
 
 after_success:
