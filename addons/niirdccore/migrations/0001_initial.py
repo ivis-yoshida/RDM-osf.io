@@ -13,8 +13,10 @@ class Migration(migrations.Migration):
 
     initial = True
 
+    # dependencies = [
+    #     ('osf', '0214_merge_20210312_1440'),
+    # ]
     dependencies = [
-        ('osf', '0214_merge_20210312_1440'),
     ]
 
     operations = [
