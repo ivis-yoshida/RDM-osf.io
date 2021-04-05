@@ -3,7 +3,7 @@
 本アドオンの各種プロパティを定義する
 """
 
-import os
+# import os
 from addons.base.apps import BaseAddonAppConfig
 from . import SHORT_NAME
 
