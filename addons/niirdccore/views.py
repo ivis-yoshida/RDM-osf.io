@@ -21,7 +21,7 @@ def niirdccore_get_config(**kwargs):
 
     node = kwargs['node'] or kwargs['project']
 
-    return {"test": "OK"}
+    return {'test': 'OK'}
 
 @must_be_valid_project
 @must_have_permission('admin')
@@ -31,4 +31,3 @@ def niirdccore_set_config(**kwargs):
     node = kwargs['node'] or kwargs['project']
 
     return {}
-
