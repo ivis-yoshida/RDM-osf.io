@@ -15,3 +15,5 @@ class NodeSettings(BaseNodeSettings):
     """
     プロジェクトにアタッチされたアドオンに関するモデルを定義する。
     """
+    def dummy_setting(self):
+        return 1
