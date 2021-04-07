@@ -64,6 +64,7 @@ COPY ./addons/nextcloud/requirements.txt ./addons/nextcloud/
 COPY ./addons/nextcloudinstitutions/requirements.txt ./addons/nextcloudinstitutions/
 COPY ./admin/rdm_announcement/requirements.txt ./admin/rdm_announcement/
 COPY ./admin/rdm_statistics/requirements.txt ./admin/rdm_statistics/
+COPY ./addons/niirdccore/requirements.txt ./addons/niirdccore/
 
 RUN set -ex \
     && mkdir -p /var/www \
@@ -165,6 +166,7 @@ COPY ./addons/ociinstitutions/requirements.txt ./addons/ociinstitutions/
 COPY ./addons/nextcloud/static/ ./addons/nextcloud/static/
 COPY ./addons/nextcloudinstitutions/static/ ./addons/nextcloudinstitutions/static/
 COPY ./addons/iqbrims/static/ ./addons/iqbrims/static/
+COPY ./addons/niirdccore/static/ ./addons/niirdccore/static/
 RUN \
     # OSF
     yarn install --frozen-lockfile \
