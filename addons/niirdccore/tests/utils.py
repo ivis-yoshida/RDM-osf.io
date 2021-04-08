@@ -18,3 +18,6 @@ class NiirdccoreAddonTestCase(AddonTestCase):
     def set_node_settings(self, settings):
         # super(NiirdccoreAddonTestCase, self).set_node_settings(settings)
         return
+
+    def set_user_settings(self, settings):
+        return
