@@ -106,12 +106,12 @@ def niirdccore_update_dmp_info(**kwargs):
     try:
         recv_data = request.json['data']['attributes']
         dataset = recv_data['dataset'][0]
-        dataset_is_new = dataset['dataset_is_new']
-        dataset_id = dataset['dataset_id']['identifier']
+        dataset_is_new = dataset['datasetIsNew']
+        dataset_id = dataset['datasetId']['identifier']
     except KeyError:
         raise HTTPError(http_status.HTTP_400_BAD_REQUEST)
 
-    dataset.pop('dataset_is_new')
+    dataset.pop('datasetIsNew')
     send_data = {'data': dataset}
 
     headers = {'Authorization': 'Bearer ' + addon.get_dmr_api_key()}
@@ -123,7 +123,8 @@ def niirdccore_update_dmp_info(**kwargs):
         response = requests.post(url, json=send_data, headers=headers)
     else:
         # update dataset
-        url = settings.DMR_URL + '/v1/dataset/{}/metadata'.format(str(dataset_id))
+        # url = settings.DMR_URL + '/v1/dataset/{}/metadata'.format(str(dataset_id))
+        url = settings.DMR_URL + '/v1/dataset/metadata'
         response = requests.put(url, json=send_data, headers=headers)
     try:
         response.raise_for_status()
