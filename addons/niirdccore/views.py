@@ -123,8 +123,7 @@ def niirdccore_update_dmp_info(**kwargs):
         response = requests.post(url, json=send_data, headers=headers)
     else:
         # update dataset
-        # url = settings.DMR_URL + '/v1/dataset/{}/metadata'.format(str(dataset_id))
-        url = settings.DMR_URL + '/v1/dataset/metadata'
+        url = settings.DMR_URL + '/v1/dataset/{}/metadata'.format(str(dataset_id))
         response = requests.put(url, json=send_data, headers=headers)
     try:
         response.raise_for_status()
