@@ -27,7 +27,7 @@ from addons.niirdccore.tests.factories import NiirdccoreNodeSettingsFactory
 
 # pytestmark = pytest.mark.django_db
 
-class TestNiirdccoreModels(NiirdccoreAddonTestCase, OsfTestCase, unittest.TestCase):
+class TestNiirdccoreModels(NiirdccoreAddonTestCase, unittest.TestCase):
 
     def setUp(self):
         super(TestNiirdccoreModels, self).setUp()
