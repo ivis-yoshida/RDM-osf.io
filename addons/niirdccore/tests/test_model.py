@@ -34,54 +34,54 @@ class TestNiirdccoreModels(NiirdccoreAddonTestCase, unittest.TestCase):
         super(TestNiirdccoreModels, self).setUp()
         # self.set_node_settings(self.node_settings)
         # self.dummy_project = ProjectWithAddonFactory(addon='niirdccore')
-        self.node = ProjectFactory()
-        self.user = self.node.creator
+        # self.node = ProjectFactory()
+        # self.user = self.node.creator
 
-        self.node_settings = self._NodeSettingsFactory(owner=self.node)
-        self.node_settings.save()
+        # self.node_settings = self._NodeSettingsFactory(owner=self.node)
+        # self.node_settings.save()
 
-        # self.addon_list = models.AddonList()
-        # self.addon_list.save()
+        self.addon_list = models.AddonList()
+        self.addon_list.save()
 
     def tearDown(self):
-        super(TestNodeSettings, self).tearDown()
-        self.node.delete()
-        self.user.delete()
+        # super(TestNodeSettings, self).tearDown()
+        # self.node.delete()
+        # self.user.delete()
 
-        # self.addon_list.delete()
+        self.addon_list.delete()
 
 
 ################################ NodeSettings ###################################
-    def test_dmp_id_normal(self):
-        self.node_settings.set_dmp_id('dmp_id')
-        assert_equal(self.node_settings.get_dmp_id(), 'dmp_id')
+    # def test_dmp_id_normal(self):
+    #     self.node_settings.set_dmp_id('dmp_id')
+    #     assert_equal(self.node_settings.get_dmp_id(), 'dmp_id')
 
-        self.node_settings.set_dmp_id(111 > 100)
-        self.assertTrue(self.node_settings.get_dmp_id())
+    #     self.node_settings.set_dmp_id(111 > 100)
+    #     self.assertTrue(self.node_settings.get_dmp_id())
 
-        self.node_settings.set_dmp_id(None)
-        self.assertIsNone(self.node_settings.get_dmp_id())
+    #     self.node_settings.set_dmp_id(None)
+    #     self.assertIsNone(self.node_settings.get_dmp_id())
 
-    def test_add_niirdccore_addon_normal(self):
-        mock_node = mock.MagicMock(spec=Node, return_value=True)
-        with mock.patch('osf.models.node.Node.has_addon', return_value=True):
-            addon_result = self.node_settings.add_niirdccore_addon(mock_node, '2021-03-11')
-            self.assertIsNone(addon_result)
-            mock_node.add_addon.assert_not_called()
+    # def test_add_niirdccore_addon_normal(self):
+    #     mock_node = mock.MagicMock(spec=Node, return_value=True)
+    #     with mock.patch('osf.models.node.Node.has_addon', return_value=True):
+    #         addon_result = self.node_settings.add_niirdccore_addon(mock_node, '2021-03-11')
+    #         self.assertIsNone(addon_result)
+    #         mock_node.add_addon.assert_not_called()
 
 
 ################################ AddonList #######################################
-    # def test_addonList_owner_normal(self):
-    #     self.addon_list.set_owner(self.node_settings)
-    #     self.assertIs(type(self.addon_list.get_owner()), models.NodeSettings)
+    def test_addonList_owner_normal(self):
+        self.addon_list.set_owner(self.node_settings)
+        self.assertIs(type(self.addon_list.get_owner()), models.NodeSettings)
 
-    # def test_addonList_owner_error(self):
-    #     with pytest.raises(ValueError):
-    #         self.addon_list.set_owner(True)
+    def test_addonList_owner_error(self):
+        with pytest.raises(ValueError):
+            self.addon_list.set_owner(True)
 
-    # def test_addonList_node_id_normal(self):
-    #     self.addon_list.set_node_id('123')
-    #     assert_equal(self.addon_list.get_node_id(), '123')
+    def test_addonList_node_id_normal(self):
+        self.addon_list.set_node_id('123')
+        assert_equal(self.addon_list.get_node_id(), '123')
 
         # set Max length
         # self.addon_list.set_node_id(
@@ -138,9 +138,9 @@ class TestNiirdccoreModels(NiirdccoreAddonTestCase, unittest.TestCase):
     #         self.addon_list.set_node_id(11111)
     #         self.addon_list.set_node_id(111.11)
 
-    # def test_addonList_callback_normal(self):
-    #     self.addon_list.set_callback('test.views.callback')
-    #     assert_equal(self.addon_list.get_callback(), 'test.views.callback')
+    def test_addonList_callback_normal(self):
+        self.addon_list.set_callback('test.views.callback')
+        assert_equal(self.addon_list.get_callback(), 'test.views.callback')
 
     #     # set Max length
     #     self.addon_list.set_callback(
