@@ -25,7 +25,7 @@ from addons.niirdccore import apps, models, views
 from addons.niirdccore.tests.utils import NiirdccoreAddonTestCase
 from addons.niirdccore.tests.factories import NiirdccoreNodeSettingsFactory
 
-# pytestmark = pytest.mark.django_db
+pytestmark = pytest.mark.django_db
 
 class TestNiirdccoreModels(NiirdccoreAddonTestCase, unittest.TestCase):
 
