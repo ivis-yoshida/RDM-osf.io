@@ -14,8 +14,6 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        # ('osf', '0214_merge_20210312_1440'),
-        ('addons_osfstorage', '0005_region_mfr_url')
     ]
 
     operations = [
