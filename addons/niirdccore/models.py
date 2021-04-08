@@ -33,6 +33,14 @@ class NodeSettings(BaseNodeSettings):
     app = Celery()
     app.config_from_object(CeleryConfig)
 
+    #! implemented temporally
+    @property
+    def complete(self):
+        """Whether or not this addon is properly configured
+        :rtype bool:
+        """
+        return True
+
     def set_dmp_id(self, dmp_id):
         self.dmp_id = dmp_id
         self.save()
