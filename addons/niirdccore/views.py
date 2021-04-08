@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from rest_framework import status as http_status
 from flask import request
-from django.db.models import Subquery
 import logging
 import requests
 
@@ -17,8 +16,7 @@ from website.ember_osf_web.views import use_ember_app
 from addons.jupyterhub.apps import JupyterhubAddonAppConfig
 from addons.niirdccore.models import AddonList
 
-from addons import *
-from addons.jupyterhub.models import NodeSettings
+# import addons
 
 logger = logging.getLogger(__name__)
 
@@ -44,27 +42,26 @@ def niirdccore_set_config(**kwargs):
     addon.set_dmr_api_key(dmr_api_key)
 
     # provisioning
-    dataAnalysisResources = dmp_metadata.get("vivo:Dataset_redbox:DataAnalysisResources")
+    dataAnalysisResources = dmp_metadata.get('vivo:Dataset_redbox:DataAnalysisResources')
 
     if dataAnalysisResources:
         try:
-            typeName = dataAnalysisResources["type"]
-            serviceName = dataAnalysisResources["name"]
-            baseUrl = dataAnalysisResources["url"]
+            typeName = dataAnalysisResources['type']
+            serviceName = dataAnalysisResources['name']
+            baseUrl = dataAnalysisResources['url']
         except KeyError:
             raise HTTPError(http_status.HTTP_400_BAD_REQUEST)
 
-        if typeName == JupyterhubAddonAppConfig.full_name \
-            or typeName ==  JupyterhubAddonAppConfig.short_name:
+        if typeName == JupyterhubAddonAppConfig.full_name or typeName == JupyterhubAddonAppConfig.short_name:
 
             # add jupyterHub
             node.add_addon(JupyterhubAddonAppConfig.short_name, auth=None, log=False)
             jupyterHub = node.get_addon(JupyterhubAddonAppConfig.short_name)
             jupyterHub.set_services([(serviceName, baseUrl)])
 
-            return {"result": "jupyterhub added"}
+            return {'result': 'jupyterhub added'}
 
-    return {"result": "jupyterhub none"}
+    return {'result': 'jupyterhub none'}
 
 @must_be_valid_project
 @must_have_permission('admin')
@@ -85,7 +82,7 @@ def niirdccore_get_dmp_info(**kwargs):
     try:
         response.raise_for_status()
     except requests.exceptions.RequestException as e:
-        logger.error("Failed to post/put request to DMR, error message: " + str(e))
+        logger.error('Failed to post/put request to DMR, error message: ' + str(e))
         raise e
 
     data = response.json()
@@ -104,9 +101,9 @@ def niirdccore_update_dmp_info(**kwargs):
 
     if dmp_id is None:
         raise HTTPError(http_status.HTTP_410_GONE)
-    
+
     # update/create dataset
-    try: 
+    try:
         recv_data = request.json['data']['attributes']
         dataset = recv_data['dataset'][0]
         dataset_is_new = dataset['dataset_is_new']
@@ -123,7 +120,7 @@ def niirdccore_update_dmp_info(**kwargs):
         # create dataset
         send_data['data']['dmp_id'] = {'identifier': dmp_id, 'type': 'other'}
         url = settings.DMR_URL + '/v1/dataset/metadata'
-        response = requests.post(url, json=send_data, headers=headers)        
+        response = requests.post(url, json=send_data, headers=headers)
     else:
         # update dataset
         url = settings.DMR_URL + '/v1/dataset/{}/metadata'.format(str(dataset_id))
@@ -131,7 +128,7 @@ def niirdccore_update_dmp_info(**kwargs):
     try:
         response.raise_for_status()
     except requests.exceptions.RequestException as e:
-        logger.error("Failed to post/put request to DMR, error message: " + str(e)) 
+        logger.error('Failed to post/put request to DMR, error message: ' + str(e))
         raise e
 
     # get updated dmp
@@ -140,7 +137,7 @@ def niirdccore_update_dmp_info(**kwargs):
     try:
         response.raise_for_status()
     except requests.exceptions.RequestException as e:
-        logger.error("Failed to get request to DMR, error message: " + str(e))
+        logger.error('Failed to get request to DMR, error message: ' + str(e))
         raise e
 
     data = response.json()
@@ -159,7 +156,6 @@ def project_niirdccore(**kwargs):
 @must_have_addon(SHORT_NAME, 'node')
 def niirdccore_apply_dmp_subscribe(**kwargs):
     node = kwargs['node']
-    addon = node.get_addon(SHORT_NAME)
     addon_list = AddonList()
 
     addon_list.set_node_id(node._id)
