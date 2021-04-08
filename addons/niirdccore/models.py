@@ -5,9 +5,11 @@ from celery import Celery
 import requests
 
 from django.db import models
+from django.db.models import Subquery
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from osf.models import RdmAddonOption
 from osf.models.node import Node
 
 from website.settings import CeleryConfig
@@ -23,15 +25,22 @@ import addons
 logger = logging.getLogger(__name__)
 
 class NodeSettings(BaseNodeSettings):
-    '''
+    """
     プロジェクトにアタッチされたアドオンに関するモデルを定義する。
-    '''
+    """
     dmp_id = models.TextField(blank=True, null=True)
     dmr_api_key = models.TextField(blank=True, null=True)
 
     # 非同期処理のための変数を定義
     app = Celery()
     app.config_from_object(CeleryConfig)
+
+    @property
+    def complete(self):
+        """Whether or not this addon is properly configured
+        :rtype bool:
+        """
+        return False
 
     def set_dmp_id(self, dmp_id):
         self.dmp_id = dmp_id
@@ -55,19 +64,19 @@ class NodeSettings(BaseNodeSettings):
         if instance.has_addon(SHORT_NAME):
             # add済みの場合は終了
             return
-        # 所属機関によるアドオン追加判定は、adminコンテナの起動が可能になるまでコメントアウトする
-        # inst_ids = instance.affiliated_institutions.values('id')
-        # addon_option = RdmAddonOption.objects.filter(
-        #     provider=SHORT_NAME,
-        #     institution_id__in=Subquery(inst_ids),
-        #     management_node__isnull=False,
-        #     is_allowed=True
-        # ).first()
-        # if addon_option is None:
-        #     return
-        # if addon_option.organizational_node is not None and \
-        #         not addon_option.organizational_node.is_contributor(instance.creator):
-        #     return
+
+        inst_ids = instance.affiliated_institutions.values('id')
+        addon_option = RdmAddonOption.objects.filter(
+            provider=SHORT_NAME,
+            institution_id__in=Subquery(inst_ids),
+            management_node__isnull=False,
+            is_allowed=True
+        ).first()
+        if addon_option is None:
+            return
+        if addon_option.organizational_node is not None and \
+                not addon_option.organizational_node.is_contributor(instance.creator):
+            return
 
         instance.add_addon(SHORT_NAME, auth=None, log=False)
 
@@ -157,9 +166,9 @@ class NodeSettings(BaseNodeSettings):
         requests.put(dmr_url, headers=headers, json=request_body)
 
 class AddonList(BaseNodeSettings):
-    '''
+    """
     送信先アドオンリストに関するモデルを定義する。
-    '''
+    """
     owner = models.ForeignKey('NodeSettings', null=True, blank=True, related_name='node')
     node_id = models.CharField(max_length=100, blank=True)
     addon_id = models.CharField(max_length=50, blank=True)
