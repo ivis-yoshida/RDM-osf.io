@@ -28,12 +28,28 @@ from addons.niirdccore.tests.factories import NiirdccoreNodeSettingsFactory
 pytestmark = pytest.mark.django_db
 
 class TestNiirdccoreModels(NiirdccoreAddonTestCase, unittest.TestCase):
+    _NodeSettingsFactory = NiirdccoreNodeSettingsFactory
 
     def setUp(self):
         super(TestNiirdccoreModels, self).setUp()
-        self.set_node_settings(self.node_settings)
+        # self.set_node_settings(self.node_settings)
         # self.dummy_project = ProjectWithAddonFactory(addon='niirdccore')
-        self.addon_list = models.AddonList()
+        self.node = ProjectFactory()
+        self.user = self.node.creator
+
+        self.node_settings = self._NodeSettingsFactory(owner=self.node)
+        self.node_settings.save()
+
+        # self.addon_list = models.AddonList()
+        # self.addon_list.save()
+
+    def tearDown(self):
+        super(TestNodeSettings, self).tearDown()
+        self.node.delete()
+        self.user.delete()
+
+        # self.addon_list.delete()
+
 
 ################################ NodeSettings ###################################
     def test_dmp_id_normal(self):
@@ -55,17 +71,17 @@ class TestNiirdccoreModels(NiirdccoreAddonTestCase, unittest.TestCase):
 
 
 ################################ AddonList #######################################
-    def test_addonList_owner_normal(self):
-        self.addon_list.set_owner(self.node_settings)
-        self.assertIs(type(self.addon_list.get_owner()), models.NodeSettings)
+    # def test_addonList_owner_normal(self):
+    #     self.addon_list.set_owner(self.node_settings)
+    #     self.assertIs(type(self.addon_list.get_owner()), models.NodeSettings)
 
-    def test_addonList_owner_error(self):
-        with pytest.raises(ValueError):
-            self.addon_list.set_owner(True)
+    # def test_addonList_owner_error(self):
+    #     with pytest.raises(ValueError):
+    #         self.addon_list.set_owner(True)
 
-    def test_addonList_node_id_normal(self):
-        self.addon_list.set_node_id('123')
-        assert_equal(self.addon_list.get_node_id(), '123')
+    # def test_addonList_node_id_normal(self):
+    #     self.addon_list.set_node_id('123')
+    #     assert_equal(self.addon_list.get_node_id(), '123')
 
         # set Max length
         # self.addon_list.set_node_id(
@@ -100,9 +116,9 @@ class TestNiirdccoreModels(NiirdccoreAddonTestCase, unittest.TestCase):
     #         self.addon_list.set_node_id(11111)
     #         self.addon_list.set_node_id(111.11)
 
-    def test_addonList_addon_id_normal(self):
-        self.addon_list.set_addon_id('55555')
-        assert_equal(self.addon_list.get_addon_id(), '55555')
+    # def test_addonList_addon_id_normal(self):
+    #     self.addon_list.set_addon_id('55555')
+    #     assert_equal(self.addon_list.get_addon_id(), '55555')
 
         # set max length
         # self.addon_list.set_addon_id(
