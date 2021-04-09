@@ -46,7 +46,7 @@ class Migration(migrations.Migration):
                 ('deleted', osf.utils.fields.NonNaiveDateTimeField(blank=True, null=True)),
                 ('dmp_id', models.TextField(blank=True, null=True)),
                 ('dmr_api_key', models.TextField(blank=True, null=True)),
-                # ('owner', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='addons_niirdccore_node_settings', to='osf.AbstractNode')),
+                ('owner', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='addons_niirdccore_node_settings', to='osf.AbstractNode')),
             ],
             options={
                 'abstract': False,
