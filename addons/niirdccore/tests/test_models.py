@@ -142,14 +142,14 @@ class TestNiirdccoreModels(NiirdccoreAddonTestCase, unittest.TestCase):
         self.addon_list.set_callback('test.views.callback')
         assert_equal(self.addon_list.get_callback(), 'test.views.callback')
 
-    #     # set Max length
-    #     self.addon_list.set_callback(
-    #         '0000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999'
-    #     )
-    #     assert_equal(
-    #         self.addon_list.get_callback(),
-    #         '0000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999'
-    #     )
+        # set Max length
+        self.addon_list.set_callback(
+            '0000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999'
+        )
+        assert_equal(
+            self.addon_list.get_callback(),
+            '0000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999'
+        )
 
     # def test_addonList_callback_error(self):
     #     with pytest.raises(DataError):
