@@ -5,9 +5,11 @@ from celery import Celery
 import requests
 
 from django.db import models
+from django.db.models import Subquery
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from osf.models import RdmAddonOption
 from osf.models.node import Node
 
 from website.settings import CeleryConfig
@@ -64,20 +66,20 @@ class NodeSettings(BaseNodeSettings):
             # add済みの場合は終了
             return
         # 所属機関によるアドオン追加判定は、adminコンテナの起動が可能になるまでコメントアウトする
-        # inst_ids = instance.affiliated_institutions.values('id')
-        # addon_option = RdmAddonOption.objects.filter(
-        #     provider=SHORT_NAME,
-        #     institution_id__in=Subquery(inst_ids),
-        #     management_node__isnull=False,
-        #     is_allowed=True
-        # ).first()
-        # if addon_option is None:
-        #     return
-        # if addon_option.organizational_node is not None and \
-        #         not addon_option.organizational_node.is_contributor(instance.creator):
-        #     return
+        inst_ids = instance.affiliated_institutions.values('id')
+        addon_option = RdmAddonOption.objects.filter(
+            provider=SHORT_NAME,
+            institution_id__in=Subquery(inst_ids),
+            management_node__isnull=False,
+            is_allowed=True
+        ).first()
+        if addon_option is None:
+            return
+        if addon_option.organizational_node is not None and \
+                not addon_option.organizational_node.is_contributor(instance.creator):
+            return
 
-        # instance.add_addon(SHORT_NAME, auth=None, log=False)
+        instance.add_addon(SHORT_NAME, auth=None, log=False)
 
     # DMP情報モニタリング
     @receiver(post_save, sender=Node)
