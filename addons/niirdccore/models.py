@@ -23,9 +23,9 @@ import addons
 logger = logging.getLogger(__name__)
 
 class NodeSettings(BaseNodeSettings):
-    '''
+    """
     プロジェクトにアタッチされたアドオンに関するモデルを定義する。
-    '''
+    """
     dmp_id = models.TextField(blank=True, null=True)
     dmr_api_key = models.TextField(blank=True, null=True)
 
@@ -39,7 +39,7 @@ class NodeSettings(BaseNodeSettings):
         """Whether or not this addon is properly configured
         :rtype bool:
         """
-        return True
+        return False
 
     def set_dmp_id(self, dmp_id):
         self.dmp_id = dmp_id
@@ -77,7 +77,7 @@ class NodeSettings(BaseNodeSettings):
         #         not addon_option.organizational_node.is_contributor(instance.creator):
         #     return
 
-        instance.add_addon(SHORT_NAME, auth=None, log=False)
+        # instance.add_addon(SHORT_NAME, auth=None, log=False)
 
     # DMP情報モニタリング
     @receiver(post_save, sender=Node)
