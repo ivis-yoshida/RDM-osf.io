@@ -87,7 +87,7 @@ class NodeSettings(BaseNodeSettings):
         if SHORT_NAME not in ws_settings.ADDONS_AVAILABLE_DICT:
             return
 
-        sender_node = instance.get_addon(name=SHORT_NAME)
+        sender_node = instance.get_addon(SHORT_NAME)
         if sender_node is None:
             return
 

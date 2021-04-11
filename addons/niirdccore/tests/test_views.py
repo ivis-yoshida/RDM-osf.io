@@ -190,7 +190,7 @@ class TestNiirdccoreViews(NiirdccoreAddonTestCase,  OsfTestCase):
             res = self.app.patch_json(
                 url,
                 {
-                    "data": {}
+                    'data': {}
                 },
                 auth=self.user.auth,
             )
