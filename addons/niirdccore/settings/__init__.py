@@ -3,6 +3,7 @@ from .defaults import *  # noqa
 
 
 logger = logging.getLogger(__name__)
+DMR_URL = 'https://dev1.dmr.nii.ac.jp/'
 
 try:
     from .local import *  # noqa
