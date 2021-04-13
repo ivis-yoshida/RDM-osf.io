@@ -43,6 +43,7 @@ class TestNiirdccoreModels(NiirdccoreAddonTestCase, unittest.TestCase):
 
     def tearDown(self):
         self.addon_list.delete()
+        self.node_settings.delete()
 
         # super(TestNodeSettings, self).tearDown()
         self.node.delete()
