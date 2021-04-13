@@ -25,7 +25,7 @@ from admin.rdm_addons.utils import get_rdm_addon_option
 import website
 from website.util import api_url_for
 from addons.niirdccore.tests.utils import NiirdccoreAddonTestCase
-from addons.niirdccore import apps, models, views, SHORT_NAME
+from addons.niirdccore import apps, models, settings, views, SHORT_NAME
 
 def mocked_requests_get(*args, **kwargs):
     class MockResponse:
@@ -105,7 +105,8 @@ class TestNiirdccoreViews(NiirdccoreAddonTestCase,  OsfTestCase):
             assert_equals(res.status_code, 400)
 
     @mock.patch('requests.get', side_effect=mocked_requests_get)
-    def test_niirdccore_get_dmp_info(self, mock_get):
+    @mock.patch.object(settings.defaults, 'DMR_URL', return_value='http://dummy_domain.com/')
+    def test_niirdccore_get_dmp_info(self, mock_get, dummy_url):
         expected_res = {'data': {'id': self.project._id, 'type': 'dmp-status', 'attributes': 'dummy_value'}}
 
         self.node_settings.set_dmp_id('valid')
@@ -117,7 +118,8 @@ class TestNiirdccoreViews(NiirdccoreAddonTestCase,  OsfTestCase):
         assert_equals(res.json, expected_res)
 
     @mock.patch('requests.get', side_effect=mocked_requests_get)
-    def test_niirdccore_get_dmp_info_dmp_id_none(self, mock_get):
+    @mock.patch.object(settings.defaults, 'DMR_URL', return_value='http://dummy_domain.com/')
+    def test_niirdccore_get_dmp_info_dmp_id_none(self, mock_get, dummy_url):
         with pytest.raises(AppError):
             url = self.project.api_url_for('{}_get_dmp_info'.format(SHORT_NAME))
             res = self.app.get(url, auth=self.user.auth)
@@ -125,7 +127,8 @@ class TestNiirdccoreViews(NiirdccoreAddonTestCase,  OsfTestCase):
 
     @mock.patch('requests.get', side_effect=mocked_requests_get)
     @mock.patch('requests.Response.raise_for_status', side_effect=requests.exceptions.HTTPError)
-    def test_niirdccore_get_dmp_info_request_exception(self, err, mock_get):
+    @mock.patch.object(settings.defaults, 'DMR_URL', return_value='http://dummy_domain.com/')
+    def test_niirdccore_get_dmp_info_request_exception(self, err, mock_get, dummy_url):
         url = self.project.api_url_for('{}_get_dmp_info'.format(SHORT_NAME))
         self.node_settings.set_dmp_id('dummy_id')
         self.node_settings.set_dmr_api_key('dummy_key')
@@ -137,7 +140,8 @@ class TestNiirdccoreViews(NiirdccoreAddonTestCase,  OsfTestCase):
     @mock.patch('requests.get', side_effect=mocked_requests_get)
     @mock.patch('requests.post', side_effect=mocked_requests_get)
     @mock.patch('requests.put', side_effect=mocked_requests_get)
-    def test_niirdccore_update_dmp_info(self, mock_get, mock_post, mock_put):
+    @mock.patch.object(settings.defaults, 'DMR_URL', return_value='http://dummy_domain.com/')
+    def test_niirdccore_update_dmp_info(self, mock_get, mock_post, mock_put, dummy_url):
         self.node_settings.set_dmp_id('valid')
         self.node_settings.set_dmr_api_key('valid')
 
@@ -185,7 +189,8 @@ class TestNiirdccoreViews(NiirdccoreAddonTestCase,  OsfTestCase):
         )
         assert_equals(res.status_code, 200)
 
-    def test_niirdccore_update_dmp_info_denied(self):
+    @mock.patch.object(settings.defaults, 'DMR_URL', return_value='http://dummy_domain.com/')
+    def test_niirdccore_update_dmp_info_denied(self, dummy_url):
         with pytest.raises(AppError):
             self.node_settings.set_dmp_id('78c0f674a39962f2a70f7e9a9d783805')
 
@@ -235,7 +240,6 @@ class TestNiirdccoreViews(NiirdccoreAddonTestCase,  OsfTestCase):
                 # auth=self.user.auth,
             )
 
-        with pytest.raises(AppError):
             url = self.project.api_url_for('{}_dmp_notification'.format(SHORT_NAME))
             res = self.app.post_json(
                 url,
