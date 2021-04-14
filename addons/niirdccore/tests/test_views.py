@@ -54,6 +54,9 @@ def mocked_requests_get(*args, **kwargs):
 
 
 class TestNiirdccoreViews(NiirdccoreAddonTestCase,  OsfTestCase):
+    def setUp(self):
+        super(TestNiirdccoreViews, self).setUp()
+
     def test_niirdccore_set_config(self):
         # jupyterhub none
         url = self.project.api_url_for('{}_set_config'.format(SHORT_NAME))
