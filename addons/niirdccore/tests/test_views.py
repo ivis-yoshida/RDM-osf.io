@@ -312,7 +312,7 @@ class TestNiirdccoreViews(NiirdccoreAddonTestCase,  OsfTestCase):
     @mock.patch('website.ember_osf_web.views.use_ember_app', mock.Mock())
     def test_project_niirdccore(self):
         url = self.project.web_url_for('project_{}'.format(SHORT_NAME))
-        res = self.app.get(url, auth=self.user.auth)
+        res = self.app.get(url)
         assert_equals(res.status_code, 200)
 
     def test_niirdccore_apply_dmp_subscribe(self):
