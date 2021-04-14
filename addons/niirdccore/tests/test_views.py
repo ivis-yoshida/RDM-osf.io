@@ -312,11 +312,11 @@ class TestNiirdccoreViews(NiirdccoreAddonTestCase,  OsfTestCase):
             )
             assert_equals(res.status_code, 500)
 
-    @mock.patch('website.ember_osf_web.views.use_ember_app', mock.Mock())
-    def test_project_niirdccore(self):
-        url = self.project.web_url_for('project_{}'.format(SHORT_NAME))
-        res = self.app.get(url)
-        assert_equals(res.status_code, 200)
+    # @mock.patch('website.ember_osf_web.views.use_ember_app', mock.Mock())
+    # def test_project_niirdccore(self):
+    #     url = self.project.web_url_for('project_{}'.format(SHORT_NAME))
+    #     res = self.app.get(url)
+    #     assert_equals(res.status_code, 200)
 
     def test_niirdccore_apply_dmp_subscribe(self):
         self.node_settings.set_dmp_id('dummy_id')
