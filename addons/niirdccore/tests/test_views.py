@@ -24,6 +24,7 @@ from admin.rdm_addons.utils import get_rdm_addon_option
 
 import website
 from website.util import api_url_for
+from website.ember_osf_web.views import use_ember_app
 from addons.niirdccore.tests.utils import NiirdccoreAddonTestCase
 from addons.niirdccore import apps, models, settings, views, SHORT_NAME
 
@@ -46,8 +47,11 @@ def mocked_requests_get(*args, **kwargs):
 
     if kwargs['headers']['Authorization'] == 'Bearer valid':
         return MockResponse({'dmp': 'dummy_value'}, 200)
+    elif args[0] == 'http://error_domain.com/v1/dmp/valid' and kwargs['headers']['Authorization'] == 'Bearer valid':
+        return MockResponse({'dmp': 'null'}, 500)
     else:
         return MockResponse({'dmp': 'null'}, 405)
+
 
 class TestNiirdccoreViews(NiirdccoreAddonTestCase,  OsfTestCase):
     def test_niirdccore_set_config(self):
@@ -102,6 +106,25 @@ class TestNiirdccoreViews(NiirdccoreAddonTestCase,  OsfTestCase):
                 },
                 auth=self.user.auth,
             )
+            assert_equals(res.status_code, 400)
+
+            res = self.app.post_json(
+            url,
+            {
+                'dmp': {
+                    'redboxOid': '78c0f674a39962f2a70f7e9a9d783805',
+                    'metadata':{
+                        'vivo:Dataset_redbox:DataAnalysisResources': {
+                            'type': 'jupyterhub',
+                            'name': 'DEMOPRESTIGESERVICE',
+                            # 'url': 'https://google.com'
+                        },
+                    }
+                },
+                'dmr_api_key': '5b7da054-34cc-4109-8474-40eef2dbe738'
+            },
+            auth=self.user.auth,
+        )
             assert_equals(res.status_code, 400)
 
     @mock.patch('requests.get', side_effect=mocked_requests_get)
@@ -189,11 +212,12 @@ class TestNiirdccoreViews(NiirdccoreAddonTestCase,  OsfTestCase):
         )
         assert_equals(res.status_code, 200)
 
+    @mock.patch('requests.get', side_effect=mocked_requests_get)
+    @mock.patch('requests.post', side_effect=mocked_requests_get)
+    @mock.patch('requests.put', side_effect=mocked_requests_get)
     @mock.patch.object(settings.defaults, 'DMR_URL', return_value='http://dummy_domain.com/')
-    def test_niirdccore_update_dmp_info_denied(self, dummy_url):
+    def test_niirdccore_update_dmp_info_dmp_id_none(self, mock_get, mock_post, mock_put, dummy_url):
         with pytest.raises(AppError):
-            self.node_settings.set_dmp_id('78c0f674a39962f2a70f7e9a9d783805')
-
             url = self.project.api_url_for('{}_update_dmp_info'.format(SHORT_NAME))
             res = self.app.patch_json(
                 url,
@@ -202,7 +226,94 @@ class TestNiirdccoreViews(NiirdccoreAddonTestCase,  OsfTestCase):
                 },
                 auth=self.user.auth,
             )
-            assert_equals(res.status_code, 200)
+            assert_equals(res.status_code, 410)
+
+    @mock.patch('requests.get', side_effect=mocked_requests_get)
+    @mock.patch('requests.post', side_effect=mocked_requests_get)
+    @mock.patch('requests.put', side_effect=mocked_requests_get)
+    @mock.patch.object(settings.defaults, 'DMR_URL', return_value='http://dummy_domain.com/')
+    def test_niirdccore_update_dmp_info_keyerror(self, mock_get, mock_post, mock_put, dummy_url):
+        with pytest.raises(AppError):
+            self.node_settings.set_dmp_id('valid')
+            self.node_settings.set_dmr_api_key('valid')
+
+            url = self.project.api_url_for('{}_update_dmp_info'.format(SHORT_NAME))
+            res = self.app.patch_json(
+            url,
+            {
+                'data': {
+                    'attributes': {
+                        'dataset': [
+                            {
+                                'datasetIsNew': 'true',
+                                'datasetId': {
+                                    # 'identifier': 'dummy_dataset_id'
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            auth=self.user.auth,
+            )
+            assert_equals(res.status_code, 400)
+
+    @mock.patch('requests.get', side_effect=mocked_requests_get)
+    @mock.patch('requests.post', side_effect=mocked_requests_get)
+    @mock.patch('requests.put', side_effect=mocked_requests_get)
+    @mock.patch.object(settings.defaults, 'DMR_URL', return_value='http://error_domain.com/')
+    def test_niirdccore_update_dmp_info_request_exception(self, mock_get, mock_post, mock_put, dummy_url):
+        with pytest.raises(AppError):
+            self.node_settings.set_dmp_id('invalid')
+            self.node_settings.set_dmr_api_key('invalid')
+
+            url = self.project.api_url_for('{}_update_dmp_info'.format(SHORT_NAME))
+            res = self.app.patch_json(
+            url,
+            {
+                'data': {
+                    'attributes': {
+                        'dataset': [
+                            {
+                                'datasetIsNew': 'true',
+                                'datasetId': {
+                                    'identifier': 'dummy_dataset_id'
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            auth=self.user.auth,
+            )
+            assert_equals(res.status_code, 405)
+
+            self.node_settings.set_dmp_id('valid')
+            res = self.app.patch_json(
+            url,
+            {
+                'data': {
+                    'attributes': {
+                        'dataset': [
+                            {
+                                'datasetIsNew': 'true',
+                                'datasetId': {
+                                    'identifier': 'dummy_dataset_id'
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            auth=self.user.auth,
+            )
+            assert_equals(res.status_code, 500)
+
+    @mock.patch('website.ember_osf_web.views.use_ember_app', mock.Mock())
+    def test_project_niirdccore(self):
+        url = self.project.web_url_for('project_{}'.format(SHORT_NAME))
+        res = self.app.get(url, auth=self.user.auth)
+        assert_equals(res.status_code, 200)
 
     def test_niirdccore_apply_dmp_subscribe(self):
         self.node_settings.set_dmp_id('dummy_id')

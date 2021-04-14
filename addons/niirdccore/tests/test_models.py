@@ -2,15 +2,19 @@ from rest_framework import status as http_status
 from flask import request
 from django.db.utils import DataError
 from django.db.transaction import TransactionManagementError
-from django.db.models import Subquery
+from django.db.models import Subquery, QuerySet
 
 import random
+import string
+import requests
 import mock
 import pytest
 import unittest
 from nose.tools import *  # noqa
 
 from framework.auth import Auth
+from osf.models import RdmAddonOption
+from osf.models.mixins import ContributorMixin
 from osf.models.node import Node
 
 from addons.base.tests.views import (
@@ -21,11 +25,18 @@ from osf_tests.factories import ProjectFactory, ProjectWithAddonFactory, UserFac
 from admin.rdm_addons.utils import get_rdm_addon_option
 
 from website.util import api_url_for
-from addons.niirdccore import apps, models, views
+from addons.niirdccore import apps, models, views, SHORT_NAME
 from addons.niirdccore.tests.utils import NiirdccoreAddonTestCase
 from addons.niirdccore.tests.factories import NiirdccoreNodeSettingsFactory
 
 pytestmark = pytest.mark.django_db
+
+def mocked_addon_option(*args, **kwargs):
+    class MockAddonOption:
+        def __init__(self):
+            self.organizational_node = ContributorMixin()
+
+    return MockAddonOption()
 
 class TestNiirdccoreModels(NiirdccoreAddonTestCase, unittest.TestCase):
     _NodeSettingsFactory = NiirdccoreNodeSettingsFactory
@@ -42,18 +53,21 @@ class TestNiirdccoreModels(NiirdccoreAddonTestCase, unittest.TestCase):
         self.addon_list.save()
 
     def tearDown(self):
-        self.addon_list.delete()
-        self.node_settings.delete()
+        try:
+            self.addon_list.delete()
+            self.node_settings.delete()
+            self.node.delete()
+            self.user.delete()
+        except TransactionManagementError:
+            pass
+        super(TestNiirdccoreModels, self).tearDown()
 
-        # super(TestNodeSettings, self).tearDown()
-        self.node.delete()
-        self.user.delete()
+    @classmethod
+    def generate_string(self, n):
+        return ''.join(random.choices(string.ascii_letters + string.digits, k=n))
 
-
-
-
-################################ NodeSettings ###################################
-    def test_dmp_id_normal(self):
+    # NodeSettings #
+    def test_dmp_id(self):
         self.node_settings.set_dmp_id('dmp_id')
         assert_equal(self.node_settings.get_dmp_id(), 'dmp_id')
 
@@ -63,16 +77,96 @@ class TestNiirdccoreModels(NiirdccoreAddonTestCase, unittest.TestCase):
         self.node_settings.set_dmp_id(None)
         self.assertIsNone(self.node_settings.get_dmp_id())
 
-    def test_add_niirdccore_addon_normal(self):
-        mock_node = mock.MagicMock(spec=Node, return_value=True)
-        with mock.patch('osf.models.node.Node.has_addon', return_value=True):
-            addon_result = self.node_settings.add_niirdccore_addon(mock_node, '2021-03-11')
+    def test_dmr_api_key(self):
+        self.node_settings.set_dmr_api_key('dmp_id')
+        assert_equal(self.node_settings.get_dmr_api_key(), 'dmp_id')
+
+        self.node_settings.set_dmr_api_key(111 > 100)
+        self.assertTrue(self.node_settings.get_dmr_api_key())
+
+        self.node_settings.set_dmr_api_key(None)
+        self.assertIsNone(self.node_settings.get_dmr_api_key())
+
+    def test_add_niirdccore_addon(self):
+        with mock.patch('osf.models.node.Node.has_addon', return_value=False),\
+        mock.patch('django.db.models.QuerySet.first', side_effect=mocked_addon_option),\
+        mock.patch('osf.models.mixins.ContributorMixin.is_contributor', return_value=True),\
+        mock.patch('osf.models.node.Node.add_addon'):
+            addon_result = self.node_settings.add_niirdccore_addon(self.node, '2021-03-11')
             self.assertIsNone(addon_result)
-            mock_node.add_addon.assert_not_called()
+            self.node.add_addon.assert_called()
+
+    def test_add_niirdccore_addon_not_available(self):
+        with mock.patch('website.settings.ADDONS_AVAILABLE_DICT', return_value=[]),\
+        mock.patch('django.db.models.QuerySet.first'),\
+        mock.patch('osf.models.node.Node.add_addon'):
+            addon_result = self.node_settings.add_niirdccore_addon(self.node, '2021-03-11')
+            self.assertIsNone(addon_result)
+            QuerySet.first.assert_not_called()
+            self.node.add_addon.assert_not_called()
 
 
-################################ AddonList #######################################
-    def test_addonList_owner_normal(self):
+    def test_add_niirdccore_addon_already_has_addon(self):
+        with mock.patch('osf.models.node.Node.has_addon', return_value=True),\
+        mock.patch('django.db.models.QuerySet.first'),\
+        mock.patch('osf.models.node.Node.add_addon'):
+            addon_result = self.node_settings.add_niirdccore_addon(self.node, '2021-03-11')
+            self.assertIsNone(addon_result)
+            QuerySet.first.assert_not_called()
+            self.node.add_addon.assert_not_called()
+
+    def test_add_niirdccore_addon_option_is_none(self):
+        with mock.patch('osf.models.node.Node.has_addon', return_value=False), \
+        mock.patch('django.db.models.QuerySet.first', return_value=None),\
+        mock.patch('osf.models.node.Node.add_addon'):
+            addon_result = self.node_settings.add_niirdccore_addon(self.node, '2021-03-11')
+            self.assertIsNone(addon_result)
+            QuerySet.first.assert_called()
+            self.node.add_addon.assert_not_called()
+
+    def test_add_niirdccore_addon_not_contributor(self):
+        with mock.patch('osf.models.node.Node.has_addon', return_value=False), \
+        mock.patch('django.db.models.QuerySet.first', side_effect=mocked_addon_option),\
+        mock.patch('osf.models.mixins.ContributorMixin.is_contributor', return_value=False),\
+        mock.patch('osf.models.node.Node.add_addon'):
+            addon_result = self.node_settings.add_niirdccore_addon(self.node, '2021-03-11')
+            self.assertIsNone(addon_result)
+            QuerySet.first.assert_called()
+            self.node.add_addon.assert_not_called()
+
+    def test_node_monitoring(self):
+        self.node_settings.set_dmp_id('dummy')
+        with mock.patch('addons.niirdccore.models.NodeSettings.dmp_update'):
+            self.node_settings.node_monitoring(self.node, '2021-03-11')
+            self.node_settings.dmp_update.assert_called()
+
+    def test_node_monitoring_not_available(self):
+        with mock.patch('website.settings.ADDONS_AVAILABLE_DICT', return_value=[]),\
+        mock.patch('osf.models.node.Node.get_addon'):
+            self.node_settings.node_monitoring(self.node, '2021-03-11')
+            self.node.get_addon.assert_not_called()
+
+    def test_node_monitoring_sender_is_none(self):
+        self.node_settings.set_dmp_id('dummy')
+        with mock.patch('osf.models.node.Node.get_addon', return_value=None),\
+        mock.patch('addons.niirdccore.models.NodeSettings.dmp_update'):
+            self.node_settings.node_monitoring(self.node, '2021-03-11')
+            self.node_settings.dmp_update.assert_not_called()
+
+    def test_node_monitoring_dmp_id_none(self):
+        with mock.patch('addons.niirdccore.models.NodeSettings.dmp_update'):
+            self.node_settings.node_monitoring(self.node, '2021-03-11')
+            self.node_settings.dmp_update.assert_not_called()
+
+    def test_dmp_update(self):
+        self.node_settings.set_dmp_id('dummy')
+        self.node_settings.set_dmr_api_key('dummy')
+        with mock.patch('requests.put'):
+            self.node_settings.dmp_update(self.node)
+            requests.put.assert_called()
+
+    # AddonList #
+    def test_addonList_owner(self):
         self.addon_list.set_owner(self.node_settings)
         self.assertIs(type(self.addon_list.get_owner()), models.NodeSettings)
 
@@ -80,85 +174,42 @@ class TestNiirdccoreModels(NiirdccoreAddonTestCase, unittest.TestCase):
         with pytest.raises(ValueError):
             self.addon_list.set_owner(True)
 
-    def test_addonList_node_id_normal(self):
+    def test_addonList_node_id(self):
         self.addon_list.set_node_id('123')
         assert_equal(self.addon_list.get_node_id(), '123')
 
-        # set Max length
-        # self.addon_list.set_node_id(
-        #     '0000000000\
-        #     1111111111\
-        #     2222222222\
-        #     3333333333\
-        #     4444444444'
-        # )
-        # assert_equal(
-        #     self.addon_list.get_node_id(),
-        #     '0000000000\
-        #     1111111111\
-        #     2222222222\
-        #     3333333333\
-        #     4444444444'
-        # )
+        max_length = TestNiirdccoreModels.generate_string(100)
+        self.addon_list.set_node_id(max_length)
+        assert_equal(self.addon_list.get_node_id(), max_length)
 
-    # def test_addonList_node_id_error(self):
-    #     with pytest.raises(DataError):
-    #         self.addon_list.set_node_id(
-    #         '0000000000\
-    #         1111111111\
-    #         2222222222\
-    #         3333333333\
-    #         4444444444\
-    #         5'
-    #     )
 
-    #     with pytest.raises(TransactionManagementError):
-    #         self.addon_list.set_node_id(True)
-    #         self.addon_list.set_node_id(11111)
-    #         self.addon_list.set_node_id(111.11)
+    def test_addonList_node_id_error(self):
+        with pytest.raises(DataError):
+            overflow = TestNiirdccoreModels.generate_string(101)
+            self.addon_list.set_node_id(overflow)
 
-    # def test_addonList_addon_id_normal(self):
-    #     self.addon_list.set_addon_id('55555')
-    #     assert_equal(self.addon_list.get_addon_id(), '55555')
+    def test_addonList_addon_id(self):
+        self.addon_list.set_addon_id('123')
+        assert_equal(self.addon_list.get_addon_id(), '123')
 
-        # set max length
-        # self.addon_list.set_addon_id(
-        #     '00000000001111111111222222222233333333334444444444'
-        # )
+        max_length = TestNiirdccoreModels.generate_string(50)
+        self.addon_list.set_addon_id(max_length)
+        assert_equal(self.addon_list.get_addon_id(), max_length)
 
-        # assert_equal(self.addon_list.get_addon_id(), '00000000001111111111222222222233333333334444444444')
+    def test_addonList_addon_id_error(self):
+        with pytest.raises(DataError):
+            overflow = TestNiirdccoreModels.generate_string(51)
+            self.addon_list.set_addon_id(overflow)
 
-    # def test_addonList_addon_id_error(self):
-    #     with pytest.raises(DataError):
-    #         self.addon_list.set_addon_id(
-    #             '000000000011111111112222222222333333333344444444445'
-    #         )
+    def test_addonList_callback(self):
+        self.addon_list.set_callback('123')
+        assert_equal(self.addon_list.get_callback(), '123')
 
-    #     with pytest.raises(TransactionManagementError):
-    #         self.addon_list.set_node_id(True)
-    #         self.addon_list.set_node_id(11111)
-    #         self.addon_list.set_node_id(111.11)
+        max_length = TestNiirdccoreModels.generate_string(100)
+        self.addon_list.set_callback(max_length)
+        assert_equal(self.addon_list.get_callback(), max_length)
 
-    def test_addonList_callback_normal(self):
-        self.addon_list.set_callback('test.views.callback')
-        assert_equal(self.addon_list.get_callback(), 'test.views.callback')
-
-        # set Max length
-        self.addon_list.set_callback(
-            '0000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999'
-        )
-        assert_equal(
-            self.addon_list.get_callback(),
-            '0000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999'
-        )
-
-    # def test_addonList_callback_error(self):
-    #     with pytest.raises(DataError):
-    #         self.addon_list.set_callback(
-    #         '00000000001111111111222222222233333333334444444444555555555566666666667777777777888888888899999999990'
-    #     )
-
-    #     with pytest.raises(TransactionManagementError):
-    #         self.addon_list.set_callback(True)
-    #         self.addon_list.set_callback(11111)
-    #         self.addon_list.set_callback(111.11)
+    def test_addonList_callback_error(self):
+        with pytest.raises(DataError):
+            overflow = TestNiirdccoreModels.generate_string(101)
+            self.addon_list.set_node_id(overflow)
