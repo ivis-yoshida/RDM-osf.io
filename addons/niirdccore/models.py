@@ -17,14 +17,14 @@ from website import util
 
 from . import settings
 from . import SHORT_NAME
-from addons.base.models import BaseNodeSettings
+from addons.base.models import BaseNodeSettings, BaseStorageAddon
 from website import settings as ws_settings
 
 import addons
 
 logger = logging.getLogger(__name__)
 
-class NodeSettings(BaseNodeSettings):
+class NodeSettings(BaseNodeSettings, BaseStorageAddon):
     """
     プロジェクトにアタッチされたアドオンに関するモデルを定義する。
     """
